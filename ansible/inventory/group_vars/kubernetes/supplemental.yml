@@ -1,5 +1,7 @@
 ---
 timezone: "Asia/Singapore"
-kubevip_address: "192.168.40.254"
+kubevip_address: "192.168.30.100"
 cluster_cidr: "10.42.0.0/16"
+cluster_v6cidr: "2001:470:ee86:10:43::/80"
 service_cidr: "10.43.0.0/16"
+service_v6cidr: "2001:470:ee86:4:10:43::/112"
