@@ -14,7 +14,6 @@ spec:
   valuesContent: |-
     bpf:
       masquerade: false
-      # -- Allow cluster external access to ClusterIP services.
       lbExternalClusterIP: true
     cluster:
       name: home-cluster
@@ -26,44 +25,34 @@ spec:
       enabled: false
     ipam:
       mode: "cluster-pool"
-      # -- Maximum rate at which the CiliumNode custom resource is updated.
       ciliumNodeUpdateRate: "15s"
       operator:
-      # -- IPv4 CIDR list range to delegate to individual nodes for IPAM.
-      clusterPoolIPv4PodCIDRList: ["10.42.0.0/16"]
-      # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
-      clusterPoolIPv4MaskSize: 24
-      # -- IPv6 CIDR list range to delegate to individual nodes for IPAM.
-      clusterPoolIPv6PodCIDRList: ["2001:470:ee86:10:42::/80"]
-      # -- IPv6 CIDR mask size to delegate to individual nodes for IPAM.
-      clusterPoolIPv6MaskSize: 120
+        # -- IPv4 CIDR list range to delegate to individual nodes for IPAM.
+        clusterPoolIPv4PodCIDRList: ["10.42.0.0/16"]
+        # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
+        clusterPoolIPv4MaskSize: 24
+        # -- IPv6 CIDR list range to delegate to individual nodes for IPAM.
+        clusterPoolIPv6PodCIDRList: ["2001:470:ee86:1042::/112"]
+        # -- IPv6 CIDR mask size to delegate to individual nodes for IPAM.
+    clusterPoolIPv6MaskSize: 120
     tunnel: "disabled"
     autoDirectNodeRoutes: true
     ipv4NativeRoutingCIDR: "10.42.0.0/16"
-    ipv6NativeRoutingCIDR: "2001:470:ee86:10:43::/80"
+    ipv6NativeRoutingCIDR: "2001:470:ee86:1042::/112"
     enableIPv4Masquerade: true
     enableIPv6Masquerade: true
     ipv6:
       enabled: true
     bgpControlPlane:
-      # -- Enables the BGP control plane.
       enabled: true
     endpointRoutes:
-      # -- Enable use of per endpoint routes instead of routing via
-      # the cilium_host interface.
       enabled: true
     socketLB:
-      # -- Disable socket lb for non-root ns. This is used to enable Istio routing rules.
       hostNamespaceOnly: true
     loadBalancer:
-      # -- algorithm is the name of the load balancing algorithm for backend
-      # selection e.g. random or maglev
       algorithm: maglev
     nodePort:
-      # -- Enable the Cilium NodePort service implementation.
       enabled: true
-      # -- Port range to use for NodePort services.
-      # range: "30000,32767"
     k8sServiceHost: "{{ kubevip_address }}"
     k8sServicePort: 6443
     kubeProxyReplacement: strict

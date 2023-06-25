@@ -41,18 +41,18 @@ spec:
       # -- Maximum rate at which the CiliumNode custom resource is updated.
       ciliumNodeUpdateRate: "15s"
       operator:
-      # -- IPv4 CIDR list range to delegate to individual nodes for IPAM.
-      clusterPoolIPv4PodCIDRList: ["10.42.0.0/16"]
-      # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
-      clusterPoolIPv4MaskSize: 24
-      # -- IPv6 CIDR list range to delegate to individual nodes for IPAM.
-      clusterPoolIPv6PodCIDRList: ["2001:470:ee86:10:42::/80"]
-      # -- IPv6 CIDR mask size to delegate to individual nodes for IPAM.
-      clusterPoolIPv6MaskSize: 120
+        # -- IPv4 CIDR list range to delegate to individual nodes for IPAM.
+        clusterPoolIPv4PodCIDRList: ["10.42.0.0/16"]
+        # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
+        clusterPoolIPv4MaskSize: 24
+        # -- IPv6 CIDR list range to delegate to individual nodes for IPAM.
+        clusterPoolIPv6PodCIDRList: ["2001:470:ee86:1042::/112"]
+        # -- IPv6 CIDR mask size to delegate to individual nodes for IPAM.
+        clusterPoolIPv6MaskSize: 120
     tunnel: "disabled"
     autoDirectNodeRoutes: true
     ipv4NativeRoutingCIDR: "10.42.0.0/16"
-    ipv6NativeRoutingCIDR: "2001:470:ee86:10:43::/80"
+    ipv6NativeRoutingCIDR: "2001:470:ee86:1042::/112"
     enableIPv4Masquerade: true
     enableIPv6Masquerade: true
     ipv6:
