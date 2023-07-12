@@ -40,6 +40,10 @@ spec:
   maxHistory: 3
   values:
     global:
+      meshID: smesh
+      multiCluster:
+        clusterName: clusterxx
+      network: clusterxx
       defaultPodDisruptionBudget:
         enabled: false
       # variant: "distroless"
@@ -47,37 +51,103 @@ spec:
       proxy:
         resources:
           requests:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 5m
+            memory: 32Mi
           limits:
             cpu: 200m
             memory: 256Mi
       proxy_init:
         resources:
           requests:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 5m
+            memory: 32Mi
           limits:
             cpu: 200m
             memory: 256Mi
     pilot:
-      autoscaleEnabled: false
-      replicaCount: 1
+      autoscaleEnabled: "false"
       autoscaleMin: 1
       autoscaleMax: 1
+      replicaCount: 1
+      # rollingMaxSurge: 100%
+      # rollingMaxUnavailable: 25%
+      resources:
+        requests:
+          cpu: 10m #default is 500m
+          memory: 128Mi #default is 2048Mi
       env:
-        PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true
-        PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true
+        PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true # default is true also
+        PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true # default is true also
+        PILOT_FILTER_GATEWAY_CLUSTER_CONFIG: true # default is false
     meshConfig:
       defaultConfig:
+        holdApplicationUntilProxyStarts: true #..Wait for the istio-proxy to start before starting application pods
+        discoverySelectors:
+          - matchLabels:
+              istio-discovery: enabled
+        proxyMetadata:
+          ISTIO_META_DNS_CAPTURE: "true"
+          ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+        # interceptionMode: TPROXY # default is redirect
+        tracing:
+        sampling: 1.0 #... default value
+        custom_tags:
+          clusterID:
+            environment:
+              name: ISTIO_META_CLUSTER_ID
         gatewayTopology:
           # Trust Cloudflare
           numTrustedProxies: 1
           # Always forward the XFCC header in the request, regardless of whether the client connection is mTLS.
           forwardClientCertDetails: ALWAYS_FORWARD_ONLY
-      accessLogFile: /dev/stdout
+      enableTracing: true
+      enablePrometheusMerge: true
       trustDomain: cluster.local
-    #   extensionProviders:
+      extensionProviders:
+        - name: file-log
+          envoyFileAccessLog:
+            path: /dev/stdout
+            logFormat:
+              text: "[%START_TIME%] \"%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %PROTOCOL%\" %RESPONSE_CODE% %RESPONSE_FLAGS% %RESPONSE_CODE_DETAILS% \"%UPSTREAM_TRANSPORT_FAILURE_REASON%\" %BYTES_RECEIVED% %BYTES_SENT% %DURATION% %RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)% \"%REQ(X-FORWARDED-FOR)%\" \"%REQ(USER-AGENT)%\" \"%REQ(X-REQUEST-ID)%\" \"%REQ(:AUTHORITY)%\" \"%UPSTREAM_HOST%\" %UPSTREAM_CLUSTER% %UPSTREAM_LOCAL_ADDRESS% %DOWNSTREAM_LOCAL_ADDRESS% %DOWNSTREAM_REMOTE_ADDRESS% %REQUESTED_SERVER_NAME% %ROUTE_NAME%\n"
+        - name: file-json
+          envoyFileAccessLog:
+            path: /dev/stdout
+            logFormat:
+              labels:
+                "start_time": "[%START_TIME%]"
+                "method": "%REQ(:METHOD)%"
+                "path": "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
+                "protocol": "%PROTOCOL%"
+                "reponse_code": "%RESPONSE_CODE%"
+                "reponse_flags": "%RESPONSE_FLAGS%"
+                "repons_code_details": "%RESPONSE_CODE_DETAILS%"
+                "failure_reason": "%UPSTREAM_TRANSPORT_FAILURE_REASON%"
+                "bytes_received": "%BYTES_RECEIVED% %BYTES_SENT%"
+                "duration": "%DURATION%"
+                "envoy_upstream_service_time": "%RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)%"
+                "forwarded_for": "%REQ(X-FORWARDED-FOR)%"
+                "user_agent": "%REQ(USER-AGENT)%"
+                "request_id": "%REQ(X-REQUEST-ID)%"
+                "authority": "%REQ(:AUTHORITY)%"
+                "host": "%UPSTREAM_HOST%"
+                "upstream_cluster": "%UPSTREAM_CLUSTER%"
+                "upstream_local_adress": "%UPSTREAM_LOCAL_ADDRESS%"
+                "downstream_local_address": "%DOWNSTREAM_LOCAL_ADDRESS%"
+                "downstream_remote_address": "%DOWNSTREAM_REMOTE_ADDRESS%"
+                "requested_server_name": "%REQUESTED_SERVER_NAME%"
+                "route_name": "%ROUTE_NAME%"
+                # "downstream_peer_id": "%FILTER_STATE(wasm.downstream_peer_id)%"
+                # "upstream_peer_id": "%FILTER_STATE(wasm.upstream_peer_id)%"
+                # "downstream_peer": "%FILTER_STATE(wasm.downstream_peer)%"
+                # "upstream_peer": "%FILTER_STATE(wasm.upstream_peer)%"
+                "cluster_metadata": "%CLUSTER_METADATA(istio)%"
+                "upstream_metadata": "%UPSTREAM_METADATA(istio)%"
+                # "route_metadata": "%METADATA(ROUTE:istio)%" # need enable envoy.formatter.metadata
+      defaultProviders:
+        accessLogging:
+          #- file-log
+          - file-json
+    # extensionProviders:
     #   - name: oauth2-proxy
     #     envoyExtAuthzHttp:
     #       service: oauth2-proxy.network-system.svc.cluster.local
