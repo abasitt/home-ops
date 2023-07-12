@@ -42,8 +42,11 @@ spec:
     global:
       meshID: smesh
       multiCluster:
-        clusterName: clusterxx
-      network: clusterxx
+        clusterName: ${CLUSTER_NAME}
+      network: ${CLUSTER_NAME}-net
+      #tracer:
+      #  zipkin:
+      #    address: localhost:9411
       defaultPodDisruptionBudget:
         enabled: false
       # variant: "distroless"
