@@ -17,4 +17,5 @@ resources:
   - ./prometheus-community.yaml
   - ./stakater.yaml
   - ./weave-gitops.yaml
-  - networking/
+  - ./istio.yaml
+  - ./kiali.yaml
