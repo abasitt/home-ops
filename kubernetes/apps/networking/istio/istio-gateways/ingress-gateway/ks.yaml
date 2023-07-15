@@ -11,8 +11,6 @@ spec:
   path: "./kubernetes/apps/networking/istio-gateways/ingress-gateway/app"
   prune: true
   wait: false
-  patchesStrategicMerge:
-    - service-patch.yaml # change this to match your patch overlay file name
   sourceRef:
     kind: GitRepository
     name: cluster
