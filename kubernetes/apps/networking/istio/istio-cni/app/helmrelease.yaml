@@ -2,13 +2,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: istio-base
+  name: istio-cni
   namespace: istio-system
 spec:
   interval: 5m
   chart:
     spec:
-      chart: base
+      chart: cni
       version: 1.18.1
       sourceRef:
         kind: HelmRepository
@@ -38,3 +38,6 @@ spec:
   uninstall:
     keepHistory: false
   maxHistory: 3
+  # values:
+  #   global:
+  #     variant: "distroless"

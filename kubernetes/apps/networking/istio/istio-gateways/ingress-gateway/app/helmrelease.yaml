@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: gateway
-      version: 1.18.0
+      version: 1.18.1
       sourceRef:
         kind: HelmRepository
         name: istio-charts
@@ -44,8 +44,8 @@ spec:
       maxReplicas: 2
     service:
       annotations:
-        metallb.universe.tf/loadBalancerIPs: ${CLUSTER_LB_ISTIO_INGRESS_GATEWAY}
-      externalTrafficPolicy: "Cluster"
+        metallb.universe.tf/loadBalancerIPs: ${METALLB_ISTIOINGRESS_V4ADDR}
+      externalTrafficPolicy: "Local"
       type: LoadBalancer
       ports:
         - name: http2
