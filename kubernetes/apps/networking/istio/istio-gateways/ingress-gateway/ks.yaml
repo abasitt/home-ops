@@ -13,7 +13,7 @@ spec:
   wait: false
   sourceRef:
     kind: GitRepository
-    name: cluster
+    name: home-kubernetes
   dependsOn:
     - name: istiod
       namespace: flux-system

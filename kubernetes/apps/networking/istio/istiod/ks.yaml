@@ -13,7 +13,7 @@ spec:
   wait: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: home-kubernetes
   postBuild:
     substituteFrom:
       - kind: ConfigMap
