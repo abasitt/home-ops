@@ -38,6 +38,10 @@ spec:
   uninstall:
     keepHistory: false
   maxHistory: 3
+  postRenderers:
+    kustomize:
+      patchesStrategicMerge:
+        - service-patch.yaml # change this to match your patch overlay file name
   values:
     autoscaling:
       minReplicas: 2
