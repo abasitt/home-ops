@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: istio-gateway
+  name: istio-ingressgateway
   namespace: istio-ingress
 spec:
   interval: 5m
@@ -44,7 +44,7 @@ spec:
           - service-patch.yaml # change this to match your patch overlay file name
   values:
     autoscaling:
-      minReplicas: 2
+      minReplicas: 1
       maxReplicas: 2
     service:
       annotations:
