@@ -19,5 +19,5 @@ spec:
       - kind: ConfigMap
         name: cluster-settings
   dependsOn:
-    - name: istio-base
+    - name: cluster-apps-istio-base
       namespace: flux-system

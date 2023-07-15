@@ -15,7 +15,7 @@ spec:
     kind: GitRepository
     name: home-kubernetes
   dependsOn:
-    - name: istiod
+    - name: cluster-apps-istiod
       namespace: flux-system
-    - name: cert-manager
+    - name: cluster-apps-cert-manager
       namespace: flux-system
