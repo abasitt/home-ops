@@ -44,7 +44,8 @@ spec:
           - apiVersion: v1
             kind: Service
             metadata:
-              istio: ingressgateway
+              name: istio-ingressgateway
+              namespace: istio-ingress
             spec:
               allocateLoadBalancerNodePorts: false
   values:
