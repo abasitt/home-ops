@@ -38,10 +38,15 @@ spec:
   uninstall:
     keepHistory: false
   maxHistory: 3
-  # postRenderers:
-  #   - kustomize:
-  #       patchesStrategicMerge:
-  #         - service-patch.yaml # change this to match your patch overlay file name
+  postRenderers:
+    - kustomize:
+        patchesStrategicMerge:
+          - apiVersion: v1
+            kind: Service
+            metadata:
+              name: istio-ingressgateway
+            spec:
+              allocateLoadBalancerNodePorts: false
   values:
     autoscaling:
       minReplicas: 1
