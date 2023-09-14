@@ -5,7 +5,7 @@ metadata:
   name: cluster-settings
   namespace: flux-system
 data:
-  TIMEZONE: "Asia/SG"
+  TIMEZONE: "Asia/Singapore"
   METALLB_LB_V4RANGE: "192.168.30.11-192.168.30.20"
   METALLB_K8S_GATEWAY_V4ADDR: "192.168.30.11"
   METALLB_INGRESS_V4ADDR: "192.168.30.12"
