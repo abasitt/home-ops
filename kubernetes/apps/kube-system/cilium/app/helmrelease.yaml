@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: cilium
-      version: 1.13.4
+      version: 1.13.7
       sourceRef:
         kind: HelmRepository
         name: cilium
@@ -46,7 +46,7 @@ spec:
         # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
         clusterPoolIPv4MaskSize: 24
         # -- IPv6 CIDR list range to delegate to individual nodes for IPAM.
-        clusterPoolIPv6PodCIDRList: ["2001:470:ee86:1042::/112"]
+        clusterPoolIPv6PodCIDRList: ["2001:470:ee86:1042::/104"]
         # -- IPv6 CIDR mask size to delegate to individual nodes for IPAM.
         clusterPoolIPv6MaskSize: 120
     tunnel: "disabled"
