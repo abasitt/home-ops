@@ -8,7 +8,7 @@ spec:
   repo: https://helm.cilium.io/
   chart: cilium
   # renovate: datasource=helm depName=cilium registryUrl=https://helm.cilium.io
-  version: "1.13.4"
+  version: "1.13.7"
   targetNamespace: kube-system
   bootstrap: true
   valuesContent: |-
@@ -32,13 +32,13 @@ spec:
         # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
         clusterPoolIPv4MaskSize: 24
         # -- IPv6 CIDR list range to delegate to individual nodes for IPAM.
-        clusterPoolIPv6PodCIDRList: ["2001:470:ee86:1042::/112"]
+        clusterPoolIPv6PodCIDRList: ["2001:470:ee86:1042::/104"]
         # -- IPv6 CIDR mask size to delegate to individual nodes for IPAM.
-    clusterPoolIPv6MaskSize: 120
+        clusterPoolIPv6MaskSize: 120
     tunnel: "disabled"
     autoDirectNodeRoutes: true
     ipv4NativeRoutingCIDR: "10.42.0.0/16"
-    ipv6NativeRoutingCIDR: "2001:470:ee86:1042::/112"
+    ipv6NativeRoutingCIDR: "2001:470:ee86:1042::/104"
     enableIPv4Masquerade: true
     enableIPv6Masquerade: true
     ipv6:
@@ -59,3 +59,5 @@ spec:
     kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
     operator:
       replicas: 1
+      rollOutPods: true
+    rollOutCiliumPods: true
