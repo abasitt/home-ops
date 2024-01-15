@@ -39,6 +39,36 @@ tasks:
       - { msg: "Inventory not found",             sh: "test -f {{.ANSIBLE_DIR}}/{{.cluster}}/inventory/hosts.yaml" }
       - { msg: "Playbook not found",              sh: "test -f {{.ANSIBLE_DIR}}/{{.cluster}}/playbooks/{{.playbook}}.yaml" }
 
+  list:
+    desc: List all the hosts
+    deps: ["deps"]
+    cmd: |
+      .venv/bin/ansible kubernetes --inventory {{.ANSIBLE_DIR}}/{{.cluster}}/inventory/hosts.yaml \
+          --list-hosts
+    preconditions:
+      - { msg: "Venv not found",      sh: "test -d {{.ROOT_DIR}}/.venv" }
+      - { msg: "Inventory not found", sh: "test -f {{.ANSIBLE_DIR}}/{{.cluster}}/inventory/hosts.yaml" }
+
+  ping:
+    desc: Ping all the hosts
+    deps: ["deps"]
+    cmd: |
+      .venv/bin/ansible kubernetes --inventory {{.ANSIBLE_DIR}}/{{.cluster}}/inventory/hosts.yaml \
+          --one-line -m 'ping'
+    preconditions:
+      - { msg: "Venv not found",      sh: "test -d {{.ROOT_DIR}}/.venv" }
+      - { msg: "Inventory not found", sh: "test -f {{.ANSIBLE_DIR}}/{{.cluster}}/inventory/hosts.yaml" }
+
+  uptime:
+    desc: Uptime of all the hosts
+    deps: ["deps"]
+    cmd: |
+      .venv/bin/ansible kubernetes --inventory {{.ANSIBLE_DIR}}/{{.cluster}}/inventory/hosts.yaml \
+          --one-line -a 'uptime'
+    preconditions:
+      - { msg: "Venv not found",      sh: "test -d {{.ROOT_DIR}}/.venv" }
+      - { msg: "Inventory not found", sh: "test -f {{.ANSIBLE_DIR}}/{{.cluster}}/inventory/hosts.yaml" }
+
   .venv:
     internal: true
     cmds:
