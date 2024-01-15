@@ -1,14 +1,14 @@
 ---
-- hosts:
-    - master
-    - worker
+- name: Cluster kube-vip
+  hosts: master
+  serial: 1
   become: true
   gather_facts: true
   any_errors_fatal: true
   pre_tasks:
-    - name: Pausing for 5 seconds...
+    - name: Pausing for 2 seconds...
       ansible.builtin.pause:
-        seconds: 5
+        seconds: 2
   tasks:
     - name: Ensure Kubernetes is running
       ansible.builtin.include_role:
@@ -18,9 +18,6 @@
         k3s_state: started
 
     - name: Upgrade kube-vip
-      when:
-        - k3s_control_node is defined
-        - k3s_control_node
       ansible.builtin.template:
         src: templates/kube-vip-static-pod.yaml.j2
         dest: "{{ k3s_server_pod_manifests_dir }}/kube-vip-static-pod.yaml"
