@@ -24,13 +24,11 @@ k3s_server:
   pause-image: registry.k8s.io/pause:3.9
   secrets-encryption: true
   # Network CIDR to use for pod IPs
-  #cluster-cidr: "{{ cluster_cidr }},{{ cluster_v6cidr }}"
-  #service-cidr: "{{ service_cidr }},{{ service_v6cidr }}"
-  cluster-cidr: "{{ cluster_v6cidr }},{{ cluster_cidr }}"
-  service-cidr: "{{ service_v6cidr }},{{ service_cidr }}"
+  cluster-cidr: "{{ cluster_cidr }},{{ cluster_v6cidr }}"
+  service-cidr: "{{ service_cidr }},{{ service_v6cidr }}"
+  #cluster-cidr: "{{ cluster_v6cidr }},{{ cluster_cidr }}"
+  #service-cidr: "{{ service_v6cidr }},{{ service_cidr }}"
   kubelet-arg:
-    - "feature-gates=GracefulNodeShutdown=true"
-    - "feature-gates=MixedProtocolLBService=true"
     - "node-status-update-frequency=4s"
     - "image-gc-high-threshold=55"
     - "image-gc-low-threshold=50"
