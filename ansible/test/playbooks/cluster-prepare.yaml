@@ -34,23 +34,34 @@
               ff02::2 ip6-allrouters
             mode: preserve
         # https://github.com/onedr0p/flux-cluster-template/discussions/635
-        #- name: Network Configuration | Remove immutable flag from /etc/resolv.conf
-        #  ansible.builtin.file:
-        #    attributes: -i
-        #    path: /etc/resolv.conf
-        #- name: Network Configuration | Remove /etc/resolv.conf
-        #  ansible.builtin.file:
-        #    attributes: -i
-        #    path: /etc/resolv.conf
-        #    state: absent
-        #- name: Network Configuration | Add custom /etc/resolv.conf
-        #  ansible.builtin.copy:
-        #    attributes: +i
-        #    mode: '0644'
-        #    dest: /etc/resolv.conf
-        #    content: |
-        #      search .
-        #      nameserver 1.1.1.1
+        - name: Stop and disable service which messes with DNS
+          service:
+            name: "systemd-resolved"
+            state: stopped
+            enabled: false
+        - name: Network Configuration | Remove immutable flag from /etc/resolv.conf
+          ansible.builtin.file:
+            attributes: -i
+            path: /etc/resolv.conf
+        - name: Delete link to the systemd-resolved resolv.conf
+          ansible.builtin.file:
+            path: /etc/resolv.conf
+            state: absent
+        - name: Create empty resolv.conf
+          ansible.builtin.file:
+            path: /etc/resolv.conf
+            state: touch
+        - name: Network Configuration | Add custom /etc/resolv.conf
+          ansible.builtin.copy:
+            attributes: +i
+            mode: '0644'
+            dest: /etc/resolv.conf
+            content: |
+              search .
+              nameserver 192.168.30.1
+              nameserver 1.1.1.1
+              nameserver 2606:4700:4700::64
+              nameserver 2001:4860:4860::64
 
     - name: Packages | Ubuntu
       block:
