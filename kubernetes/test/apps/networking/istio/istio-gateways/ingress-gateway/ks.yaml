@@ -2,7 +2,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps-istio-ingress
+  name: istio-ingress
   namespace: flux-system
 spec:
   interval: 30m
@@ -15,7 +15,7 @@ spec:
     kind: GitRepository
     name: home-kubernetes
   dependsOn:
-    - name: cluster-apps-istiod
+    - name: istiod
       namespace: flux-system
-    - name: cluster-apps-cert-manager
+    - name: cert-manager
       namespace: flux-system
