@@ -74,14 +74,14 @@
             name: "systemd-resolved"
             state: stopped
             enabled: false
+        #- name: Delete link to the systemd-resolved resolv.conf
+        #  ansible.builtin.file:
+        #    path: /etc/resolv.conf
+        #    state: absent
         - name: Network Configuration | Remove immutable flag from /etc/resolv.conf
           ansible.builtin.file:
             attributes: -i
             path: /etc/resolv.conf
-        - name: Delete link to the systemd-resolved resolv.conf
-          ansible.builtin.file:
-            path: /etc/resolv.conf
-            state: absent
         - name: Create empty resolv.conf
           ansible.builtin.file:
             path: /etc/resolv.conf
