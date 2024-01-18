@@ -19,3 +19,4 @@ resources:
   - ./weave-gitops.yaml
   - ./istio.yaml
   - ./kiali.yaml
+  - ./coredns.yaml
