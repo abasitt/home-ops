@@ -43,7 +43,7 @@ k3s_server:
   etcd-expose-metrics: true           # Required to monitor etcd with kube-prometheus-stack
   etcd-disable-snapshots: true
   kube-apiserver-arg:
-    - "bind-address=0.0.0.0"
+    - "bind-address=::"
     - "--advertise-address={{ kubeapi_addr }}"
     - "anonymous-auth=true"           # Required for HAProxy health-checks
     - "default-not-ready-toleration-seconds=20"
