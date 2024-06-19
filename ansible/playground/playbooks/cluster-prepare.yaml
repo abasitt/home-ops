@@ -74,9 +74,14 @@
             name: "systemd-resolved"
             state: stopped
             enabled: false
+        - name: Delete link to the systemd-resolved resolv.conf
+          ansible.builtin.file:
+            path: /etc/resolv.conf
+            state: absent
         - name: Network Configuration |  Setup nameserver
-          blockinfile:
-            dest: /etc/resolv.conf
+          ansible.builtin.blockinfile:
+            path: /etc/resolv.conf
+            create: true
             block: |
               search .
               nameserver 192.168.30.1
