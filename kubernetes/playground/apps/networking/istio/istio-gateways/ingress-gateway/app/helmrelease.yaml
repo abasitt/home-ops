@@ -40,14 +40,16 @@ spec:
   maxHistory: 3
   postRenderers:
     - kustomize:
-        patchesStrategicMerge:
-          - apiVersion: v1
-            kind: Service
-            metadata:
+        patches:
+          - target:
+              apiVersion: v1
+              kind: Service
               name: istio-ingressgateway
               namespace: istio-ingress
-            spec:
-              allocateLoadBalancerNodePorts: false
+            patch: |
+              - op: replace
+                path: /spec/allocateLoadBalancerNodePorts
+                value: false
   values:
     autoscaling:
       minReplicas: 1
