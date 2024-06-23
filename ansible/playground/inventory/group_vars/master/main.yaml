@@ -45,6 +45,6 @@ k3s_server:
   kube-apiserver-arg:
     - "bind-address=::"
     - "--advertise-address={{ kubeapi_addr }}"
-    - "anonymous-auth=true"           # Required for HAProxy health-checks
+    #- "anonymous-auth=true"           # Required for HAProxy health-checks
     - "default-not-ready-toleration-seconds=20"
     - "default-unreachable-toleration-seconds=20"
