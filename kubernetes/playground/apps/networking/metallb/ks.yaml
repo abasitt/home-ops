@@ -5,7 +5,7 @@ metadata:
   name: metallb
   namespace: flux-system
 spec:
-  path: ./kubernetes/test/apps/networking/metallb/app
+  path: ./kubernetes/playground/apps/networking/metallb/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -23,7 +23,7 @@ metadata:
 spec:
   dependsOn:
     - name: metallb
-  path: ./kubernetes/test/apps/networking/metallb/config
+  path: ./kubernetes/playground/apps/networking/metallb/config
   prune: true
   sourceRef:
     kind: GitRepository

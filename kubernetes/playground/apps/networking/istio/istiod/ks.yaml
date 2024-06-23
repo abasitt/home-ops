@@ -8,7 +8,7 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 3m
-  path: "./kubernetes/test/apps/networking/istio/istiod/app"
+  path: "./kubernetes/playground/apps/networking/istio/istiod/app"
   prune: true
   wait: true
   sourceRef:

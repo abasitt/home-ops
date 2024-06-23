@@ -5,7 +5,7 @@ metadata:
   name: echo-server
   namespace: flux-system
 spec:
-  path: ./kubernetes/test/apps/default/echo-server/app
+  path: ./kubernetes/playground/apps/default/echo-server/app
   prune: true
   sourceRef:
     kind: GitRepository

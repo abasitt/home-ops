@@ -5,7 +5,7 @@ metadata:
   name: hajimari
   namespace: flux-system
 spec:
-  path: ./kubernetes/test/apps/default/hajimari/app
+  path: ./kubernetes/playground/apps/default/hajimari/app
   prune: true
   sourceRef:
     kind: GitRepository

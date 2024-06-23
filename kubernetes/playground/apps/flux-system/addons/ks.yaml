@@ -9,7 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/test/apps/flux-system/addons/webhooks
+  path: ./kubernetes/playground/apps/flux-system/addons/webhooks
   prune: true
   sourceRef:
     kind: GitRepository

@@ -8,14 +8,14 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 3m
-  path: "./kubernetes/test/apps/networking/istio/istio-gateways/ingress-gateway/app"
+  path: "./kubernetes/playground/apps/networking/istio/istio-gateways/ingress-gateway/app"
   prune: true
   wait: false
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
-  dependsOn:
-    - name: istiod
-      namespace: flux-system
-    - name: cert-manager
-      namespace: flux-system
+#  dependsOn:
+#    - name: istiod
+#      namespace: flux-system
+#    - name: cert-manager
+#      namespace: flux-system
