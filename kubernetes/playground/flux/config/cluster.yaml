@@ -26,7 +26,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  path: ./kubernetes/test/flux
+  path: ./kubernetes/playground/flux
   prune: true
   wait: false
   sourceRef:
