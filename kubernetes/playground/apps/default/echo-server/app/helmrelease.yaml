@@ -3,9 +3,8 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: echo-server
-  namespace: default
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
@@ -14,46 +13,77 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    controller:
-      strategy: RollingUpdate
-    image:
-      repository: docker.io/jmalloc/echo-server
-      tag: 0.3.6
+    controllers:
+      echo-server:
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: ghcr.io/mendhak/http-https-echo
+              tag: 33
+            env:
+              HTTP_PORT: &port 8080
+              LOG_WITHOUT_NEWLINE: true
+              LOG_IGNORE_PATH: /healthz
+              PROMETHEUS_ENABLED: true
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 64Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile: { type: RuntimeDefault }
     service:
-      main:
+      app:
+        controller: echo-server
         ports:
           http:
-            port: &port 8080
-    probes:
-      liveness: &probes
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /health
             port: *port
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness: *probes
-      startup:
-        enabled: false
-    resources:
-      requests:
-        cpu: 5m
-        memory: 10Mi
-      limits:
-        memory: 50Mi
+    serviceMonitor:
+      app:
+        serviceName: echo-server
+        endpoints:
+          - port: http
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+    ingress:
+      app:
+        className: istio
+        hosts:
+          - host: "external.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
