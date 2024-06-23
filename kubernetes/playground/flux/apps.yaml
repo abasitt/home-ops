@@ -6,8 +6,8 @@ metadata:
   name: cluster-apps
   namespace: flux-system
 spec:
-  interval: 30m
-  path: ./kubernetes/test/apps
+  interval: 10m
+  path: ./kubernetes/playground/apps
   prune: true
   sourceRef:
     kind: GitRepository
