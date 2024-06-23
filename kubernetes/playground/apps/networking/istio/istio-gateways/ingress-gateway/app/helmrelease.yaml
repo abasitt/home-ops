@@ -42,7 +42,7 @@ spec:
     - kustomize:
         patches:
           - target:
-              apiVersion: v1
+              version: v1
               kind: Service
               name: istio-ingressgateway
               namespace: istio-ingress
