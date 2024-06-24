@@ -59,7 +59,7 @@ spec:
         metallb.universe.tf/loadBalancerIPs: ${METALLB_ISTIOINGRESS_V6ADDR},${METALLB_ISTIOINGRESS_V4ADDR}
       externalTrafficPolicy: "Local"
       type: LoadBalancer
-      ipFamilyPolicy: PreferDualStack
+      ipFamilyPolicy: RequireDualStack
       ports:
         - name: http2
           port: 80
