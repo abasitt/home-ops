@@ -56,7 +56,7 @@ spec:
       maxReplicas: 2
     service:
       annotations:
-        metallb.universe.tf/loadBalancerIPs: ${METALLB_ISTIOINGRESS_V6ADDR},${METALLB_ISTIOINGRESS_V4ADDR}
+        #metallb.universe.tf/loadBalancerIPs: ${METALLB_ISTIOINGRESS_V6ADDR},${METALLB_ISTIOINGRESS_V4ADDR}
       externalTrafficPolicy: "Local"
       type: LoadBalancer
       ipFamilyPolicy: RequireDualStack
