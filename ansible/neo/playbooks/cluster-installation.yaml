@@ -56,7 +56,7 @@
 
     - name: Cilium
       when: k3s_primary_control_node
-      ansible.builtin.include_tasks: tasks/cilium.yaml
+      ansible.builtin.include_tasks: tasks/calico.yaml
 
     - name: Cruft
       when: k3s_primary_control_node
