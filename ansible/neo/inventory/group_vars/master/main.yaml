@@ -4,14 +4,14 @@
 
 k3s_control_node: true
 k3s_server:
-  node-ip: "{{ ansible_host }},{{ ansible_default_ipv6.address }}"
-  #node-ip: "{{ ansible_default_ipv6.address }},{{ ansible_host }}"
+  #node-ip: "{{ ansible_host }},{{ ansible_default_ipv6.address }}"
+  node-ip: "{{ ansible_default_ipv6.address }},{{ ansible_host }}"
   tls-san:
-    - "{{ kubevip_address }}"
-    - "{{ ansible_default_ipv6.address }}"
+    - "{{ kubeapi_addr }}"
   docker: false
   flannel-backend: "none"             # This needs to be in quotes
   disable:
+    - coredns
     - flannel                         # Disable flannel                 - replaced with Cilium
     - local-storage                   # Disable local-path-provisioner  - installed with Flux
     - metrics-server                  # Disable metrics-server          - installed with Flux
@@ -21,22 +21,30 @@ k3s_server:
   disable-cloud-controller: true
   disable-kube-proxy: true            # Cilium uses eBPF
   write-kubeconfig-mode: "644"
+  pause-image: registry.k8s.io/pause:3.10
+  secrets-encryption: true
   # Network CIDR to use for pod IPs
-  cluster-cidr: "{{ cluster_cidr }},{{ cluster_v6cidr }}"
-  service-cidr: "{{ service_cidr }},{{ service_v6cidr }}"
+  #cluster-cidr: "{{ cluster_cidr }},{{ cluster_v6cidr }}"
+  #service-cidr: "{{ service_cidr }},{{ service_v6cidr }}"
+  cluster-cidr: "{{ cluster_v6cidr }},{{ cluster_cidr }}"
+  service-cidr: "{{ service_v6cidr }},{{ service_cidr }}"
   kubelet-arg:
-    - "feature-gates=GracefulNodeShutdown=true"
-    - "feature-gates=MixedProtocolLBService=true"
-    - "node-status-update-frequency=4s"
+    #- "node-status-update-frequency=4s"
+    - "image-gc-high-threshold=55"
+    - "image-gc-low-threshold=50"
+    - "node-ip=::"
   kube-controller-manager-arg:
-    - "bind-address=0.0.0.0"          # Required to monitor kube-controller-manager with kube-prometheus-stack
+    - "bind-address=::"          # Required to monitor kube-controller-manager with kube-prometheus-stack
     # https://github.com/k3s-io/k3s/issues/1264
     - "node-monitor-period=4s"
     - "node-monitor-grace-period=16s"
   kube-scheduler-arg:
-    - "bind-address=0.0.0.0"          # Required to monitor kube-scheduler with kube-prometheus-stack
+    - "bind-address=::"          # Required to monitor kube-scheduler with kube-prometheus-stack
   etcd-expose-metrics: true           # Required to monitor etcd with kube-prometheus-stack
+  etcd-disable-snapshots: true
   kube-apiserver-arg:
-    - "anonymous-auth=true"           # Required for HAProxy health-checks
+    - "bind-address=::"
+    - "--advertise-address={{ kubeapi_addr }}"
+    #- "anonymous-auth=true"           # Required for HAProxy health-checks
     - "default-not-ready-toleration-seconds=20"
     - "default-unreachable-toleration-seconds=20"

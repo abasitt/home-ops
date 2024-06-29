@@ -1,4 +1,5 @@
 ---
+#21-30 for k8s and 31-40 for LB range
 kubernetes:
   vars:
     ansible_user: k8s

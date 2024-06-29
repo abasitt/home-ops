@@ -1,7 +1,6 @@
 ---
-- hosts:
-    - master
-    - worker
+- name: Prepare System
+  hosts: kubernetes
   become: true
   gather_facts: true
   any_errors_fatal: true
@@ -9,6 +8,8 @@
     - name: Pausing for 5 seconds...
       ansible.builtin.pause:
         seconds: 5
+    - name: Populate service facts
+      ansible.builtin.service_facts:
   tasks:
     - name: Locale
       block:
@@ -16,75 +17,80 @@
           community.general.timezone:
             name: "{{ timezone | default('Etc/UTC') }}"
 
-    - name: Networking
+    - name: Packages
       block:
-        - name: Networking | Set hostname to inventory hostname
-          ansible.builtin.hostname:
-            name: "{{ inventory_hostname }}"
-        - name: Networking | Update /etc/hosts to include inventory hostname
-          ansible.builtin.blockinfile:
-            path: /etc/hosts
-            block: |
-              127.0.1.1   {{ inventory_hostname }}
-
-    - name: Packages | Fedora
-      block:
-        - name: Packages | Install required packages
-          ansible.builtin.dnf:
-            name: "{{ fedora.packages | default([]) }}"
-            state: present
-            update_cache: true
-        - name: Packages | Remove leaf packages
-          ansible.builtin.dnf:
-            autoremove: true
-      when: ansible_facts['distribution'] == 'Fedora'
-
-    - name: Packages | Ubuntu
-      block:
-        - name: Packages | Install required packages
+        - name: Packages | Install
           ansible.builtin.apt:
-            name: "{{ ubuntu.packages | default([]) }}"
-            state: present
-            update_cache: true
-        - name: Packages | Remove leaf packages
-          ansible.builtin.apt:
-            autoremove: true
-        - name: Packages | RasPi packages
-          ansible.builtin.apt:
-            name: ["linux-modules-extra-raspi"]
+            name: apt-transport-https,ca-certificates,conntrack,curl,dirmngr,gdisk,gnupg,hdparm,htop,
+              iptables,iputils-ping,ipvsadm,libseccomp2,lm-sensors,neofetch,net-tools,nfs-common,
+              nvme-cli,open-iscsi,parted,psmisc,python3,python3-apt,python3-kubernetes,python3-yaml,
+              smartmontools,socat,software-properties-common,unzip,util-linux
             install_recommends: false
-          notify: Reboot
-          when: "'raspi' in ansible_kernel"
-      when: ansible_facts['distribution'] == 'Ubuntu'
-
-    - name: Packages | Cilium CLI
-      ansible.builtin.include_role:
-        name: githubixx.cilium_cli
-        public: true
-      vars:
-        cilium_cli_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}"
-        cilium_cli_tmp_directory: /tmp
-      when:
-        - k3s_control_node is defined
-        - k3s_control_node
 
     - name: User Configuration
       block:
-        - name: User Configuration | Add additional SSH public keys
+        - name: User Configuration | SSH keys
           ansible.posix.authorized_key:
             user: "{{ ansible_user }}"
-            key: "{{ item }}"
-          loop: "{{ public_ssh_keys | default([]) }}"
+            key: "https://github.com/{{ github_username }}.keys"
+        - name: User Configuration | Silence login
+          ansible.builtin.file:
+            dest: "{{ '/home/' + ansible_user if ansible_user != 'root' else '/root' }}/.hushlogin"
+            state: touch
+            owner: "{{ ansible_user }}"
+            group: "{{ ansible_user }}"
+            mode: "0644"
+            modification_time: preserve
+            access_time: preserve
+        - name: User Configuration | Add user to sudoers
+          when: ansible_user != 'root'
+          ansible.builtin.copy:
+            content: "{{ ansible_user }} ALL=(ALL:ALL) NOPASSWD:ALL"
+            dest: "/etc/sudoers.d/{{ ansible_user }}"
+            owner: root
+            group: root
+            mode: "0440"
+
+    - name: Network Configuration
+      notify: Reboot
+      block:
+        - name: Network Configuration | Set hostname
+          ansible.builtin.hostname:
+            name: "{{ inventory_hostname }}"
+        - name: Network Configuration | Update hosts
+          ansible.builtin.copy:
+            dest: /etc/hosts
+            content: |
+              127.0.0.1 localhost
+              127.0.1.1 {{ inventory_hostname }}
+              # The following lines are desirable for IPv6 capable hosts
+              ::1     localhost ip6-localhost ip6-loopback
+              ff02::1 ip6-allnodes
+              ff02::2 ip6-allrouters
+            mode: preserve
+        # https://github.com/onedr0p/flux-cluster-template/discussions/635
+        - name: Network Configuration | Stop and disable service which messes with DNS
+          service:
+            name: "systemd-resolved"
+            state: stopped
+            enabled: false
+        - name: Delete link to the systemd-resolved resolv.conf
+          ansible.builtin.file:
+            path: /etc/resolv.conf
+            state: absent
+        - name: Network Configuration |  Setup nameserver
+          ansible.builtin.blockinfile:
+            path: /etc/resolv.conf
+            create: true
+            block: |
+              search .
+              nameserver 192.168.30.1
+              nameserver 1.1.1.1
+              nameserver 2606:4700:4700::64
+              nameserver 2001:4860:4860::64
 
     - name: System Configuration (1)
       block:
-        - name: System Configuration (1) | Disable firewalld | Fedora
-          ansible.builtin.systemd:
-            service: firewalld.service
-            enabled: false
-            masked: true
-            state: stopped
-          when: ansible_facts['distribution'] == 'Fedora'
         - name: System Configuration (1) | Disable ufw | Ubuntu
           ansible.builtin.systemd:
             service: ufw.service
@@ -128,11 +134,6 @@
               net.bridge.bridge-nf-call-ip6tables: 1
               fs.inotify.max_user_watches: 524288
               fs.inotify.max_user_instances: 512
-        - name: System Configuration (2) | Disable swap | Fedora
-          ansible.builtin.dnf:
-            name: zram-generator-defaults
-            state: absent
-          when: ansible_facts['distribution'] == 'Fedora'
         - name: System Configuration (2) | Disable swap at runtime | Ubuntu
           ansible.builtin.command: swapoff -a
           when:
@@ -145,11 +146,6 @@
             state: absent
           loop: ["none", "swap"]
           when: ansible_facts['distribution'] == 'Ubuntu'
-        - name: System Configuration (2) | Permissive SELinux | Fedora
-          ansible.posix.selinux:
-            state: permissive
-            policy: targeted
-          when: ansible_facts['distribution'] == 'Fedora'
       notify: Reboot
 
   handlers:
