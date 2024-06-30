@@ -12,14 +12,14 @@ k3s_server:
   flannel-backend: "none"             # This needs to be in quotes
   disable:
     - coredns
-    - flannel                         # Disable flannel                 - replaced with Cilium
+    - flannel                         # Disable flannel                 - replaced with calico
     - local-storage                   # Disable local-path-provisioner  - installed with Flux
     - metrics-server                  # Disable metrics-server          - installed with Flux
     - servicelb                       # Disable servicelb               - replaced with metallb and installed with Flux
     - traefik                         # Disable traefik                 - replaced with ingress-nginx and installed with Flux
   disable-network-policy: true
   disable-cloud-controller: true
-  disable-kube-proxy: true            # Cilium uses eBPF
+  disable-kube-proxy: true            # calico eBPF mode
   write-kubeconfig-mode: "644"
   pause-image: registry.k8s.io/pause:3.10
   secrets-encryption: true

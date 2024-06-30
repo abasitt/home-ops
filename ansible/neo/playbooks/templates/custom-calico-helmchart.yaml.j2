@@ -8,13 +8,14 @@ spec:
   imagePath: calico
   calicoNetwork:
     bgp: Enabled
+    linuxDataplane: BPF
     # https://projectcalico.docs.tigera.io/networking/ip-autodetection
     nodeAddressAutodetectionV4:
       cidrs:
         - "{{ nodes_v4cidr }}"
     nodeAddressAutodetectionV6:
       cidrs:
-        - "{{ nodes_v4cidr }}"
+        - "{{ nodes_v6cidr }}"
     # Note: The ipPools section cannot be modified post-install.
     ipPools:
       - blockSize: 116

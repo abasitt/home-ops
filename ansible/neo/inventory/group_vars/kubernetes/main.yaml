@@ -14,5 +14,11 @@ k3s_use_unsupported_config: true
 k3s_registration_address: "[{{ kubeapi_addr }}]"
 # /var/lib/rancher/k3s/server/manifests
 k3s_server_manifests_templates:
-  - custom-cilium-helmchart.yaml.j2
+  - custom-calico.tigerans.yaml.j2
+  - custom-calico-k8service.yaml.j2
+  - custom-calico-helmchart.yaml.j2
   - custom-coredns-helmchart.yaml.j2
+k3s_server_manifests_urls:
+  # Tigera Operator for Calico CNI
+  - url: https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
+    filename: custom-tigera-operator.yaml
