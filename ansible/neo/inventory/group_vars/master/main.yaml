@@ -5,9 +5,10 @@
 k3s_control_node: true
 k3s_server:
   #node-ip: "{{ ansible_host }},{{ ansible_default_ipv6.address }}"
-  node-ip: "{{ ansible_default_ipv6.address }},{{ ansible_host }}"
+  node-ip: "{{ ansible_v6host }},{{ ansible_host }}"
   tls-san:
     - "{{ kubeapi_addr }}"
+    - "{{ ansible_v6host }}"
   docker: false
   flannel-backend: "none"             # This needs to be in quotes
   disable:
@@ -20,19 +21,17 @@ k3s_server:
   disable-network-policy: true
   disable-cloud-controller: true
   disable-kube-proxy: true            # calico eBPF mode
-  write-kubeconfig-mode: "644"
   pause-image: registry.k8s.io/pause:3.10
   secrets-encryption: true
-  # Network CIDR to use for pod IPs
-  #cluster-cidr: "{{ cluster_cidr }},{{ cluster_v6cidr }}"
-  #service-cidr: "{{ service_cidr }},{{ service_v6cidr }}"
   cluster-cidr: "{{ cluster_v6cidr }},{{ cluster_cidr }}"
   service-cidr: "{{ service_v6cidr }},{{ service_cidr }}"
+  etcd-expose-metrics: true           # Required to monitor etcd with kube-prometheus-stack
+  etcd-disable-snapshots: true
   kubelet-arg:
     #- "node-status-update-frequency=4s"
     - "image-gc-high-threshold=55"
     - "image-gc-low-threshold=50"
-    - "node-ip=::"
+    - "node-ip={{ ansible_v6host }}"
   kube-controller-manager-arg:
     - "bind-address=::"          # Required to monitor kube-controller-manager with kube-prometheus-stack
     # https://github.com/k3s-io/k3s/issues/1264
@@ -40,11 +39,10 @@ k3s_server:
     - "node-monitor-grace-period=16s"
   kube-scheduler-arg:
     - "bind-address=::"          # Required to monitor kube-scheduler with kube-prometheus-stack
-  etcd-expose-metrics: true           # Required to monitor etcd with kube-prometheus-stack
-  etcd-disable-snapshots: true
   kube-apiserver-arg:
     - "bind-address=::"
     - "--advertise-address={{ kubeapi_addr }}"
-    #- "anonymous-auth=true"           # Required for HAProxy health-checks
+    - "anonymous-auth=true"           # Required for HAProxy health-checks
     - "default-not-ready-toleration-seconds=20"
     - "default-unreachable-toleration-seconds=20"
+  write-kubeconfig-mode: "644"

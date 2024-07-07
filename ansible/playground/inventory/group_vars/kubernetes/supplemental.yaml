@@ -4,7 +4,7 @@ github_username: abasitt
 kubeapi_addr: "2001:470:ee86:30:192:168:30:21"
 #kubeapi_addr: "192.168.30.21"
 cluster_cidr: "10.42.0.0/16"
-cluster_v6cidr: "2001:470:ee86:1042::/56"
+cluster_v6cidr: "2001:470:ee86:42::/56"
 service_cidr: "10.43.0.0/16"
 service_v6cidr: "2001:470:ee86:4:10:43::/112"
 coredns_v4addr: "{{ service_cidr.split(',')[0] | ansible.utils.nthhost(10) }}"
