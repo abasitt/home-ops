@@ -41,7 +41,7 @@ k3s_server:
     - "bind-address=::"          # Required to monitor kube-scheduler with kube-prometheus-stack
   kube-apiserver-arg:
     - "bind-address=::"
-    - "--advertise-address={{ kubeapi_addr }}"
+    #- "--advertise-address={{ kubeapi_addr }}"
     - "anonymous-auth=true"           # Required for HAProxy health-checks
     - "default-not-ready-toleration-seconds=20"
     - "default-unreachable-toleration-seconds=20"
