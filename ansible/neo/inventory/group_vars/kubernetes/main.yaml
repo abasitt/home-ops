@@ -18,10 +18,11 @@ k3s_server_manifests_templates:
   - custom-calico-k8service.yaml.j2
   - custom-calico-installation.yaml.j2
   - custom-coredns-helmchart.yaml.j2
-#  - kube-vip-ds.yaml.j2
-#  - kube-vip-rbac.yaml.j2
-k3s_server_pod_manifests_templates:
-  - kube-vip-static-pod.yaml.j2
+  - kube-vip-k8service.yaml.j2
+  - kube-vip-ds.yaml.j2
+  - kube-vip-rbac.yaml.j2
+#k3s_server_pod_manifests_templates:
+#  - kube-vip-static-pod.yaml.j2
 k3s_server_manifests_urls:
   # Tigera Operator for Calico CNI
   - url: https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
