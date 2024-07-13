@@ -85,7 +85,7 @@
             block: |
               search .
               nameserver 192.168.30.1
-              nameserver 2001:470:ee86:30:192:168:30:1
+              nameserver 2001:470:ee86:30::1
 
     - name: System Configuration (1)
       block:
