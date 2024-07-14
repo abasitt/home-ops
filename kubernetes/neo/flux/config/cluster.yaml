@@ -16,7 +16,7 @@ spec:
     # exclude all
     /*
     # include kubernetes directory
-    !/kubernetes/test
+    !/kubernetes/neo
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -26,7 +26,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  path: ./kubernetes/metal/flux
+  path: ./kubernetes/neo/flux
   prune: true
   wait: false
   sourceRef:
