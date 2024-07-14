@@ -5,6 +5,7 @@ resources:
   - ./actions-runner-controller.yaml
   - ./bitnami.yaml
   - ./bjw-s.yaml
+  - ./calico.yaml
   - ./external-dns.yaml
   - ./grafana.yaml
   - ./hajimari.yaml
