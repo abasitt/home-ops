@@ -8,7 +8,6 @@ resources:
   - ./coredns.yaml
   - ./external-dns.yaml
   - ./grafana.yaml
-  - ./hajimari.yaml
   - ./ingress-nginx.yaml
   - ./istio.yaml
   - ./jetstack.yaml
