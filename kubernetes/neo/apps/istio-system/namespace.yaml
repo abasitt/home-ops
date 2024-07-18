@@ -5,3 +5,4 @@ metadata:
   name: istio-system
   labels:
     topology.istio.io/network: ${CLUSTER_NAME}-net
+    kustomize.toolkit.fluxcd.io/prune: disabled
