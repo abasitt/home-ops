@@ -8,7 +8,7 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 3m
-  path: "./kubernetes/apps/networking/istio/istio-gateways/ingress-gateway/app"
+  path: "./kubernetes/neo/apps/istio-gateways/ingress-gateway/app"
   prune: true
   wait: false
   sourceRef:
