@@ -26,6 +26,6 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
-  values:
-    crds:
-      enabled: true
+  valuesFrom:
+    - kind: ConfigMap
+      name: metallb-helm-values

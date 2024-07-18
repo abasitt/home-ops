@@ -1,0 +1,12 @@
+---
+crds:
+  enabled: true
+speaker:
+  enabled: false
+prometheus:
+  namespace: observability
+  serviceAccount: kube-prometheus-stack-prometheus
+  serviceMonitor:
+    enabled: true
+  prometheusRule:
+    enabled: true
