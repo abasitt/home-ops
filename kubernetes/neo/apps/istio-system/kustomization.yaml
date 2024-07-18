@@ -7,4 +7,3 @@ resources:
   - istio-base/ks.yaml
   # - istio-cni/ks.yaml #deployment without cni at the moment
   - istiod/ks.yaml
-  - istio-gateways
