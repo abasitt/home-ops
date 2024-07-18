@@ -10,3 +10,4 @@ prometheus:
     enabled: true
   prometheusRule:
     enabled: true
+loadBalancerClass: metallb
