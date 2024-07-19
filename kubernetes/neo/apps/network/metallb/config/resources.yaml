@@ -2,8 +2,8 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: default-pool
+  name: default-l3-pool
 spec:
   addresses:
-    - "${METALLB_LB_V4RANGE}"
-    - "${METALLB_LB_V6RANGE}"
+    - "${METALLB_L3_V4RANGE}"
+    - "${METALLB_L3_V6RANGE}"
