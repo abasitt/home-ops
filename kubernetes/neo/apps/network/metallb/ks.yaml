@@ -36,7 +36,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: metallb
-  path: ./kubernetes/registry/apps/network/metallb/config
+  path: ./kubernetes/neo/apps/network/metallb/config
   prune: true
   sourceRef:
     kind: GitRepository
