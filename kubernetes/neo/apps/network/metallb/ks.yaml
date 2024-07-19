@@ -3,28 +3,40 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps-metallb
+  name: &app metallb
   namespace: flux-system
 spec:
+  targetNamespace: network
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: ./kubernetes/neo/apps/networking/metallb/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
-  wait: true
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: metallb
+      namespace: network
   interval: 30m
   retryInterval: 1m
-  timeout: 5m
+  timeout: 3m
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps-metallb-config
+  name: &app metallb-config
   namespace: flux-system
 spec:
+  targetNamespace: network
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   dependsOn:
-    - name: cluster-apps-metallb
-  path: ./kubernetes/neo/apps/networking/metallb/config
+    - name: metallb
+  path: ./kubernetes/registry/apps/network/metallb/config
   prune: true
   sourceRef:
     kind: GitRepository
@@ -32,4 +44,4 @@ spec:
   wait: true
   interval: 30m
   retryInterval: 1m
-  timeout: 5m
+  timeout: 3m
