@@ -7,11 +7,9 @@ apiServer:
           containers:
             - name: calico-apiserver
               resources:
-                requests:
-                  cpu: 6m
-                  memory: 100Mi
                 limits:
-                  memory: 300Mi
+                  cpu: 50m
+                  memory: 200Mi
 # Configures general installation parameters for Calico. Schema is based
 # on the operator.tigera.io/Installation API documented
 # here: https://projectcalico.docs.tigera.io/reference/installation/api#operator.tigera.io/v1.InstallationSpec
@@ -43,7 +41,7 @@ installation:
         nodeSelector: all()
   nodeMetricsPort: 9091
   typhaMetricsPort: 9093
-  kubeletVolumePluginPath: None
+kubeletVolumePluginPath: None
 resources:
   requests:
     cpu: 15m
