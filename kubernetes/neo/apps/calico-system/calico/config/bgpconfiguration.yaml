@@ -8,5 +8,5 @@ spec:
   nodeToNodeMeshEnabled: true
   serviceClusterIPs: []
   serviceLoadBalancerIPs:
-    - "${METALLB_L3_V4RANGE}"
-    - "${METALLB_L3_V6RANGE}"
+    - cidr: "${METALLB_L3_V4RANGE}"
+    - cidr: "${METALLB_L3_V6RANGE}"
