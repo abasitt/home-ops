@@ -44,7 +44,7 @@ installation:
 resources:
   requests:
     cpu: 15m
-    memory: 112M
+    memory: 112
   limits:
     cpu: 500m
     memory: 196
