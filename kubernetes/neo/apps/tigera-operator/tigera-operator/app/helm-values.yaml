@@ -22,10 +22,10 @@ installation:
     # https://projectcalico.docs.tigera.io/networking/ip-autodetection
     nodeAddressAutodetectionV4:
       cidrs:
-        - "{{ nodes_v4cidr }}"
+        - "{{ NODES_V4CIDR }}"
     nodeAddressAutodetectionV6:
       cidrs:
-        - "{{ nodes_v6cidr }}"
+        - "{{ NODES_V6CIDR }}"
     # Note: The ipPools section cannot be modified post-install.
     ipPools:
       - blockSize: 116
