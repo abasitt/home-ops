@@ -1,4 +1,6 @@
 global:
+  hub: gcr.io/istio-release
+  variant: "distroless"
   meshID: smesh
   multiCluster:
     clusterName: ${CLUSTER_NAME}
@@ -8,7 +10,6 @@ global:
   #    address: localhost:9411
   defaultPodDisruptionBudget:
     enabled: false
-  # variant: "distroless"
   # caAddress: cert-manager-istio-csr.network-system.svc:443
   proxy:
     resources:
@@ -41,6 +42,7 @@ pilot:
     PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true # default is true also
     PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true # default is true also
     PILOT_FILTER_GATEWAY_CLUSTER_CONFIG: true # default is false
+    ISTIO_DUAL_STACK: "true" #..enable dualstack
 meshConfig:
   defaultConfig:
     holdApplicationUntilProxyStarts: true #..Wait for the istio-proxy to start before starting application pods
@@ -50,6 +52,7 @@ meshConfig:
     proxyMetadata:
       ISTIO_META_DNS_CAPTURE: "true"
       ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+      ISTIO_DUAL_STACK: "true" #..enable dualstack
     # interceptionMode: TPROXY # default is redirect
     tracing:
     sampling: 1.0 #... default value
