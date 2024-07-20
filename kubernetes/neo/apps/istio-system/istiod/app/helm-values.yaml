@@ -5,13 +5,11 @@ global:
   multiCluster:
     clusterName: ${CLUSTER_NAME}
   network: ${CLUSTER_NAME}-net
-  #tracer:
-  #  zipkin:
-  #    address: localhost:9411
   defaultPodDisruptionBudget:
     enabled: false
   # caAddress: cert-manager-istio-csr.network-system.svc:443
   proxy:
+    tracer: "none"
     resources:
       requests:
         cpu: 5m
