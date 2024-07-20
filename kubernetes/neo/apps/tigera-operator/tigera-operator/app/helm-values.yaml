@@ -16,7 +16,7 @@ apiServer:
 # on the operator.tigera.io/Installation API documented
 # here: https://projectcalico.docs.tigera.io/reference/installation/api#operator.tigera.io/v1.InstallationSpec
 installation:
-#  enabled: true
+  enabled: true
   registry: quay.io
   imagePath: calico
   calicoNetwork:
@@ -25,19 +25,19 @@ installation:
     # https://projectcalico.docs.tigera.io/networking/ip-autodetection
     nodeAddressAutodetectionV4:
       cidrs:
-        - "{{ NODES_V4CIDR }}"
+        - ${NODES_V4CIDR}
     nodeAddressAutodetectionV6:
       cidrs:
-        - "{{ NODES_V6CIDR }}"
+        - ${NODES_V6CIDR}
     # Note: The ipPools section cannot be modified post-install.
     ipPools:
       - blockSize: 116
-        cidr: "{{ CLUSTER_V6CIDR }}"
+        cidr: ${CLUSTER_V6CIDR}
         encapsulation: "None"
         natOutgoing: Enabled
         nodeSelector: all()
       - blockSize: 26
-        cidr: "{{ CLUSTER_CIDR }}"
+        cidr: ${CLUSTER_CIDR}
         encapsulation: "None"
         natOutgoing: Enabled
         nodeSelector: all()
