@@ -3,22 +3,21 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps-istiod
+  name: &app istiod
   namespace: flux-system
 spec:
-  interval: 30m
-  retryInterval: 1m
-  timeout: 3m
-  path: "./kubernetes/neo/apps/networking/istio/istiod/app"
-  prune: true
-  wait: true
+  targetNamespace: istio-system
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/neo/apps/istio-system/istiod/app
+  prune: false
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
-  postBuild:
-    substituteFrom:
-      - kind: ConfigMap
-        name: cluster-settings
   dependsOn:
-    - name: cluster-apps-istio-base
-      namespace: flux-system
+    - name: istio-base
+  wait: false
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
