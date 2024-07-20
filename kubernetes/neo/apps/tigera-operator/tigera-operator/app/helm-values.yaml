@@ -29,12 +29,12 @@ installation:
     # Note: The ipPools section cannot be modified post-install.
     ipPools:
       - blockSize: 116
-        cidr: "{{ cluster_v6cidr }}"
+        cidr: "{{ CLUSTER_V6CIDR }}"
         encapsulation: "None"
         natOutgoing: Enabled
         nodeSelector: all()
       - blockSize: 26
-        cidr: "{{ cluster_cidr }}"
+        cidr: "{{ CLUSTER_CIDR }}"
         encapsulation: "None"
         natOutgoing: Enabled
         nodeSelector: all()
