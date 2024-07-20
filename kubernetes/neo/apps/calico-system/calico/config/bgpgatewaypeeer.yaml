@@ -1,23 +1,17 @@
----
-apiVersion: crd.projectcalico.org/v1
-kind: BGPFilter
-metadata:
-  name: drop-pod-network
-spec:
-  exportV4:
-    - action: Accept
-      matchOperator: In
-      cidr: 192.168.21.0/24
-    - action: Reject
-      matchOperator: In
-      cidr: ${NETWORK_K8S_POD_CIDR}
-  exportV6:
-    - action: Accept
-      matchOperator: In
-      cidr: fdd5:aa8:9535:21::/64
-    - action: Reject
-      matchOperator: In
-      cidr: ${NETWORK_K8S_POD_CIDR_V6}
+#---
+#apiVersion: crd.projectcalico.org/v1
+#kind: BGPFilter
+#metadata:
+#  name: drop-pod-network
+#spec:
+#  exportV4:
+#    - action: Reject
+#      matchOperator: In
+#      cidr: ${CLUSTER_CIDR}
+#  exportV6:
+#    - action: Reject
+#      matchOperator: In
+#      cidr: ${CLUSTER_V6CIDR}
 ---
 apiVersion: crd.projectcalico.org/v1
 kind: BGPPeer
@@ -27,16 +21,16 @@ spec:
   peerIP: 192.168.30.1
   asNumber: 65001
   keepOriginalNextHop: true
-  filters:
-    - drop-pod-network
+#  filters:
+#    - drop-pod-network
 ---
 apiVersion: crd.projectcalico.org/v1
 kind: BGPPeer
 metadata:
   name: ipv6
 spec:
-  peerIP: fdd5:aa8:9535:20::1
-  asNumber: 64512
+  peerIP: f2001:470:ee86:30::1
+  asNumber: 65001
   keepOriginalNextHop: true
-  filters:
-    - drop-pod-network
+#  filters:
+#    - drop-pod-network
