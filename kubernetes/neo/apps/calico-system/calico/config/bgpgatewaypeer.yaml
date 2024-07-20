@@ -29,7 +29,7 @@ kind: BGPPeer
 metadata:
   name: ipv6
 spec:
-  peerIP: f2001:470:ee86:30::1
+  peerIP: 2001:470:ee86:30::1
   asNumber: 65001
   keepOriginalNextHop: true
 #  filters:
