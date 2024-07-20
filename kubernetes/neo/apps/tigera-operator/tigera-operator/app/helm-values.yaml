@@ -1,0 +1,50 @@
+apiServer:
+  enabled: false
+  apiServerDeployment:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: calico-apiserver
+              resources:
+                limits:
+                  memory: 300M
+# Configures general installation parameters for Calico. Schema is based
+# on the operator.tigera.io/Installation API documented
+# here: https://projectcalico.docs.tigera.io/reference/installation/api#operator.tigera.io/v1.InstallationSpec
+installation:
+  enabled: true
+  registry: quay.io
+  imagePath: calico
+  calicoNetwork:
+    bgp: Enabled
+    linuxDataplane: Iptables
+    # https://projectcalico.docs.tigera.io/networking/ip-autodetection
+    nodeAddressAutodetectionV4:
+      cidrs:
+        - "{{ nodes_v4cidr }}"
+    nodeAddressAutodetectionV6:
+      cidrs:
+        - "{{ nodes_v6cidr }}"
+    # Note: The ipPools section cannot be modified post-install.
+    ipPools:
+      - blockSize: 116
+        cidr: "{{ cluster_v6cidr }}"
+        encapsulation: "None"
+        natOutgoing: Enabled
+        nodeSelector: all()
+      - blockSize: 26
+        cidr: "{{ cluster_cidr }}"
+        encapsulation: "None"
+        natOutgoing: Enabled
+        nodeSelector: all()
+  nodeMetricsPort: 9091
+  typhaMetricsPort: 9093
+  kubeletVolumePluginPath: None
+resources:
+  requests:
+    cpu: 15m
+    memory: 112M
+  limits:
+    cpu: 500m
+    memory: 196
