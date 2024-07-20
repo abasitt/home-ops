@@ -16,7 +16,7 @@
 apiVersion: crd.projectcalico.org/v1
 kind: BGPPeer
 metadata:
-  name: ipv4
+  name: ipv4-gw
 spec:
   peerIP: 192.168.30.1
   asNumber: 65001
@@ -27,7 +27,7 @@ spec:
 apiVersion: crd.projectcalico.org/v1
 kind: BGPPeer
 metadata:
-  name: ipv6
+  name: ipv6-gw
 spec:
   peerIP: 2001:470:ee86:30::1
   asNumber: 65001
