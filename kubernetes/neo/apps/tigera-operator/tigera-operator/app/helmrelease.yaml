@@ -26,4 +26,4 @@ spec:
       retries: 3
   valuesFrom:
     - kind: ConfigMap
-      name: metallb-helm-values
+      name: calico-helm-values

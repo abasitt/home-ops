@@ -6,7 +6,7 @@ resources:
   - ./helmrelease.yaml
   - ./felixconfiguration.yaml
 configMapGenerator:
-  - name: metallb-helm-values
+  - name: calico-helm-values
     files:
       - values.yaml=./helm-values.yaml
 configurations:
