@@ -1,5 +1,5 @@
 apiServer:
-  enabled: false
+  enabled: true
   apiServerDeployment:
     spec:
       template:
