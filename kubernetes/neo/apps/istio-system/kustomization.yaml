@@ -2,8 +2,8 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources: []
-#  - namespace.yaml
-#  - istio-base/ks.yaml
+resources:
+  - namespace.yaml
+  - istio-base/ks.yaml
 #  # - istio-cni/ks.yaml #deployment without cni at the moment
-#  - istiod/ks.yaml
+  - istiod/ks.yaml

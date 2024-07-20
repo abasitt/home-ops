@@ -1,16 +1,23 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps-istio-base
+  name: &app istio-base
   namespace: flux-system
 spec:
-  interval: 30m
-  retryInterval: 1m
-  timeout: 3m
-  path: "./kubernetes/apps/networking/istio/istio-base/app"
-  prune: true
-  wait: true
+  targetNamespace: istio-system
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/neo/apps/istio-system/istio-base/app
+  prune: false
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
+  dependsOn:
+    - name: istio-base
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
