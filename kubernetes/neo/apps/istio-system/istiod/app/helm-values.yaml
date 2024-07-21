@@ -42,6 +42,15 @@ pilot:
     PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true # default is true also
     PILOT_FILTER_GATEWAY_CLUSTER_CONFIG: true # default is false
     ISTIO_DUAL_STACK: "true" #..enable dualstack
+  #don't deploy on a laptop node
+  affinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: "kubernetes.io/hostname"
+          operator: "NotIn"
+          values:
+          - "neok3slm-w1"
 meshConfig:
   defaultConfig:
     holdApplicationUntilProxyStarts: true #..Wait for the istio-proxy to start before starting application pods
