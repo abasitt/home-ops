@@ -3,7 +3,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: istio-ingressgateway
-  namespace: istio-ingress
 spec:
   interval: 5m
   chart:
@@ -19,7 +18,6 @@ spec:
     timeout: 10m
     replace: true
     crds: CreateReplace
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
@@ -40,47 +38,16 @@ spec:
   maxHistory: 3
   postRenderers:
     - kustomize:
-        patchesStrategicMerge:
-          - apiVersion: v1
-            kind: Service
-            metadata:
+        patches:
+          - target:
+              version: v1
+              kind: Service
               name: istio-ingressgateway
               namespace: istio-ingress
-            spec:
-              allocateLoadBalancerNodePorts: false
-  values:
-    autoscaling:
-      minReplicas: 1
-      maxReplicas: 2
-    service:
-      annotations:
-        metallb.universe.tf/loadBalancerIPs: ${METALLB_ISTIOINGRESS_V4ADDR}
-      externalTrafficPolicy: "Local"
-      type: LoadBalancer
-      ports:
-        - name: http2
-          port: 80
-          protocol: TCP
-          targetPort: 80
-        - name: https
-          port: 443
-          protocol: TCP
-          targetPort: 443
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        cpu: 200m
-        memory: 256Mi
-    # affinity:
-    #   # This podAntiAffinity ensures ingress controllers are not scheduled on the same node
-    #   podAntiAffinity:
-    #     requiredDuringSchedulingIgnoredDuringExecution:
-    #     - labelSelector:
-    #         matchExpressions:
-    #         - key: istio
-    #           operator: In
-    #           values:
-    #           - ingressgateway
-    #       topologyKey: kubernetes.io/hostname
+            patch: |
+              - op: replace
+                path: /spec/loadBalancerClass
+                value: metallb
+  valuesFrom:
+    - kind: ConfigMap
+      name: istioingressgw-helm-values

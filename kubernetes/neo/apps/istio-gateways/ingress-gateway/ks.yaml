@@ -1,21 +1,24 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps-istio-ingress
+  name: &app istio-ingressgateway
   namespace: flux-system
 spec:
-  interval: 30m
-  retryInterval: 1m
-  timeout: 3m
-  path: "./kubernetes/neo/apps/istio-gateways/ingress-gateway/app"
+  targetNamespace: istio-gateways
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/neo/apps/istio-gateways/ingress-gateway/app
   prune: true
-  wait: false
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
   dependsOn:
-    - name: cluster-apps-istiod
-      namespace: flux-system
-    - name: cluster-apps-cert-manager
-      namespace: flux-system
+    - name: istiod
+    - name: cert-manager
+  wait: false
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
