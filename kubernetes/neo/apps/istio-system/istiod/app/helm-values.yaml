@@ -26,6 +26,7 @@ global:
         cpu: 200m
         memory: 256Mi
 pilot:
+  ipFamilyPolicy: "RequireDualStack"
   autoscaleEnabled: "false"
   autoscaleMin: 1
   autoscaleMax: 1
