@@ -43,9 +43,9 @@ spec:
               version: v1
               kind: Service
               name: istio-ingressgateway
-              namespace: istio-ingress
+              namespace: istio-gateways
             patch: |
-              - op: replace
+              - op: add
                 path: /spec/loadBalancerClass
                 value: metallb
   valuesFrom:
