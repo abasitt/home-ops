@@ -1,6 +1,6 @@
 autoscaling:
   minReplicas: 1
-  maxReplicas: 2
+  maxReplicas: 1
 service:
   annotations:
     metallb.universe.tf/loadBalancerIPs: ${METALLB_ISTIOINGRESS_V6ADDR},${METALLB_ISTIOINGRESS_V4ADDR}
@@ -26,13 +26,14 @@ resources:
     memory: 256Mi
 #don't deploy on a laptop node
 affinity:
-  requiredDuringSchedulingIgnoredDuringExecution:
-    nodeSelectorTerms:
-    - matchExpressions:
-      - key: "kubernetes.io/hostname"
-        operator: "NotIn"
-        values:
-        - "neok3slm-w1"
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: "kubernetes.io/hostname"
+          operator: "NotIn"
+          values:
+          - "neok3slm-w1"
 # affinity:
 #   # This podAntiAffinity ensures ingress controllers are not scheduled on the same node
 #   podAntiAffinity:

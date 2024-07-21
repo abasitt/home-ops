@@ -34,10 +34,11 @@ spec:
       enabled: true
     #don't deploy on a laptop node
     affinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: "kubernetes.io/hostname"
-            operator: "NotIn"
-            values:
-            - "neok3slm-w1"
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: "kubernetes.io/hostname"
+              operator: "NotIn"
+              values:
+              - "neok3slm-w1"
