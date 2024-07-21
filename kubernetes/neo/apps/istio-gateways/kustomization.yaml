@@ -6,4 +6,5 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - ingress-gateway/ks.yaml
+  - ingress-privategateway/ks.yaml
   - ingressclass.yaml
