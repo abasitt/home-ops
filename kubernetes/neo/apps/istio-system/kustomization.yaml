@@ -7,3 +7,4 @@ resources:
   - istio-base/ks.yaml
   - istio-cni/ks.yaml
   - istiod/ks.yaml
+  - istio-ztunnel/ks.yaml
