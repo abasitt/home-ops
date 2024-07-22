@@ -33,6 +33,7 @@ pilot:
   replicaCount: 1
   # rollingMaxSurge: 100%
   # rollingMaxUnavailable: 25%
+  traceSampling: 1 #...default is 1 also
   resources:
     requests:
       cpu: 10m #default is 500m
@@ -42,6 +43,7 @@ pilot:
     PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true # default is true also
     PILOT_FILTER_GATEWAY_CLUSTER_CONFIG: true # default is false
     ISTIO_DUAL_STACK: "true" #..enable dualstack
+    ISTIO_META_ENABLE_HBONE: "true" #..enable ambient mode
   #don't deploy on a laptop node
   affinity:
     nodeAffinity:
@@ -62,9 +64,8 @@ meshConfig:
       ISTIO_META_DNS_CAPTURE: "true"
       ISTIO_META_DNS_AUTO_ALLOCATE: "true"
       ISTIO_DUAL_STACK: "true" #..enable dualstack
+      ISTIO_META_ENABLE_HBONE: "true" #..enable ambient mode
     # interceptionMode: TPROXY # default is redirect
-    tracing:
-    sampling: 1.0 #... default value
     custom_tags:
       clusterID:
         environment:
