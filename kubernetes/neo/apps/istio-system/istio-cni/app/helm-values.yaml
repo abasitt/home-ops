@@ -1,0 +1,15 @@
+global:
+  hub: gcr.io/istio-release
+  variant: "distroless"
+cni:
+  cniConfFileName: 10-calico.conflist
+  # Configure ambient settings
+  ambient:
+    # If enabled, ambient redirection will be enabled
+    enabled: true
+    # Set ambient config dir path: defaults to /etc/ambient-config
+    configDir: ""
+    # If enabled, and ambient is enabled, DNS redirection will be enabled
+    dnsCapture: true
+    # If enabled, and ambient is enabled, enables ipv6 support
+    ipv6: true

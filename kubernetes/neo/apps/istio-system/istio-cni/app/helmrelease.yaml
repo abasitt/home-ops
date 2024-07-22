@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: cni
-      version: 1.22.2
+      version: 1.23.0-alpha.0
       sourceRef:
         kind: HelmRepository
         name: istio
@@ -38,6 +38,6 @@ spec:
   uninstall:
     keepHistory: false
   maxHistory: 3
-  # values:
-  #   global:
-  #     variant: "distroless"
+  valuesFrom:
+    - kind: ConfigMap
+      name: istiocni-helm-values

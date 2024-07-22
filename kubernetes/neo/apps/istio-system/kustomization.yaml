@@ -5,5 +5,5 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - istio-base/ks.yaml
-#  # - istio-cni/ks.yaml #deployment without cni at the moment
+  - istio-cni/ks.yaml
   - istiod/ks.yaml
