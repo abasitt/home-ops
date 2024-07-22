@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: istio-system
 resources:
   - helmrelease.yaml
-  # - ../addons/monitoring
 configMapGenerator:
   - name: istiocni-helm-values
     files:
