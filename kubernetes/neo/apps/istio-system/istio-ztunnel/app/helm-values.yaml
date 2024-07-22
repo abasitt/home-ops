@@ -1,3 +1,5 @@
 ---
 hub: gcr.io/istio-release
 variant: "distroless"
+multiCluster:
+  clusterName: ${CLUSTER_NAME}
