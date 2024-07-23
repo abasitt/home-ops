@@ -1,10 +1,10 @@
 global:
   hub: gcr.io/istio-release
   variant: "distroless"
-  meshID: smesh
+  meshID: neo
   multiCluster:
     clusterName: ${CLUSTER_NAME}
-  network: ${CLUSTER_NAME}-net
+  #network: ${CLUSTER_NAME}-net
   defaultPodDisruptionBudget:
     enabled: false
   # caAddress: cert-manager-istio-csr.network-system.svc:443
