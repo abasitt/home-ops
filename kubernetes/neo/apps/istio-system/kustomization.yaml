@@ -6,5 +6,5 @@ resources:
   - namespace.yaml
   - istio-base/ks.yaml
   - istiod/ks.yaml
-  #- istio-cni/ks.yaml
-  #- istio-ztunnel/ks.yaml
+  - istio-cni/ks.yaml
+  - istio-ztunnel/ks.yaml
