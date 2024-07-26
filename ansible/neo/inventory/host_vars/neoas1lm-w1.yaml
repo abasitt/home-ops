@@ -1,0 +1,5 @@
+k3s_agent:
+  node-taint:
+    - "kubernetes.io/hostname=neoas1lm-w1:NoExecute"
+  node-label:
+    - "kubernetes.io/zfs=true"
