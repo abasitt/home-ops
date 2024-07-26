@@ -6,20 +6,20 @@ kubernetes:
   children:
     master:
       hosts:
-        neok3svm-m1:
+        neohv1vm-m1:
           ansible_host: 192.168.30.41
           ansible_v6host: 2001:470:ee86:30:192:168:30:41
-        neok3svm-m2:
+        neohv2vm-m2:
           ansible_host: 192.168.30.42
           ansible_v6host: 2001:470:ee86:30:192:168:30:42
-        neok3sbm-m3:
+        neobl1bm-m3:
           ansible_host: 192.168.30.43
           ansible_v6host: 2001:470:ee86:30:192:168:30:43
     worker:
       hosts:
-        neok3slm-w1:  #lm=laptop machine
+        neoas1lm-w1:  #lm=laptop machine
           ansible_host: 192.168.30.46
           ansible_v6host: 2001:470:ee86:30:192:168:30:46
-        neok3sbm-w2:
+        neotc1bm-w2:
           ansible_host: 192.168.30.47
           ansible_v6host: 2001:470:ee86:30:192:168:30:47
