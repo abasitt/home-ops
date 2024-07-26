@@ -20,6 +20,6 @@ kubernetes:
         neoas1lm-w1:  #lm=laptop machine
           ansible_host: 192.168.30.46
           ansible_v6host: 2001:470:ee86:30:192:168:30:46
-        neotc1bm-w2:
+        neotc1bm-w2: #tc=thinkcenter
           ansible_host: 192.168.30.47
           ansible_v6host: 2001:470:ee86:30:192:168:30:47
