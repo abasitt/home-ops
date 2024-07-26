@@ -16,9 +16,10 @@ kubernetes:
           ansible_host: 192.168.30.43
           ansible_v6host: 2001:470:ee86:30:192:168:30:43
     worker:
-      vars:
-        ansible_user: k8s
       hosts:
         neok3slm-w1:  #lm=laptop machine
           ansible_host: 192.168.30.46
           ansible_v6host: 2001:470:ee86:30:192:168:30:46
+        neok3sbm-w2:
+          ansible_host: 192.168.30.47
+          ansible_v6host: 2001:470:ee86:30:192:168:30:47
