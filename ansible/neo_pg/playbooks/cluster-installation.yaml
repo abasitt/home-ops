@@ -63,3 +63,7 @@
     - name: Cruft
       when: k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/cruft.yaml
+
+    - name: Nodelabels
+      when: k3s_primary_control_node
+      ansible.builtin.include_tasks: tasks/node_labels.yaml
