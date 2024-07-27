@@ -11,7 +11,7 @@
         definition:
           metadata:
             labels:
-              node-role.kubernetes.io/zfs: "true"
+              node.kubernetes.io/storage-type: zfs
     - name: zfs node2
       kubernetes.core.k8s:
         kubeconfig: /etc/rancher/k3s/k3s.yaml
@@ -22,7 +22,7 @@
         definition:
           metadata:
             labels:
-              node-role.kubernetes.io/zfs: "true"
+              node.kubernetes.io/storage-type: zfs
     - name: laptop node1
       kubernetes.core.k8s:
         kubeconfig: /etc/rancher/k3s/k3s.yaml
