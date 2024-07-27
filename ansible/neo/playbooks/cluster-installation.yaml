@@ -49,14 +49,21 @@
       loop:
         - { name: tigera-operator, kind: namespace }
         - { name: kubernetes-services-endpoint, kind: configmap, namespace: tigera-operator }
-        - { name: tigera-operator, kind: Deployment, namespace: tigera-operator }
+        - { name: calico, kind: HelmChart, namespace: kube-system }
         - { name: coredns, kind: HelmChart, namespace: kube-system }
-        - { name: default, kind: Installation }
 
     - name: Coredns
       when: k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/coredns.yaml
 
+    - name: Calico
+      when: k3s_primary_control_node
+      ansible.builtin.include_tasks: tasks/calico.yaml
+
     - name: Cruft
       when: k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/cruft.yaml
+
+    - name: Nodelabels
+      when: k3s_primary_control_node
+      ansible.builtin.include_tasks: tasks/node_labels.yaml

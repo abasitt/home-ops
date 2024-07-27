@@ -1,0 +1,42 @@
+---
+- name: Label and Taint Node
+  block:
+    - name: zfs node1
+      kubernetes.core.k8s:
+        kubeconfig: /etc/rancher/k3s/k3s.yaml
+        api_version: v1
+        kind: Node
+        name: neobl1bm-m3
+        state: present
+        definition:
+          metadata:
+            labels:
+              node-role.kubernetes.io/zfs: "true"
+    - name: zfs node2
+      kubernetes.core.k8s:
+        kubeconfig: /etc/rancher/k3s/k3s.yaml
+        api_version: v1
+        kind: Node
+        name: neotc1bm-w2
+        state: present
+        definition:
+          metadata:
+            labels:
+              node-role.kubernetes.io/zfs: "true"
+    - name: laptop node1
+      kubernetes.core.k8s:
+        kubeconfig: /etc/rancher/k3s/k3s.yaml
+        api_version: v1
+        kind: Node
+        name: neoas1lm-w1
+        state: present
+        definition:
+          spec:
+            taints:
+              - key: node-role.kubernetes.io/laptop
+                value: "true"
+                effect: NoExecute
+  rescue:
+    - name: Handle failure
+      debug:
+        msg: "Failed to label or taint the node"

@@ -12,7 +12,7 @@ kubernetes:
         neohv2vm-m2:
           ansible_host: 192.168.30.42
           ansible_v6host: 2001:470:ee86:30:192:168:30:42
-        neobl1bm-m3:
+        neobl1bm-m3: #beelink, zfs
           ansible_host: 192.168.30.43
           ansible_v6host: 2001:470:ee86:30:192:168:30:43
     worker:
@@ -20,6 +20,6 @@ kubernetes:
         neoas1lm-w1:  #lm=laptop machine
           ansible_host: 192.168.30.46
           ansible_v6host: 2001:470:ee86:30:192:168:30:46
-        neotc1bm-w2: #tc=thinkcenter
+        neotc1bm-w2: #tc=thinkcenter, zfs
           ansible_host: 192.168.30.47
           ansible_v6host: 2001:470:ee86:30:192:168:30:47

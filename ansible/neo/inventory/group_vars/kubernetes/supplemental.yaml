@@ -10,3 +10,5 @@ coredns_v4addr: "{{ service_cidr.split(',')[0] | ansible.utils.nthhost(10) }}"
 coredns_v6addr: "{{ service_v6cidr.split(',')[0] | ansible.utils.nthhost(10) }}"
 nodes_v4cidr: "192.168.30.0/24"
 nodes_v6cidr: "2001:470:ee86:30::/64"
+linuxdataplane: Iptables # Iptables or BPF for calico
+disable_kubeproxy: false # true with BPF mode
