@@ -19,8 +19,8 @@ installation:
   imagePath: calico
   calicoNetwork:
     bgp: Enabled
-    linuxDataplane: Iptables
-    #linuxDataplane: BPF
+    #linuxDataplane: Iptables
+    linuxDataplane: BPF
     # https://projectcalico.docs.tigera.io/networking/ip-autodetection
     nodeAddressAutodetectionV4:
       cidrs:
