@@ -48,10 +48,7 @@
         wait_timeout: 360
       loop:
         - { name: tigera-operator, kind: namespace }
-        - { name: kubernetes-services-endpoint, kind: configmap, namespace: tigera-operator }
-        - { name: tigera-operator, kind: Deployment, namespace: tigera-operator }
         - { name: coredns, kind: HelmChart, namespace: kube-system }
-        - { name: default, kind: Installation }
 
     - name: Coredns
       when: k3s_primary_control_node
