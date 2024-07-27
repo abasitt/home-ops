@@ -19,7 +19,7 @@ k3s_server:
     - servicelb                       # Disable servicelb               - replaced with metallb and installed with Flux
     - traefik                         # Disable traefik                 - replaced with ingress-nginx and installed with Flux
   disable-network-policy: true
-  disable-cloud-controller: true
+  disable-cloud-controller: false
   disable-kube-proxy: true            # calico eBPF mode
   pause-image: registry.k8s.io/pause:3.10
   secrets-encryption: true
