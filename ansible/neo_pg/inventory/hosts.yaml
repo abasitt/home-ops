@@ -8,16 +8,16 @@ kubernetes:
         k3sneo-m1:
           ansible_host: 192.168.30.26
           ansible_v6host: 2001:470:ee86:30:192:168:30:26
-        k3sneo-m2:
-          ansible_host: 192.168.30.27
-          ansible_v6host: 2001:470:ee86:30:192:168:30:27
-        k3sneo-m3:
-          ansible_host: 192.168.30.28
-          ansible_v6host: 2001:470:ee86:30:192:168:30:28
-    #worker:
-    #  vars:
-    #    ansible_user: k8s
-    #  hosts:
-    #    k3sne0-w1:
-    #      ansible_host: 192.168.30.46
-    #      ansible_v6host: 2001:470:ee86:30:192:168:30:46
+        #k3sneo-m2:
+        #  ansible_host: 192.168.30.27
+        #  ansible_v6host: 2001:470:ee86:30:192:168:30:27
+        #k3sneo-m3:
+        #  ansible_host: 192.168.30.28
+        #  ansible_v6host: 2001:470:ee86:30:192:168:30:28
+    worker:
+      vars:
+        ansible_user: k8s
+      hosts:
+        k3sne0-w1:
+          ansible_host: 192.168.30.29
+          ansible_v6host: 2001:470:ee86:30:192:168:30:29

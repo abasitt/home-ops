@@ -3,7 +3,7 @@ apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
   name: calico
-  namespace: kube-system
+  namespace: tigera-operator
 spec:
   repo: https://projectcalico.docs.tigera.io/charts
   chart: tigera-operator
@@ -18,7 +18,7 @@ spec:
       imagePath: calico
       calicoNetwork:
         bgp: Enabled
-        linuxDataplane: BPF
+        linuxDataplane: "{{ linuxdataplane }}"
         # https://projectcalico.docs.tigera.io/networking/ip-autodetection
         nodeAddressAutodetectionV4:
           cidrs:
@@ -40,15 +40,8 @@ spec:
             nodeSelector: all()
       nodeMetricsPort: 9091
       typhaMetricsPort: 9093
-    #resources:
-    #  requests:
-    #    cpu: 15m
-    #    memory: 168Mi
-    #  limits:
-    #    cpu: 500m
-    #    memory: 224Mi
     apiServer:
       enabled: false
     kubernetesServiceEndpoint:
-      host: "2001:470:ee86:30:192:168:30:60"
+      host: "2001:470:ee86:30:192:168:30:25"
       port: "6443"
