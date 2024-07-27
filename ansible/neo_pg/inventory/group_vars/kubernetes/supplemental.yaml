@@ -1,7 +1,7 @@
 ---
 timezone: "Asia/Singapore"
 github_username: abasitt
-kubeapi_addr: "2001:470:ee86:30:192:168:30:25"  #kube-vip-address
+kubeapi_addr: "2001:470:ee86:30:192:168:30:26"  #kube-vip-address
 cluster_cidr: "10.46.0.0/16"
 cluster_v6cidr: "2001:470:ee86:4600::/56"
 service_cidr: "10.47.0.0/16"
