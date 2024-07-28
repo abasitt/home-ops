@@ -61,8 +61,8 @@ meshConfig:
       - matchLabels:
           istio-discovery: enabled
     proxyMetadata:
-      #ISTIO_META_DNS_CAPTURE: "true"
-      #ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+      ISTIO_META_DNS_CAPTURE: "true"
+      ISTIO_META_DNS_AUTO_ALLOCATE: "true"
       ISTIO_DUAL_STACK: "true" #..enable dualstack
       ISTIO_META_ENABLE_HBONE: "true" #..enable ambient mode
     # interceptionMode: TPROXY # default is redirect
