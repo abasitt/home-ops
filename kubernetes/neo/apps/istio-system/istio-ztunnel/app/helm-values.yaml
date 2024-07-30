@@ -3,3 +3,7 @@ hub: gcr.io/istio-release
 variant: "distroless"
 multiCluster:
   clusterName: ${CLUSTER_NAME}
+meshConfig:
+  defaultConfig:
+    proxyMetadata:
+      ISTIO_META_DNS_CAPTURE: "true"
