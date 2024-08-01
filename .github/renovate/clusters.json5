@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": ["Separate PRs for neo cluster"],
+      "matchFileNames": ["**/kubernetes/neo/**"],
+      "additionalBranchPrefix": "neo-"
+    },
+    {
+      "description": ["Separate PRs for playground cluster"],
+      "matchFileNames": ["**/kubernetes/playground/**"],
+      "additionalBranchPrefix": "playground-"
+    }
+  ]
+}

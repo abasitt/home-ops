@@ -21,9 +21,9 @@ area/taskfile:
           - "Taskfile.yaml"
 
 # Clusters
-cluster/metal:
+cluster/neo:
   - changed-files:
-      - any-glob-to-any-file: "kubernetes/metal/**/*"
+      - any-glob-to-any-file: "kubernetes/neo/**/*"
 cluster/playground:
   - changed-files:
       - any-glob-to-any-file: "kubernetes/playground/**/*"
