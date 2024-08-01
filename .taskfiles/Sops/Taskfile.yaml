@@ -17,3 +17,46 @@ tasks:
               EDITOR="vim -es +'norm Go' +':wq'" sops --ignore-mac "${file}"
           fi
       done
+
+  check-unencrypted:
+    desc: Check for unencrypted Kubernetes SOPS secrets
+    cmds:
+      - for: { var: file }
+        task: .check-file
+        vars:
+          file: "{{.ITEM}}"
+    vars:
+      file:
+        sh: find "{{.KUBERNETES_DIR}}" -type f -name "*.sops.*" -exec grep -L "ENC\[AES256_GCM" {} \;
+  .check-file:
+    internal: true
+    cmd: "echo 'Unencrypted file found: {{.file}}'"
+    requires:
+      vars: ["file"]
+    preconditions:
+    - msg: Missing Sops config file
+      sh: test -f {{.SOPS_CONFIG_FILE}}
+    - msg: Missing Sops Age key file
+      sh: test -f {{.AGE_FILE}}
+
+  encrypt:
+    desc: Encrypt all Kubernetes SOPS secrets
+    cmds:
+      - for: { var: file }
+        task: .encrypt-file
+        vars:
+          file: "{{.ITEM}}"
+    vars:
+      file:
+        sh: find "{{.KUBERNETES_DIR}}" -type f -name "*.sops.*" -exec grep -L "ENC\[AES256_GCM" {} \;
+
+  .encrypt-file:
+    internal: true
+    cmd: sops --encrypt --in-place {{.file}}
+    requires:
+      vars: ["file"]
+    preconditions:
+      - msg: Missing Sops config file
+        sh: test -f {{.SOPS_CONFIG_FILE}}
+      - msg: Missing Sops Age key file
+        sh: test -f {{.AGE_FILE}}

@@ -5,6 +5,10 @@ vars:
   ANSIBLE_DIR: "{{.ROOT_DIR}}/ansible"
   KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
   TERRAFORM_DIR: "{{.ROOT_DIR}}/terraform"
+  SCRIPTS_DIR: "{{.ROOT_DIR}}/scripts"
+  # Files
+  AGE_FILE: "{{.ROOT_DIR}}/age.key"
+  SOPS_CONFIG_FILE: "{{.ROOT_DIR}}/.sops.yaml"
 
 
 env:
@@ -17,7 +21,6 @@ includes:
     aliases: ["k8s"]
     taskfile: .taskfiles/Kubernetes/Taskfile.yaml
   flux: .taskfiles/Flux/Taskfile.yaml
-  #k0s: .taskfiles/K0s/Taskfile.yaml
   sops: .taskfiles/Sops/Taskfile.yaml
   workstation: .taskfiles/Workstation/Taskfile.yaml
 
