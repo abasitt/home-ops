@@ -9,13 +9,13 @@ resources:
   - ./coredns.yaml
   - ./external-dns.yaml
   - ./grafana.yaml
-  - ./hajimari.yaml
+  - ./istio.yaml
   - ./jetstack.yaml
+  - ./kiali.yaml
   - ./k8s-gateway.yaml
   - ./kubernetes-dashboard.yaml
   - ./metallb.yaml
   - ./metrics-server.yaml
+  - ./openebs.yaml
   - ./prometheus-community.yaml
   - ./stakater.yaml
-  - ./istio.yaml
-  - ./kiali.yaml
