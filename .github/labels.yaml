@@ -13,7 +13,7 @@
 - name: area/terraform
   color: "0e8a16"
 # Clusters
-- name: cluster/metal
+- name: cluster/neo
   color: "ffc300"
 - name: cluster/playground
   color: "ffc300"
