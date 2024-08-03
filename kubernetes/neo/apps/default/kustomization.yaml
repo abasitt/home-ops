@@ -6,3 +6,4 @@ resources:
   - ./curl/ks.yaml
   - ./echo-server/ks.yaml
 #  - ./busybox/ks.yaml curl have the pretty much same features
+  - ./homeassistant/ks.yaml
