@@ -34,6 +34,12 @@ spec:
             args: ["-c", "while true; do ping localhost; sleep 60; done"]
             env:
               TZ: "${TIMEZONE}"
+            securityContext:
+              capabilities: { drop: ["ALL"] }
+            resources:
+              limits:
+                cpu: 2m
+                memory: 5Mi
     service:
       app:
         controller: busybox
