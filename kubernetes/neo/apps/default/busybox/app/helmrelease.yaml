@@ -22,15 +22,21 @@ spec:
     remediation:
       retries: 5
   values:
-    image:
-      repository: docker.io/library/busybox
-      tag: latest
+    controllers:
+      busybox:
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: docker.io/library/busybox
+              tag: latest
     service:
       app:
         controller: busybox
         enabled: false
     command:
       - sh
+      - "while true; do ping localhost; sleep 60; done"
     nodeSelector:
       kubernetes.io/hostname: neoas1lm-w1
     tolleration:
