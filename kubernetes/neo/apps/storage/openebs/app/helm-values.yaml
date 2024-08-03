@@ -1,16 +1,4 @@
-engines:
-  local:
-    lvm:
-      enabled: false
-    zfs:
-      enabled: true
-  replicated:
-    mayastor:
-      enabled: false
-openebs-crds:
-  csi:
-    volumeSnapshots:
-      enabled: false
+---
 localpv-provisioner:
   localpv:
     image:
@@ -23,3 +11,32 @@ localpv-provisioner:
     name: openebs-hostpath
     isDefaultClass: false
     basePath: /var/openebs/local
+    resources:
+      requests:
+        cpu: 10m
+        memory: 24Mi
+      limits:
+        memory: 96Mi
+zfs-localpv:
+  enabled: true
+  zfsNode:
+    encrKeysDir: /var/openebs/keys
+    nodeSelector:
+      node.kubernetes.io/storage-type=zfs
+    zfsPlugin:
+      image:
+        registry: quay.io/
+        repository: openebs/zfs-driver
+openebs-crds:
+  csi:
+    volumeSnapshots:
+      enabled: false
+engines:
+  local:
+    lvm:
+      enabled: false
+    zfs:
+      enabled: true
+  replicated:
+    mayastor:
+      enabled: false
