@@ -51,3 +51,8 @@ spec:
         - key: node-role.kubernetes.io/laptop
           value: "true"
           effect: NoExecute
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile: { type: RuntimeDefault }
