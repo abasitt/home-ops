@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: openebs-system
+  name: volsync-system
   annotations:
-    #kustomize.toolkit.fluxcd.io/prune: disabled
+    kustomize.toolkit.fluxcd.io/prune: disabled
     volsync.backube/privileged-movers: "true"
 #---
 ## yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/notification.toolkit.fluxcd.io/provider_v1beta3.json
@@ -12,7 +12,7 @@ metadata:
 #kind: Provider
 #metadata:
 #  name: alert-manager
-#  namespace: openebs-system
+#  namespace: volsync-system
 #spec:
 #  type: alertmanager
 #  address: http://alertmanager-operated.observability.svc.cluster.local:9093/api/v2/alerts/
@@ -22,7 +22,7 @@ metadata:
 #kind: Alert
 #metadata:
 #  name: alert-manager
-#  namespace: openebs-system
+#  namespace: volsync-system
 #spec:
 #  providerRef:
 #    name: alert-manager
