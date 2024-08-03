@@ -22,7 +22,7 @@ zfs-localpv:
   zfsNode:
     encrKeysDir: /var/openebs/keys
     nodeSelector:
-      node.kubernetes.io/storage-type=zfs
+      node.kubernetes.io/storage-type: zfs
     zfsPlugin:
       image:
         registry: quay.io/
