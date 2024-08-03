@@ -1,6 +1,11 @@
 global:
   hub: gcr.io/istio-release
   variant: "distroless"
+  # reduce for home cluster
+  defaultResources:
+    requests:
+      cpu: 20m
+      memory: 50Mi
 cni:
   #cniConfFileName: 10-calico.conflist
   # Configure ambient settings
@@ -13,8 +18,3 @@ cni:
     dnsCapture: true
     # If enabled, and ambient is enabled, enables ipv6 support
     ipv6: true
-# reducing for home cluster
-resources:
-  requests:
-    cpu: 20m
-    memory: 50Mi
