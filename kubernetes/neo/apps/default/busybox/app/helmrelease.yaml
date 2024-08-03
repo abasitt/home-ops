@@ -30,16 +30,18 @@ spec:
             image:
               repository: docker.io/library/busybox
               tag: latest
+            command: ["/bin/sh"]
+            args: ["-c", "while true; do ping localhost; sleep 60; done"]
+            env:
+              TZ: "${TIMEZONE}"
     service:
       app:
         controller: busybox
         enabled: false
-    command:
-      - sh
-      - "while true; do ping localhost; sleep 60; done"
-    nodeSelector:
-      kubernetes.io/hostname: neoas1lm-w1
-    tolleration:
-      - key: node-role.kubernetes.io/laptop
-        value: "true"
-        effect: NoExecute
+    defaultPodOptions:
+      nodeSelector:
+        kubernetes.io/hostname: neoas1lm-w1
+      tolerations:
+        - key: node-role.kubernetes.io/laptop
+          value: "true"
+          effect: NoExecute
