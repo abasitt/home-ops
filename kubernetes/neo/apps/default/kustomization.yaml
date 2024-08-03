@@ -5,4 +5,4 @@ resources:
   - ./namespace.yaml
   - ./curl/ks.yaml
   - ./echo-server/ks.yaml
-  - ./busybox/ks.yaml
+#  - ./busybox/ks.yaml curl have the pretty much same features
