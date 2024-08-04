@@ -9,7 +9,7 @@ localpv-provisioner:
   hostpathClass:
     enabled: true
     name: openebs-hostpath
-    isDefaultClass: false
+    isDefaultClass: true
     basePath: /var/openebs/local
     resources:
       requests:
