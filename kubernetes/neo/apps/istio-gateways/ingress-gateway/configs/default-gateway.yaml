@@ -5,7 +5,7 @@ metadata:
   name: gateway
 spec:
   gatewayClassName: istio
-  isteners:
+  listeners:
   - name: http
     hostname: "*.abasitt.tech"
     protocol: HTTP
