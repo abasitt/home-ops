@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./cert-manager/ks.yaml
-  - ./certifcates/ks.yaml
+  - ./certificates/ks.yaml
