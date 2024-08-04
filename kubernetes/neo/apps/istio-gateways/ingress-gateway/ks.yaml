@@ -27,14 +27,14 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app istio-ingress-configs
+  name: &app istio-ingress-gateways
   namespace: flux-system
 spec:
   targetNamespace: istio-gateways
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/neo/apps/istio-gateways/ingress-gateway/configs
+  path: ./kubernetes/neo/apps/istio-gateways/ingress-gateway/gateways
   prune: true
   sourceRef:
     kind: GitRepository
