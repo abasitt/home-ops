@@ -6,14 +6,14 @@ metadata:
   name: &app certificates
   namespace: flux-system
 spec:
-  targetNamespace: cert-manager
+  targetNamespace: istio-gateways
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cert-manager-issuers
   path: ./kubernetes/neo/apps/cert-manager/certificates/app
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
