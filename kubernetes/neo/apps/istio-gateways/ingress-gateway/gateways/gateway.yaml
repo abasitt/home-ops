@@ -21,4 +21,4 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - ".abasitt.tech"
+    - "*.abasitt.tech"
