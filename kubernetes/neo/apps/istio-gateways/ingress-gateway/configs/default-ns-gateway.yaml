@@ -1,0 +1,21 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: gateway
+  namespace: istio-gateways
+spec:
+  gatewayClassName: istio
+  isteners:
+  - name: https
+    hostname: "*.example.com"
+    port: 443
+    protocol: HlTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: your-tls-secret
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            kubernetes.io/metadata.name: default
