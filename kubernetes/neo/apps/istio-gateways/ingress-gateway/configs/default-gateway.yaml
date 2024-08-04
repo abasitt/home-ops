@@ -1,18 +1,23 @@
+---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: gateway
-  namespace: istio-gateways
 spec:
   gatewayClassName: istio
   isteners:
+  - name: http
+    hostname: "*.abasitt.tech"
+    protocol: HTTP
+    port: 80
   - name: https
-    hostname: "*.example.com"
+    hostname: "*.abasitt.tech"
     port: 443
     protocol: HlTTPS
     tls:
-      mode: SIMPLE
-      credentialName: your-tls-secret
+      mode: Terminate
+      certificateRefs:
+      - name: abasitt-tech-secret
     allowedRoutes:
       namespaces:
         from: Selector
