@@ -8,7 +8,7 @@ spec:
   - name: default-gateway
     namespace: istio-gateways
   hostnames:
-  - name: "echo-server.abasitt.tech"
+  - "echo-server.abasitt.tech"
   rules:
   - matches:
     - path:
