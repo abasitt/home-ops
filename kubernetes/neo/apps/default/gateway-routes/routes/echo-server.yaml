@@ -7,7 +7,7 @@ spec:
   parentRefs:
   - group: gateway.networking.k8s.io
     kind: Gateway
-    name: default-gw
+    name: default-gateway
     namespace: istio-gateways
   hostnames:
   - "echo-server.abasitt.tech"
