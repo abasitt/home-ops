@@ -36,8 +36,6 @@ spec:
       protocol: TCP
       targetPort: 8123
       name: http-homeassistant
-  selector:
-    app: home-assistant
   type: ClusterIP
   ipFamilyPolicy: SingleStack
   ipFamilies:
