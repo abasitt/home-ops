@@ -29,7 +29,7 @@ metadata:
   name: echo-server
 spec:
   parentRefs:
-  - group: gateway.networking.k8s.io
+  - group: networking.istio.io
     kind: Gateway
     name: default-gw
     namespace: istio-gateways
