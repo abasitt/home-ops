@@ -5,7 +5,9 @@ metadata:
   name: echo-server
 spec:
   parentRefs:
-  - name: default-gw
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: default-gw
     namespace: istio-gateways
   hostnames:
   - "echo-server.abasitt.tech"
@@ -15,5 +17,8 @@ spec:
         type: PathPrefix
         value: /
     backendRefs:
-    - name: echo-server
+    - group: ''
+      kind: Service
+      name: echo-server
       port: 8080
+      weight: 1
