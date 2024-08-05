@@ -9,6 +9,7 @@ subsets:
     ports:
       - port: 8123
         protocol: TCP
+        name: http
 ---
 # service.yaml
 apiVersion: v1
