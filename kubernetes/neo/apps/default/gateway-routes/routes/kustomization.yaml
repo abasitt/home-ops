@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - echo-server.yaml
   - echo-server-private.yaml
+  - homeassistant.yaml
