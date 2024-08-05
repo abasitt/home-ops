@@ -25,3 +25,6 @@ spec:
   selector:
     app: home-assistant
   type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  ipFamilies:
+    - IPv4
