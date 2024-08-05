@@ -22,3 +22,27 @@ spec:
       protocol: HTTP
     hosts:
     - "*.abasitt.tech"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: echo-server
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: default-gw
+    namespace: istio-gateways
+  hostnames:
+  - "echo-server.abasitt.tech"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - group: ''
+      kind: Service
+      name: echo-server.default.svc.cluster.local
+      port: 8080
+      weight: 1
