@@ -5,9 +5,8 @@ metadata:
 spec:
   hosts:
   - home-assistant.default.svc.cluster.local
-  addresses:
-  #exportTo:
-  #- "."
+  exportTo:
+  - "."
   location: MESH_INTERNAL
   resolution: DNS
   ports:
