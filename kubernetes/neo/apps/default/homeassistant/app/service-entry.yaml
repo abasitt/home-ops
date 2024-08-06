@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: external-svc-homeassistant
+spec:
+  hosts:
+  - home-assistant.default.svc.cluster.local
+  addresses:
+  #exportTo:
+  #- "."
+  location: MESH_INTERNAL
+  resolution: DNS
+  ports:
+  - number: 8123
+    name: http-homeassistant
+    protocol: HTTP
+  endpoints:
+  - address: 192.168.20.5
