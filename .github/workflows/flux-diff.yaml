@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: "Flux Diff"
 
 on:
@@ -73,34 +75,6 @@ jobs:
           token: "${{ steps.app-token.outputs.token }}"
           ref: "${{ github.event.repository.default_branch }}"
           path: default
-
-      - name: Debug - List Directory Contents (Pull)
-        run: |
-          echo "Listing contents of /github/workspace/pull/${{ matrix.paths }}/flux"
-          ls -la /github/workspace/pull/${{ matrix.paths }}/flux
-
-      - name: Debug - List Directory Contents (Default)
-        run: |
-          echo "Listing contents of /github/workspace/default/${{ matrix.paths }}/flux"
-          ls -la /github/workspace/default/${{ matrix.paths }}/flux
-
-      - name: Debug - Show kustomization.yaml (Pull)
-        run: |
-          if [ -f /github/workspace/pull/${{ matrix.paths }}/flux/kustomization.yaml ]; then
-            echo "Showing contents of kustomization.yaml (Pull)"
-            cat /github/workspace/pull/${{ matrix.paths }}/flux/kustomization.yaml
-          else
-            echo "kustomization.yaml not found in /github/workspace/pull/${{ matrix.paths }}/flux"
-          fi
-
-      - name: Debug - Show kustomization.yaml (Default)
-        run: |
-          if [ -f /github/workspace/default/${{ matrix.paths }}/flux/kustomization.yaml ]; then
-            echo "Showing contents of kustomization.yaml (Default)"
-            cat /github/workspace/default/${{ matrix.paths }}/flux/kustomization.yaml
-          else
-            echo "kustomization.yaml not found in /github/workspace/default/${{ matrix.paths }}/flux"
-          fi
 
       - name: Diff Resources
         uses: docker://ghcr.io/allenporter/flux-local:v5.4.0
