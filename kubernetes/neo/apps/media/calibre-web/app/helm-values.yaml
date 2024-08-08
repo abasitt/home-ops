@@ -72,12 +72,15 @@ route:
 #              identifier: app
 #              port: http
 volumeClaimTemplates:
-  - name: config
-    mountPath: /config
+
+persistence:
+  config:
+    type: persistentVolumeClaim
     accessMode: ReadWriteOnce
     size: 512Mi
     storageClass: openebs-zfs-hdd
-persistence:
+    globalMounts:
+      - path: /config
   cache:
     type: emptyDir
     globalMounts:
