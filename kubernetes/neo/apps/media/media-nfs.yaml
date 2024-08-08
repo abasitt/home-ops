@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: media-nfs
+  namespace: media
+spec:
+  storageClassName: media-nfs
+  capacity:
+    storage: 2Ti
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: zfs.hv01.home.arpa
+    path: /zp_sda_sdb/k8s/data/media
+  mountOptions:
+    - nfsvers=4.2
+    - nconnect=8
+    - hard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-nfs
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: media-nfs
+  resources:
+    requests:
+      storage: 2Ti
