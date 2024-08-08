@@ -34,30 +34,54 @@ service:
     ports:
       http:
         port: 8083
-ingress:
-  app:
-    className: external
-    #annotations:
-      #external-dns.alpha.kubernetes.io/target: external.${CLUSTER_DOMAIN}
-      #hajimari.io/icon: mdi:chart-bar
-      #gethomepage.dev/enabled: "true"
-      #gethomepage.dev/group: Media
-      #gethomepage.dev/name: Calibre
-      #gethomepage.dev/icon: calibre.png
-    hosts:
-      - host: ebooks.${CLUSTER_DOMAIN}
-        paths:
-          - path: /
-            service:
-              identifier: app
-              port: http
+route:
+  main:
+    parentRefs:
+      - group: ""
+        kind: Gateway
+        name: external-gateway
+        namespace: istio-gateways
+    hostnames:
+      - books.${SECRET_DOMAIN}
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
+        backendRefs:
+          - kind: Service
+            port: 8083
+            name: "{{ .Release.Name }}"
+            namespace: media
+            weight: 100
+#ingress:
+#  app:
+#    className: external
+#    #annotations:
+#      #external-dns.alpha.kubernetes.io/target: external.${CLUSTER_DOMAIN}
+#      #hajimari.io/icon: mdi:chart-bar
+#      #gethomepage.dev/enabled: "true"
+#      #gethomepage.dev/group: Media
+#      #gethomepage.dev/name: Calibre
+#      #gethomepage.dev/icon: calibre.png
+#    hosts:
+#      - host: ebooks.${CLUSTER_DOMAIN}
+#        paths:
+#          - path: /
+#            service:
+#              identifier: app
+#              port: http
+volumeClaimTemplates:
+  - name: config
+    mountPath: /config
+    accessMode: ReadWriteOnce
+    size: 512Mi
+    storageClass: openebs-zfs-hdd
 persistence:
   cache:
     type: emptyDir
     globalMounts:
       - path: /cache
-  config:
-    existingClaim: ${VOLSYNC_CLAIM}
   media:
     existingClaim: media-nfs
     globalMounts:
