@@ -1,0 +1,64 @@
+---
+controllers:
+  calibre-web:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      app:
+        image:
+          repository: ghcr.io/bjw-s/calibre-web
+          tag: 0.6.23@sha256:a1495a0f8ef0db099df11bfabe8ea8fd44d318b7db706dd03e0fa2beea5e5315
+        env:
+          CACHE_DIR: /cache
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+        resources:
+          requests:
+            cpu: 5m
+            memory: 250M
+          limits:
+            memory: 300M
+    pod:
+      securityContext:
+        runAsUser: 2000
+        runAsGroup: 2000
+        fsGroup: 2000
+        fsGroupChangePolicy: "OnRootMismatch"
+service:
+  app:
+    controller: calibre-web
+    ipFamilyPolicy: PreferDualStack
+    ports:
+      http:
+        port: 8083
+ingress:
+  app:
+    className: external
+    #annotations:
+      #external-dns.alpha.kubernetes.io/target: external.${CLUSTER_DOMAIN}
+      #hajimari.io/icon: mdi:chart-bar
+      #gethomepage.dev/enabled: "true"
+      #gethomepage.dev/group: Media
+      #gethomepage.dev/name: Calibre
+      #gethomepage.dev/icon: calibre.png
+    hosts:
+      - host: ebooks.${CLUSTER_DOMAIN}
+        paths:
+          - path: /
+            service:
+              identifier: app
+              port: http
+persistence:
+  cache:
+    type: emptyDir
+    globalMounts:
+      - path: /cache
+  config:
+    existingClaim: ${VOLSYNC_CLAIM}
+  media:
+    existingClaim: media-nfs
+    globalMounts:
+      - path: /media
