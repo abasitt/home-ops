@@ -51,7 +51,7 @@ route:
         backendRefs:
           - kind: Service
             port: 8083
-            name: "{{ .Release.Name }}"
+            name: calibre-web
             namespace: media
             weight: 100
 #ingress:
