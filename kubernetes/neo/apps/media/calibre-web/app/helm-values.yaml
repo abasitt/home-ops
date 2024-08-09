@@ -36,7 +36,7 @@ service:
       http:
         port: 8083
 route:
-  main:
+  app:
     parentRefs:
       - group: ""
         kind: Gateway
@@ -51,9 +51,8 @@ route:
               value: /
         backendRefs:
           - kind: Service
-            port: 8083
-            name: calibre-web
-            namespace: media
+            port: http
+            name: app
             weight: 100
 #ingress:
 #  app:
