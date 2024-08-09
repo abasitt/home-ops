@@ -72,8 +72,6 @@ route:
 #            service:
 #              identifier: app
 #              port: http
-volumeClaimTemplates:
-
 persistence:
   config:
     type: persistentVolumeClaim
