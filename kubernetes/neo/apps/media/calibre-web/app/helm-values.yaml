@@ -78,6 +78,7 @@ persistence:
     accessMode: ReadWriteOnce
     size: 512Mi
     storageClass: openebs-zfs-hdd
+    retain: true
     globalMounts:
       - path: /config
   cache:
