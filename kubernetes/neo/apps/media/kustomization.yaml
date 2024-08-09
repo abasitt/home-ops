@@ -8,3 +8,4 @@ resources:
   - pvc
   # Flux-Kustomizations
   - ./calibre-web/ks.yaml
+  - ./filebrowser/ks.yaml
