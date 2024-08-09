@@ -7,5 +7,5 @@ resources:
   - ./namespace.yaml
   - pvc
   # Flux-Kustomizations
-  - ./calibre-web/ks.yaml
-  - ./filebrowser/ks.yaml
+  #- ./calibre-web/ks.yaml
+  #- ./filebrowser/ks.yaml
