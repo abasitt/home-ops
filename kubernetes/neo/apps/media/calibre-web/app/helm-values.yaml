@@ -77,7 +77,7 @@ persistence:
     type: persistentVolumeClaim
     accessMode: ReadWriteOnce
     size: 512Mi
-    storageClass: openebs-zfs-hdd
+    storageClass: openebs-zfs-ssd
     retain: true
     globalMounts:
       - path: /config
