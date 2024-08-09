@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/neo/apps/default/filebrowser/app
+  path: ./kubernetes/neo/apps/media/filebrowser/app
   prune: true
   sourceRef:
     kind: GitRepository
