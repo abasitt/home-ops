@@ -13,7 +13,7 @@ alertmanager:
     tolerations:
       - key: node-role.kubernetes.io/laptop
         value: "true"
-        effect: NoExecute
+        effect: NoSchedule
     storage:
       volumeClaimTemplate:
         spec:

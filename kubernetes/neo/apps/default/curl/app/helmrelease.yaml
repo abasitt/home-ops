@@ -49,7 +49,7 @@ spec:
       tolerations:
         - key: node-role.kubernetes.io/laptop
           value: "true"
-          effect: NoExecute
+          effect: NoSchedule
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
