@@ -124,12 +124,13 @@ prometheus:
               storage: 80G
 
 kubeStateMetrics:
-   enabled: true
+  enabled: true
 kube-state-metrics:
+  fullnameOverride: kube-state-metrics
   metricLabelsAllowlist:
-    - "pods=[*]"
-    - "deployments=[*]"
-    - "persistentvolumeclaims=[*]"
+    - pods=[*]
+    - deployments=[*]
+    - persistentvolumeclaims=[*]
   prometheus:
     monitor:
       enabled: true
