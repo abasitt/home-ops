@@ -155,6 +155,10 @@ nodeExporter:
   enabled: true
 prometheus-node-exporter:
   fullnameOverride: node-exporter
+  tolerations:
+    - key: node-role.kubernetes.io/laptop
+      value: "true"
+      effect: NoExecute
   prometheus:
     monitor:
       enabled: true
