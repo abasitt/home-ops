@@ -13,7 +13,7 @@ route:
       group_wait: 0s
       matchers:
         - alertname =~ "Watchdog"
-      repeat_interval: 1h
+      repeat_interval: 5m
     - receiver: "null"
       matchers:
         - alertname =~ "InfoInhibitor"
@@ -31,12 +31,11 @@ receivers:
   - name: heartbeat
     webhook_configs:
       - send_resolved: true
-        url: "https://hc-ping.com/{{ .ALERTMANAGER_HEALTHCHECKS_TOKEN }}"
+        url: "{{ .ALERTMANAGER_CLUSTER_MAIN_HEARTBEAT_URL }}"
   - name: "null"
   - name: pushover
     pushover_configs:
       - html: true
-        # Compooters are hard
         message: |-
           {{ "{{-" }} range .Alerts {{ "}}" }}
             {{ "{{-" }} if ne .Annotations.description "" {{ "}}" }}
@@ -60,6 +59,7 @@ receivers:
           {{ "{{" }} if eq .Status "firing" {{ "}}" }}1{{ "{{" }} else {{ "}}" }}0{{ "{{" }} end {{ "}}" }}
         send_resolved: true
         sound: gamelan
+        # ttl: 1d
         title: >-
           [{{ "{{" }} .Status | toUpper {{ "}}" }}{{ "{{" }} if eq .Status "firing" {{ "}}" }}:{{ "{{" }} .Alerts.Firing | len {{ "}}" }}{{ "{{" }} end {{ "}}" }}]
           {{ "{{" }} .CommonLabels.alertname {{ "}}" }}
