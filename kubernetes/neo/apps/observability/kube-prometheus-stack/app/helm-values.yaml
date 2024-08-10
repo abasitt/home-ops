@@ -5,7 +5,22 @@ crds:
   enabled: false
 
 alertmanager:
-  enabled: false
+  alertmanagerSpec:
+    useExistingSecret: true
+    configSecret: alertmanager-secret
+    nodeSelector:
+      kubernetes.io/hostname: neoas1lm-w1
+    tolerations:
+      - key: node-role.kubernetes.io/laptop
+        value: "true"
+        effect: NoExecute
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          resources:
+            requests:
+              storage: 1Gi
 
 kubelet:
   enabled: true

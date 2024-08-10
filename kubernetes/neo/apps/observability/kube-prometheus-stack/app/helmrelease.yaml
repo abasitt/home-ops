@@ -30,4 +30,6 @@ spec:
       namespace: observability
     - name: openebs
       namespace: openebs-system
-  values:
+  valuesFrom:
+    - kind: ConfigMap
+      name: kps-helm-values
