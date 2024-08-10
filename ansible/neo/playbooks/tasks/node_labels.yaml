@@ -35,7 +35,7 @@
             taints:
               - key: node-role.kubernetes.io/laptop
                 value: "true"
-                effect: NoExecute
+                effect: NoSchedule
   rescue:
     - name: Handle failure
       debug:
