@@ -61,9 +61,9 @@ kubeApiServer:
 kubeControllerManager:
   enabled: true
   endpoints: &cp
-    - 192.168.30.41
-    - 192.168.30.42
-    - 192.168.30.43
+    - ${K3SM1_IPV4ADDR}
+    - ${K3SM2_IPV4ADDR}
+    - ${K3SM3_IPV4ADDR}
   serviceMonitor:
     metricRelabelings:
       # Remove duplicate labels provided by k3s
@@ -77,6 +77,16 @@ kubeControllerManager:
 kubeEtcd:
   enabled: true
   endpoints: *cp
+  service:
+    enabled: true
+    port: 2381
+    targetPort: 2381
+  serviceMonitor:
+    metricRelabelings:
+      - action: drop
+        sourceLabels: ["__name__"]
+        regex: (etcd_request_duration_seconds_bucket|etcd_request_duration_seconds_sum|etcd_request_duration_seconds_count)
+
 kubeScheduler:
   enabled: true
   endpoints: *cp
