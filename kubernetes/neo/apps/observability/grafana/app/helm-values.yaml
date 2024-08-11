@@ -207,10 +207,16 @@ serviceMonitor:
 persistence:
   enabled: false
 testFramework:
-resources:
-  requests:
-    cpu: 50m
-    memory: 96Mi
-  limits:
-    cpu: 500m
-    memory: 400Mi
+#resources:
+#  requests:
+#    cpu: 50m
+#    memory: 96Mi
+#  limits:
+#    cpu: 500m
+#    memory: 400Mi
+nodeSelector:
+  kubernetes.io/hostname: neoas1lm-w1
+tolerations:
+  - key: node-role.kubernetes.io/laptop
+    value: "true"
+    effect: NoSchedule
