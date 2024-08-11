@@ -28,7 +28,7 @@ spec:
         effect: NoSchedule
     extraEnv:
       - name: IP_VERSIONS
-        value: 6
+        value: "6"
     service:
       type: ClusterIP
       port: 80
