@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: goldpinger
-      #version: 1.0.0
+      version: 1.0.0
       sourceRef:
         kind: HelmRepository
         name: goldpinger
@@ -26,8 +26,8 @@ spec:
     tolerations:
       - operator: Exists
         effect: NoSchedule
-    extraEnv:
-      IP_VERSIONS: 6
+    #extraEnv:
+    #  IP_VERSIONS: 6
     service:
       type: ClusterIP
       port: 80
