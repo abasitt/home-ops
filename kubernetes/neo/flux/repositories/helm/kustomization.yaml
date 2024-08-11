@@ -16,6 +16,7 @@ resources:
   - ./kubernetes-dashboard.yaml
   - ./metallb.yaml
   - ./metrics-server.yaml
+  - ./okgolove.yaml
   - ./openebs.yaml
   - ./piraeus.yaml
   - ./prometheus-community.yaml
