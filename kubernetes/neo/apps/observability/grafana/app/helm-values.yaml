@@ -36,13 +36,13 @@ datasources:
         jsonData:
           timeInterval: 1m
         isDefault: true
-      - name: Loki
-        type: loki
-        uid: loki
-        access: proxy
-        url: http://loki-headless.observability.svc.cluster.local:3100
-        jsonData:
-          maxLines: 250
+      #- name: Loki
+      #  type: loki
+      #  uid: loki
+      #  access: proxy
+      #  url: http://loki-headless.observability.svc.cluster.local:3100
+      #  jsonData:
+      #    maxLines: 250
       - name: Alertmanager
         type: alertmanager
         uid: alertmanager
@@ -62,14 +62,14 @@ dashboardProviders:
         editable: true
         options:
           path: /var/lib/grafana/dashboards/default
-      #- name: istio
-      #  orgId: 1
-      #  folder: "istio"
-      #  type: file
-      #  disableDeletion: false
-      #  editable: true
-      #  options:
-      #    path: /var/lib/grafana/dashboards/istio
+      - name: istio
+        orgId: 1
+        folder: "istio"
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/istio
 dashboards:
   default:
     cert-manager:
