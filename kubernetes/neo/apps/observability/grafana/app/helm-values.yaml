@@ -243,9 +243,10 @@ testFramework:
 #  limits:
 #    cpu: 500m
 #    memory: 400Mi
-nodeSelector:
-  kubernetes.io/hostname: neoas1lm-w1
-tolerations:
-  - key: node-role.kubernetes.io/laptop
-    value: "true"
-    effect: NoSchedule
+#nodeSelector:
+#  kubernetes.io/hostname: neoas1lm-w1
+#tolerations:
+#  - key: node-role.kubernetes.io/laptop
+#    value: "true"
+#    effect: NoSchedule
+#
