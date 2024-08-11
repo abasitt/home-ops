@@ -200,13 +200,14 @@ plugins:
   - natel-discrete-panel
   - pr0ps-trackmap-panel
   - vonage-status-panel
-#service:
-#  ipFamilyPolicy: PreferDualStack
+service:
+  ipFamilyPolicy: PreferDualStack
 serviceMonitor:
   enabled: true
 persistence:
   enabled: false
 testFramework:
+  enabled: false
 #resources:
 #  requests:
 #    cpu: 50m
