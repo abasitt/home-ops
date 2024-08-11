@@ -62,14 +62,14 @@ dashboardProviders:
         editable: true
         options:
           path: /var/lib/grafana/dashboards/default
-      - name: istio
-        orgId: 1
-        folder: "istio"
-        type: file
-        disableDeletion: false
-        editable: true
-        options:
-          path: /var/lib/grafana/dashboards/istio
+      #- name: istio
+      #  orgId: 1
+      #  folder: "istio"
+      #  type: file
+      #  disableDeletion: false
+      #  editable: true
+      #  options:
+      #    path: /var/lib/grafana/dashboards/istio
 dashboards:
   default:
     cert-manager:
