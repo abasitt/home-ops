@@ -9,10 +9,10 @@ spec:
   chart:
     spec:
       chart: goldpinger
-      version: 6.2.0
+      version: 3.10.1
       sourceRef:
         kind: HelmRepository
-        name: okgolove
+        name: goldpinger
         namespace: flux-system
   install:
     remediation:
@@ -26,6 +26,8 @@ spec:
     tolerations:
       - operator: Exists
         effect: NoSchedule
+    extraEnv:
+      IP_VERSIONS: 6
     service:
       type: ClusterIP
       port: 80
@@ -37,3 +39,7 @@ spec:
       limits:
         cpu: 15m
         memory: 64M
+    serviceMonitor:
+      enabled: true
+    prometheusRule:
+      enabled: true

@@ -8,6 +8,7 @@ resources:
   - ./calico.yaml
   - ./coredns.yaml
   - ./external-dns.yaml
+  - ./goldpinger.yaml
   - ./grafana.yaml
   - ./istio.yaml
   - ./jetstack.yaml
@@ -16,7 +17,6 @@ resources:
   - ./kubernetes-dashboard.yaml
   - ./metallb.yaml
   - ./metrics-server.yaml
-  - ./okgolove.yaml
   - ./openebs.yaml
   - ./piraeus.yaml
   - ./prometheus-community.yaml
