@@ -36,20 +36,20 @@ datasources:
         jsonData:
           timeInterval: 1m
         isDefault: true
-      - name: Loki
-        type: loki
-        uid: loki
-        access: proxy
-        url: http://loki-headless.observability.svc.cluster.local:3100
-        jsonData:
-          maxLines: 250
-      - name: Alertmanager
-        type: alertmanager
-        uid: alertmanager
-        access: proxy
-        url: http://alertmanager-operated.observability.svc.cluster.local:9093
-        jsonData:
-          implementation: prometheus
+      #- name: Loki
+      #  type: loki
+      #  uid: loki
+      #  access: proxy
+      #  url: http://loki-headless.observability.svc.cluster.local:3100
+      #  jsonData:
+      #    maxLines: 250
+      #- name: Alertmanager
+      #  type: alertmanager
+      #  uid: alertmanager
+      #  access: proxy
+      #  url: http://alertmanager-operated.observability.svc.cluster.local:9093
+      #  jsonData:
+      #    implementation: prometheus
 dashboardProviders:
   dashboardproviders.yaml:
     apiVersion: 1
@@ -243,10 +243,9 @@ testFramework:
 #  limits:
 #    cpu: 500m
 #    memory: 400Mi
-#nodeSelector:
-#  kubernetes.io/hostname: neoas1lm-w1
-#tolerations:
-#  - key: node-role.kubernetes.io/laptop
-#    value: "true"
-#    effect: NoSchedule
-#
+nodeSelector:
+  kubernetes.io/hostname: neoas1lm-w1
+tolerations:
+  - key: node-role.kubernetes.io/laptop
+    value: "true"
+    effect: NoSchedule
