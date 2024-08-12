@@ -44,14 +44,6 @@ spec:
               path: /var/lib/grafana/dashboards/default
             orgId: 1
             type: file
-          - name: ceph
-            orgId: 1
-            folder: Ceph
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/ceph
           - name: flux
             orgId: 1
             folder: Flux
@@ -145,23 +137,6 @@ spec:
           # renovate: dashboardName="ZFS"
           gnetId: 7845
           revision: 4
-          datasource: Prometheus
-
-      ceph:
-        ceph-cluster:
-          # renovate: dashboardName="Ceph Cluster"
-          gnetId: 2842
-          revision: 17
-          datasource: Prometheus
-        ceph-osd:
-          # renovate: dashboardName="Ceph - OSD (Single)"
-          gnetId: 5336
-          revision: 9
-          datasource: Prometheus
-        ceph-pools:
-          # renovate: dashboardName="Ceph - Pools"
-          gnetId: 5342
-          revision: 9
           datasource: Prometheus
 
       flux:
@@ -271,18 +246,18 @@ spec:
           - access: proxy
             name: Prometheus
             type: prometheus
-            url: http://prometheus-operated.monitoring.svc.cluster.local:9090
+            url: http://prometheus-operated.observability.svc.cluster.local:9090
             isDefault: true
             jsonData:
               prometheusType: Prometheus
           - access: proxy
             name: Loki
             type: loki
-            url: http://loki-gateway.monitoring.svc.cluster.local:80
+            url: http://loki-gateway.observability.svc.cluster.local:80
           - name: Alertmanager
             type: alertmanager
             access: proxy
-            url: http://alertmanager.monitoring.svc.cluster.local:9093
+            url: http://alertmanager.observability.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
 
