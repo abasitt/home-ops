@@ -139,6 +139,13 @@ spec:
           revision: 4
           datasource: Prometheus
 
+        smart:
+          # renovate: depName="Dashboard for smartctl_exporter"
+          gnetId: 20204
+          revision: 1
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
+
         goldpinger:
           url: https://raw.githubusercontent.com/bloomberg/goldpinger/master/extras/goldpinger-dashboard.json
           datasource: Prometheus
