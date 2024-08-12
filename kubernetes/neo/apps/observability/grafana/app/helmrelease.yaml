@@ -312,14 +312,8 @@ spec:
 
     imageRenderer:
       enabled: true
-
-    ingress:
-      enabled: true
-      ingressClassName: internal-nginx
-      annotations:
-        external-dns.alpha.kubernetes.io/target: ingress-int.bjw-s.dev
-      hosts:
-        - grafana.bjw-s.dev
+      env:
+        HTTP_HOST: "::"
 
     persistence:
       enabled: false
