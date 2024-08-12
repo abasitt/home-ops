@@ -60,14 +60,14 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/kubernetes
-          - name: nginx
+          - name: istio
             orgId: 1
-            folder: Nginx
+            folder: Istio
             type: file
             disableDeletion: false
             editable: true
             options:
-              path: /var/lib/grafana/dashboards/nginx
+              path: /var/lib/grafana/dashboards/istio
           - name: postgres
             orgId: 1
             folder: Postgres
@@ -191,12 +191,36 @@ spec:
           revision: 14
           datasource: Prometheus
 
-      nginx:
-        nginx:
-          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
+      istio:
+        istio-mesh:
+          # renovate: dashboardName="Istio Mesh"
+          gnetId: 7639
+          revision: 221
           datasource: Prometheus
-        nginx-request-handling-performance:
-          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/request-handling-performance.json
+        istio-service:
+          # renovate: dashboardName="Istio Service"
+          gnetId: 7636
+          revision: 221
+          datasource: Prometheus
+        istio-workload:
+          # renovate: dashboardName="Istio Workload"
+          gnetId: 7630
+          revision: 221
+          datasource: Prometheus
+        istio-performence:
+          # renovate: dashboardName="Istio Performance"
+          gnetId: 11829
+          revision: 221
+          datasource: Prometheus
+        istio-control-plane:
+          # renovate: dashboardName="Istio Control Plane"
+          gnetId: 7645
+          revision: 221
+          datasource: Prometheus
+        istio-wasm:
+          # renovate: dashboardName="Istio Wasm"
+          gnetId: 13277
+          revision: 221
           datasource: Prometheus
 
       postgres:
