@@ -135,8 +135,8 @@ spec:
 
         zfs:
           # renovate: dashboardName="ZFS"
-          gnetId: 7845
-          revision: 4
+          gnetId: 7968
+          revision: 1
           datasource: Prometheus
 
         smart:
