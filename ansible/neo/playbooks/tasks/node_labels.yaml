@@ -47,7 +47,7 @@
                 value: "true"
                 effect: NoSchedule
 
+  rescue:
     - name: Handle failure
-      debug:
-        msg: "Failed to label or taint one or more nodes"
-      when: ansible_failed_task is defined
+      ansible.builtin.debug:
+      msg: "Failed to label or taint one or more nodes"
