@@ -230,6 +230,12 @@ spec:
           revision: 221
           datasource: Prometheus
 
+        istio-ztunnel:
+          # renovate: dashboardName="Istio Ztunnel"
+          gnetId: 21306
+          revision: 1
+          datasource: Prometheus
+
       postgres:
         crunchy-pgbackrest:
           url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/main/kustomize/monitoring/grafana/dashboards/pgbackrest.json
