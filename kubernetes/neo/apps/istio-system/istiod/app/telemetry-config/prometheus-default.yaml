@@ -1,0 +1,15 @@
+---
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: prometheus-mesh-default
+  namespace: istio-system
+spec:
+  # no selector specified, applies to all workloads
+  metrics:
+  - providers:
+    - name: prometheus
+    overrides:
+    - match:
+        metric: ALL_METRICS
+      disabled: false

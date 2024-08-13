@@ -1,0 +1,11 @@
+---
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: accesslogs-mesh-default
+  namespace: istio-system
+spec:
+  # no selector specified, applies to all workloads
+  accessLogging:
+  - providers:
+    - name: text-logs
