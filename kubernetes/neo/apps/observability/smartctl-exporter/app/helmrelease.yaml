@@ -35,12 +35,13 @@ spec:
       enabled: true
     prometheusRules:
       enabled: false
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: node.kubernetes.io/infrastructure-type
-            operator: In
-            values:
-            - baremetal
-            - laptop
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: node.kubernetes.io/infrastructure-type
+              operator: In
+              values:
+              - baremetal
+              - laptop
