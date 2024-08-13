@@ -16,6 +16,7 @@
       loop:
         - neobl1bm-m3
         - neotc1bm-w2
+
     - name: Label VM nodes
       kubernetes.core.k8s:
         kubeconfig: /etc/rancher/k3s/k3s.yaml
@@ -30,6 +31,7 @@
       loop:
         - neohv1vm-m1
         - neohv2vm-m2
+
     - name: Label and taint laptop node
       kubernetes.core.k8s:
         kubeconfig: /etc/rancher/k3s/k3s.yaml
