@@ -5,6 +5,7 @@ metadata:
   name: media
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
     istio.io/dataplane-mode: ambient
 #---
 ## yaml-language-server: $schema=https://github.com/fluxcd-community/flux2-schemas/raw/main/provider-notification-v1beta3.json
