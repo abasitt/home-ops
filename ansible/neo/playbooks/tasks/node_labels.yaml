@@ -1,29 +1,36 @@
 ---
 - name: Label and Taint Node
   block:
-    - name: zfs node1
+    - name: Label baremetal nodes
       kubernetes.core.k8s:
         kubeconfig: /etc/rancher/k3s/k3s.yaml
         api_version: v1
         kind: Node
-        name: neobl1bm-m3
+        name: "{{ item }}"
         state: present
         definition:
           metadata:
             labels:
+              node.kubernetes.io/infrastructure-type: baremetal
               node.kubernetes.io/storage-type: zfs
-    - name: zfs node2
+      loop:
+        - neobl1bm-m3
+        - neotc1bm-w2
+    - name: Label VM nodes
       kubernetes.core.k8s:
         kubeconfig: /etc/rancher/k3s/k3s.yaml
         api_version: v1
         kind: Node
-        name: neotc1bm-w2
+        name: "{{ item }}"
         state: present
         definition:
           metadata:
             labels:
-              node.kubernetes.io/storage-type: zfs
-    - name: laptop node1
+              node.kubernetes.io/infrastructure-type: vm
+      loop:
+        - neohv1vm-m1
+        - neohv2vm-m2
+    - name: Label and taint laptop node
       kubernetes.core.k8s:
         kubeconfig: /etc/rancher/k3s/k3s.yaml
         api_version: v1
@@ -31,12 +38,16 @@
         name: neoas1lm-w1
         state: present
         definition:
+          metadata:
+            labels:
+              node.kubernetes.io/infrastructure-type: laptop
           spec:
             taints:
               - key: node-role.kubernetes.io/laptop
                 value: "true"
                 effect: NoSchedule
-  rescue:
+
     - name: Handle failure
       debug:
-        msg: "Failed to label or taint the node"
+        msg: "Failed to label or taint one or more nodes"
+      when: ansible_failed_task is defined
