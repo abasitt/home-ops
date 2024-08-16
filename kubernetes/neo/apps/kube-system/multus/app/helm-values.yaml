@@ -96,20 +96,20 @@ controllers:
           privileged: true
         terminationMessagePolicy: FallbackToLogsOnError
 
-      initContainers:
-        cni-plugins-installer:
-          image: *image
-          command: ["/install_multus"]
-          args:
-            - "--type"
-            - "thin"
-          resources:
-            requests:
-              cpu: "10m"
-              memory: "15Mi"
-          securityContext:
-            privileged: true
-          terminationMessagePolicy: FallbackToLogsOnError
+    initContainers:
+      cni-plugins-installer:
+        image: *image
+        command: ["/install_multus"]
+        args:
+          - "--type"
+          - "thin"
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "15Mi"
+        securityContext:
+          privileged: true
+        terminationMessagePolicy: FallbackToLogsOnError
 
 persistence:
   cni:
