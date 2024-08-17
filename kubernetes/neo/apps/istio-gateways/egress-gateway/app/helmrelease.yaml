@@ -14,13 +14,27 @@ spec:
         name: istio
         namespace: flux-system
   install:
+    timeout: 10m
+    replace: true
+    crds: CreateReplace
     remediation:
       retries: 3
   upgrade:
-    cleanupOnFail: true
     remediation:
-      strategy: rollback
+      remediateLastFailure: true
       retries: 3
+      strategy: rollback
+    cleanupOnFail: true
+    crds: CreateReplace
+  test:
+    enable: true
+  rollback:
+    recreate: true
+    force: true
+    cleanupOnFail: true
+  uninstall:
+    keepHistory: false
+  maxHistory: 3
   valuesFrom:
     - kind: ConfigMap
       name: istioegressgw-helm-values
