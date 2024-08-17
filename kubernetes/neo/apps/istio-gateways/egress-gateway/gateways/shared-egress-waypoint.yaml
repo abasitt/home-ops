@@ -5,7 +5,6 @@ metadata:
   name: egress-shared-waypoint
   labels:
     istio.io/waypoint-for: all
-
 spec:
   addresses:
   - value: istio-egressgateway.istio-gateways.svc.cluster.local
