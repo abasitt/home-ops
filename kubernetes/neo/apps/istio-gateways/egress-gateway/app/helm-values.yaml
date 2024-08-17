@@ -29,6 +29,8 @@ resources:
     cpu: 200m
     memory: 256Mi
 volumes:
+  - emptyDir: {}
+    name: workload-socket
   - configMap:
       defaultMode: 420
       name: istio-ca-root-cert
