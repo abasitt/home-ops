@@ -5,11 +5,12 @@ metadata:
   name: egress-shared-waypoint
   labels:
     istio.io/waypoint-for: all
+
 spec:
-  #addresses:
-  #- value: istio-egressgateway.istio-gateways.svc.cluster.local
-  #  type: Hostname
-  gatewayClassName: istio-waypoint
+  addresses:
+  - value: istio-egressgateway.istio-gateways.svc.cluster.local
+    type: Hostname
+  gatewayClassName: istio
   listeners:
   - name: mesh
     port: 15008
