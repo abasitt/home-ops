@@ -34,7 +34,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/neo/apps/istio-gateways/ingress-gateway/gateways
+  path: ./kubernetes/neo/apps/istio-gateways/egress-gateway/gateways
   prune: true
   sourceRef:
     kind: GitRepository
