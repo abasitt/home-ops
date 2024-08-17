@@ -24,18 +24,18 @@ resources:
   limits:
     cpu: 200m
     memory: 256Mi
+
 volumes:
-  - name: ingressgateway-certs
-    configMap:
+  - configMap:
+      defaultMode: 420
       name: istio-ca-root-cert
-  - name: ingressgateway-ca-certs
-    configMap:
-      name: kube-root-ca.crt
+    name: istiod-ca-cert
+
 volumeMounts:
-  - name: ingressgateway-certs
-    mountPath: /etc/istio/ingressgateway-certs
-  - name: ingressgateway-ca-certs
-    mountPath: /etc/istio/ingressgateway-ca-certs
+  - mountPath: /var/run/secrets/workload-spiffe-uds
+    name: workload-socket
+  - mountPath: /var/run/secrets/istio
+    name: istiod-ca-cert
 # affinity:
 #   # This podAntiAffinity ensures ingress controllers are not scheduled on the same node
 #   podAntiAffinity:
