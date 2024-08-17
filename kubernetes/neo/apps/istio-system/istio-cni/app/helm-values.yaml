@@ -8,6 +8,7 @@ cni:
   cniConfDir: /etc/cni/net.d
   cniConfFileName: ""
   cniNetnsDir: # Defaults to '/var/run/netns', in minikube/docker/others can be '/var/run/docker/netns'.
+  chained: false
   # Configure ambient settings
   ambient:
     # If enabled, ambient redirection will be enabled
