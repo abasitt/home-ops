@@ -139,7 +139,7 @@ persistence:
           # e.g. if the cni bin is in '/opt/cni/bin' on the container host side, then it should be
           # mount to '/opt/cni/bin' in multus-daemon, not to any other directory, like '/opt/bin' or
           # '/usr/bin'.
-          - path: /opt/cni/bin
+          - path: /host/opt/cni/bin
 
   config:
     type: configMap
