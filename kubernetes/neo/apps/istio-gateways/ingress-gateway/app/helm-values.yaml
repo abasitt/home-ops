@@ -28,16 +28,24 @@ resources:
 volumes:
   - emptyDir: {}
     name: workload-socket
-  - configMap:
-      defaultMode: 420
-      name: istio-ca-root-cert
-    name: istiod-ca-cert
+  - name: ingressgateway-certs
+    secret:
+      optional: true
+      secretName: istio-ingressgateway-certs
+  - name: ingressgateway-ca-certs
+    secret:
+      optional: true
+      secretName: istio-ingressgateway-ca-certs
 
 volumeMounts:
   - mountPath: /var/run/secrets/workload-spiffe-uds
     name: workload-socket
-  - mountPath: /var/run/secrets/istio
-    name: istiod-ca-cert
+  - mountPath: /etc/istio/ingressgateway-certs
+    name: ingressgateway-certs
+    readOnly: true
+  - mountPath: /etc/istio/ingressgateway-ca-certs
+    name: ingressgateway-ca-certs
+    readOnly: true
 # affinity:
 #   # This podAntiAffinity ensures ingress controllers are not scheduled on the same node
 #   podAntiAffinity:
