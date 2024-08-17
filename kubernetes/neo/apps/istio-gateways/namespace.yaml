@@ -4,7 +4,7 @@ kind: Namespace
 metadata:
   name: istio-gateways
   labels:
-    istio-injection: enabled
     istio-discovery: enabled
+    istio.io/dataplane-mode: ambient
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
