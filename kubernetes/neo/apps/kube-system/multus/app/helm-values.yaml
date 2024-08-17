@@ -151,3 +151,11 @@ persistence:
 
 serviceAccount:
   create: true
+
+
+defaultPodOptions:
+  tolerations:
+    - operator: Exists
+      effect: NoSchedule
+    - operator: Exists
+      effect: NoExecute
