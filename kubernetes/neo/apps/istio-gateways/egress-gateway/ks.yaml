@@ -17,7 +17,6 @@ spec:
     name: home-kubernetes
   dependsOn:
     - name: istiod
-    - name: cert-manager
   wait: false
   interval: 30m
   retryInterval: 1m
