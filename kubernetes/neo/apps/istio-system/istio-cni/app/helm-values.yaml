@@ -3,6 +3,11 @@ global:
   variant: "distroless"
 cni:
   #cniConfFileName: 10-calico.conflist
+  provider: "multus"
+  cniBinDir: "" # Auto-detected based on version; defaults to /opt/cni/bin.
+  cniConfDir: /etc/cni/net.d
+  cniConfFileName: ""
+  cniNetnsDir: # Defaults to '/var/run/netns', in minikube/docker/others can be '/var/run/docker/netns'.
   # Configure ambient settings
   ambient:
     # If enabled, ambient redirection will be enabled
