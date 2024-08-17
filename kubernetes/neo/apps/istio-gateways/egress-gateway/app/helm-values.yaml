@@ -28,15 +28,25 @@ resources:
   limits:
     cpu: 200m
     memory: 256Mi
+
 volumes:
   - emptyDir: {}
     name: workload-socket
-  - configMap:
-      defaultMode: 420
-      name: istio-ca-root-cert
-    name: istiod-ca-cert
+  - name: egressgateway-certs
+    secret:
+      optional: true
+      secretName: istio-egressgateway-certs
+  - name: egressgateway-ca-certs
+    secret:
+      optional: true
+      secretName: istio-egressgateway-ca-certs
+
 volumeMounts:
   - mountPath: /var/run/secrets/workload-spiffe-uds
     name: workload-socket
-  - mountPath: /var/run/secrets/istio
-    name: istiod-ca-cert
+  - mountPath: /etc/istio/egressgateway-certs
+    name: egressgateway-certs
+    readOnly: true
+  - mountPath: /etc/istio/egressgateway-ca-certs
+    name: egressgateway-ca-certs
+    readOnly: true
