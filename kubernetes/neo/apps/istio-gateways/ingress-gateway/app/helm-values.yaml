@@ -24,16 +24,18 @@ resources:
   limits:
     cpu: 200m
     memory: 256Mi
-#don't deploy on a laptop node
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: "kubernetes.io/hostname"
-          operator: "NotIn"
-          values:
-          - "neok3slm-w1"
+volumes:
+  - name: ingressgateway-certs
+    secret:
+      secretName: istio-ingressgateway-certs
+  - name: ingressgateway-ca-certs
+    secret:
+      secretName: istio-ingressgateway-ca-certs
+volumeMounts:
+  - name: ingressgateway-certs
+    mountPath: /etc/istio/ingressgateway-certs
+  - name: ingressgateway-ca-certs
+    mountPath: /etc/istio/ingressgateway-ca-certs
 # affinity:
 #   # This podAntiAffinity ensures ingress controllers are not scheduled on the same node
 #   podAntiAffinity:
