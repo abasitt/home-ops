@@ -26,11 +26,11 @@ resources:
     memory: 256Mi
 volumes:
   - name: ingressgateway-certs
-    secret:
-      secretName: istio-ingressgateway-certs
+    configMap:
+      name: istio-ca-root-cert
   - name: ingressgateway-ca-certs
-    secret:
-      secretName: istio-ingressgateway-ca-certs
+    configMap:
+      name: kube-root-ca.crt
 volumeMounts:
   - name: ingressgateway-certs
     mountPath: /etc/istio/ingressgateway-certs
