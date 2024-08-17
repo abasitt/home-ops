@@ -5,5 +5,5 @@ metadata:
   name: default
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
-  labels:
-    istio.io/dataplane-mode: ambient
+  #labels:
+  #  istio.io/dataplane-mode: ambient
