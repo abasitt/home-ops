@@ -9,8 +9,12 @@ spec:
   addresses:
   - value: istio-egressgateway.istio-gateways.svc.cluster.local
     type: Hostname
-  gatewayClassName: istio
+  gatewayClassName: istio-waypoint
   listeners:
+  - name: http
+    hostname: "*.abasitt.tech"
+    protocol: HTTP
+    port: 80
   - name: mesh
     port: 15008
     protocol: HBONE
