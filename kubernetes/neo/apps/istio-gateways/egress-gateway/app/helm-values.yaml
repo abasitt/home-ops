@@ -17,7 +17,8 @@ service:
       port: 443
       protocol: TCP
       targetPort: 443
-    - name: hbone
+    - name: mesh
+      appProtocol: hbone
       port: 15008
       protocol: TCP
       targetPort: 15008
@@ -29,54 +30,55 @@ resources:
     cpu: 200m
     memory: 256Mi
 
-volumes:
-  - emptyDir: {}
-    name: workload-socket
-  - emptyDir:
-      medium: Memory
-    name: istio-envoy
-  - emptyDir:
-      medium: Memory
-    name: go-proxy-envoy
-  - emptyDir: {}
-    name: istio-data
-  - emptyDir: {}
-    name: go-proxy-data
-  - downwardAPI:
-      defaultMode: 420
-      items:
-      - fieldRef:
-          apiVersion: v1
-          fieldPath: metadata.labels
-        path: labels
-      - fieldRef:
-          apiVersion: v1
-          fieldPath: metadata.annotations
-        path: annotations
-    name: istio-podinfo
-  - name: istio-token
-    projected:
-      defaultMode: 420
-      sources:
-      - serviceAccountToken:
-          audience: istio-ca
-          expirationSeconds: 43200
-          path: istio-token
-  - configMap:
-      defaultMode: 420
-      name: istio-ca-root-cert
-    name: istiod-ca-cert
-
-volumeMounts:
-  - mountPath: /var/run/secrets/workload-spiffe-uds
-    name: workload-socket
-  - mountPath: /var/run/secrets/istio
-    name: istiod-ca-cert
-  - mountPath: /var/lib/istio/data
-    name: istio-data
-  - mountPath: /etc/istio/proxy
-    name: istio-envoy
-  - mountPath: /var/run/secrets/tokens
-    name: istio-token
-  - mountPath: /etc/istio/pod
-    name: istio-podinfo
+#volumes:
+#  - emptyDir: {}
+#    name: workload-socket
+#  - emptyDir:
+#      medium: Memory
+#    name: istio-envoy
+#  - emptyDir:
+#      medium: Memory
+#    name: go-proxy-envoy
+#  - emptyDir: {}
+#    name: istio-data
+#  - emptyDir: {}
+#    name: go-proxy-data
+#  - downwardAPI:
+#      defaultMode: 420
+#      items:
+#      - fieldRef:
+#          apiVersion: v1
+#          fieldPath: metadata.labels
+#        path: labels
+#      - fieldRef:
+#          apiVersion: v1
+#          fieldPath: metadata.annotations
+#        path: annotations
+#    name: istio-podinfo
+#  - name: istio-token
+#    projected:
+#      defaultMode: 420
+#      sources:
+#      - serviceAccountToken:
+#          audience: istio-ca
+#          expirationSeconds: 43200
+#          path: istio-token
+#  - configMap:
+#      defaultMode: 420
+#      name: istio-ca-root-cert
+#    name: istiod-ca-cert
+#
+#volumeMounts:
+#  - mountPath: /var/run/secrets/workload-spiffe-uds
+#    name: workload-socket
+#  - mountPath: /var/run/secrets/istio
+#    name: istiod-ca-cert
+#  - mountPath: /var/lib/istio/data
+#    name: istio-data
+#  - mountPath: /etc/istio/proxy
+#    name: istio-envoy
+#  - mountPath: /var/run/secrets/tokens
+#    name: istio-token
+#  - mountPath: /etc/istio/pod
+#    name: istio-podinfo
+#
