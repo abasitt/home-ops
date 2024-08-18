@@ -40,6 +40,7 @@ spec:
     name: home-kubernetes
   dependsOn:
     - name: istiod
+    - name: istio-egressgateway
   wait: false
   interval: 30m
   retryInterval: 1m
