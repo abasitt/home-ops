@@ -44,3 +44,13 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 3m
+  patches:
+    - target:
+        kind: Deployment
+        name: egress-shared-waypoint
+        namespace: istio-gateways
+      patch: |
+        - op: add
+          path: /spec/template/spec/nodeSelector
+          value:
+            kubernetes.io/hostname: neohv1vm-m1
