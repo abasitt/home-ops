@@ -8,9 +8,9 @@ metadata:
   annotations:
     abasit: tech
 spec:
-#  addresses:
-#  - value: istio-egressgateway.istio-gateways.svc.cluster.local
-#    type: Hostname
+  addresses:
+  - value: istio-egressgateway.istio-gateways.svc.cluster.local
+    type: Hostname
   gatewayClassName: istio-waypoint
   listeners:
   - name: mesh
