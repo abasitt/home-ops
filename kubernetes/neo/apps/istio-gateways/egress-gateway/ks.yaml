@@ -1,27 +1,27 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app istio-egressgateway
-  namespace: flux-system
-spec:
-  targetNamespace: istio-gateways
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  path: ./kubernetes/neo/apps/istio-gateways/egress-gateway/app
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: home-kubernetes
-  dependsOn:
-    - name: istiod
-  wait: false
-  interval: 30m
-  retryInterval: 1m
-  timeout: 3m
----
+#apiVersion: kustomize.toolkit.fluxcd.io/v1
+#kind: Kustomization
+#metadata:
+#  name: &app istio-egressgateway
+#  namespace: flux-system
+#spec:
+#  targetNamespace: istio-gateways
+#  commonMetadata:
+#    labels:
+#      app.kubernetes.io/name: *app
+#  path: ./kubernetes/neo/apps/istio-gateways/egress-gateway/app
+#  prune: true
+#  sourceRef:
+#    kind: GitRepository
+#    name: home-kubernetes
+#  dependsOn:
+#    - name: istiod
+#  wait: false
+#  interval: 30m
+#  retryInterval: 1m
+#  timeout: 3m
+#---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
