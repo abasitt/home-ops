@@ -22,6 +22,7 @@ spec:
         },
         {
         "type" : "route-override",
+        "flushroutes" : true,
         "flushgateway" : true,
         "addroutes": [
         {
