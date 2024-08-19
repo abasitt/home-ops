@@ -11,7 +11,7 @@ podAnnotations:
   k8s.v1.cni.cncf.io/networks: |
       [
         {
-          "name": "multus-egress",
+          "name": "kube-system/multus-egress",
           "ips": ["192.168.30.71/24", "2001:470:ee86:30:192:168:30:71/64"]
         }
       ]
