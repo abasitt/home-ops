@@ -1,5 +1,5 @@
 ---
-#41-59 for k8s, 60 for VIP, 61-70 for LB.
+#41-59 for k8s, 60 for VIP, 61-70 for L2-LB, 71-90 macvlan
 kubernetes:
   vars:
     ansible_user: k8s

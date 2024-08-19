@@ -1,6 +1,21 @@
 autoscaling:
   minReplicas: 1
   maxReplicas: 1
+
+podAnnotations:
+  #prometheus.io/port: "15020"
+  #prometheus.io/scrape: "true"
+  #prometheus.io/path: "/stats/prometheus"
+  #inject.istio.io/templates: "gateway"
+  #sidecar.istio.io/inject: "true"
+  k8s.v1.cni.cncf.io/networks: |
+      [
+        {
+          "name": "multus-egress",
+          "ips": ["192.168.30.10/24", "2001:470:ee86:30:192:168:30:71/64"]
+        }
+      ]
+
 service:
   type: ClusterIP
   ipFamilyPolicy: RequireDualStack
