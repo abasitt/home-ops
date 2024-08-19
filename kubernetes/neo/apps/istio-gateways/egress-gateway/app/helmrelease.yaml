@@ -36,6 +36,24 @@ spec:
   uninstall:
     keepHistory: false
   maxHistory: 3
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: istio-egressgateway
+              namespace: istio-gateways
+            patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/args
+                value:
+                  - proxy
+                  - waypoint
+                  - --domain
+                  - $(POD_NAMESPACE).svc.cluster.local
+                  - --proxyLogLevel=warning
+                  - --proxyComponentLogLevel=misc:error
+                  - --log_output_level=default:info
   valuesFrom:
     - kind: ConfigMap
       name: istioegressgw-helm-values
