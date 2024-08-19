@@ -12,7 +12,7 @@ podAnnotations:
       [
         {
           "name": "multus-egress",
-          "ips": ["192.168.30.10/24", "2001:470:ee86:30:192:168:30:71/64"]
+          "ips": ["192.168.30.71/24", "2001:470:ee86:30:192:168:30:71/64"]
         }
       ]
 
@@ -36,3 +36,6 @@ resources:
   limits:
     cpu: 200m
     memory: 256Mi
+
+nodeSelector:
+  kubernetes.io/hostname: neotc1bm-w2
