@@ -21,27 +21,8 @@ spec:
           }
         },
         {
-        "type" : "route-override",
-        "flushroutes" : true,
-        "flushgateway" : true,
-        "addroutes": [
-        {
-          "dst": "${SERVICE_CIDR}",
-          "gw": "169.254.1.1"
-        },
-        {
-          "dst": "0.0.0.0/0",
-          "gw": "192.168.30.1"
-        },
-        {
-          "dst": "${SERVICE_V6CIDR}",
-          "gw": "fe80::ecee:eeff:feee:eeee"
-        },
-        {
-          "dst": "::/0",
-          "gw": "2001:470:ee86:30::1"
+          "name": "egresssbr",
+          "type": "sbr"
         }
-        ]
-      }
       ]
     }
