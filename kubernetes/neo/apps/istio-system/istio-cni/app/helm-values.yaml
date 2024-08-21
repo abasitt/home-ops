@@ -6,9 +6,10 @@ cni:
   provider: "multus"
   cniBinDir: "" # Auto-detected based on version; defaults to /opt/cni/bin.
   cniConfDir: /etc/cni/net.d
-  cniConfFileName: ""
   cniNetnsDir: # Defaults to '/var/run/netns', in minikube/docker/others can be '/var/run/docker/netns'.
   chained: false
+  cniConfFileName: "istio-cni.conf"
+  logLevel: info
   # Configure ambient settings
   ambient:
     # If enabled, ambient redirection will be enabled
