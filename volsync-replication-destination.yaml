@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/replicationdestination_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: "calibre-bootstrap"
+  namespace: media
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    repository: "calibre-volsync"
+    copyMethod: Snapshot # must be Snapshot
+    volumeSnapshotClassName: "openebs-zfs-ssd"
+    cacheStorageClassName: "openebs-hostpath"
+    cacheAccessModes: ["ReadWriteOnce"]
+    cacheCapacity: "1Gi"
+    storageClassName: "openebs-zfs-ssd"
+    accessModes: ["ReadWriteOnce"]
+    capacity: "1G"
+    moverSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
