@@ -64,22 +64,9 @@ route:
 #      #gethomepage.dev/group: Media
 #      #gethomepage.dev/name: Calibre
 #      #gethomepage.dev/icon: calibre.png
-#    hosts:
-#      - host: ebooks.${CLUSTER_DOMAIN}
-#        paths:
-#          - path: /
-#            service:
-#              identifier: app
-#              port: http
 persistence:
   config:
-    type: persistentVolumeClaim
-    accessMode: ReadWriteOnce
-    size: 512Mi
-    storageClass: openebs-zfs-ssd
-    retain: true
-    globalMounts:
-      - path: /config
+    existingClaim: ${VOLSYNC_CLAIM}
   cache:
     type: emptyDir
     globalMounts:
