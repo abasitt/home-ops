@@ -7,6 +7,12 @@ creation_rules:
     key_groups:
       - age:
           - age1w8pq3mz7lhcnf3ajppkf9ee9j7ywapkenrads9nk3yjm08szd4rqwy3r67
+  - path_regex: kubernetes/.+\.secret(\.sops)?\.env
+    input_type: env
+    mac_only_encrypted: true
+    key_groups:
+      - age:
+          - age1w8pq3mz7lhcnf3ajppkf9ee9j7ywapkenrads9nk3yjm08szd4rqwy3r67
   - path_regex: ansible/.*\.sops\.ya?ml
     key_groups:
       - age:
