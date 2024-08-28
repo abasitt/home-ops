@@ -22,7 +22,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CLAIM: calibre-web-config
+      VOLSYNC_CLAIM: calibre-web-config-v1
       VOLSYNC_CAPACITY: 1Gi
       VOLSYNC_STORAGECLASS: openebs-zfs-ssd
       RSOURCE_SCHEDULE: 0 4 * * *
