@@ -1,0 +1,45 @@
+---
+controllers:
+  photoprism:
+    strategy: RollingUpdate
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      app:
+        image:
+          repository: docker.io/photoprism/photoprism
+          tag: latest@sha256:5db91badeec3f1e32a624f9e6c70541fe5d28ddfd5447d5d258046a5768c1c0b
+        env:
+          PHOTOPRISM_STORAGE_PATH: &storage /config
+          PHOTOPRISM_ORIGINALS_PATH: &originals /var/mnt/vol1/photo/Gallery
+          PHOTOPRISM_DEBUG: "false"
+          PHOTOPRISM_PUBLIC: "true"
+          PHOTOPRISM_SITE_URL: "https://photos.${SECRET_DOMAIN}/"
+          PHOTOPRISM_ORIGINALS_LIMIT: 4000 # in MB (default 1000)
+        envFrom:
+          - secretRef:
+              name: photoprism-secret
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 1
+            memory: 1Gi
+service:
+  app:
+    controller: photoprism
+    ports:
+      http:
+        port: 2342
+persistence:
+  config:
+    enabled: true
+    existingClaim: ${VOLSYNC_CLAIM}
+    globalMounts:
+      - path: *storage
+  originals:
+    existingClaim: media-nfs
+    path: *originals
+    globalMounts:
+      - path: *originals
