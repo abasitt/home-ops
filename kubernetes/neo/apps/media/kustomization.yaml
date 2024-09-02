@@ -9,3 +9,4 @@ resources:
   # Flux-Kustomizations
   - ./calibre-web/ks.yaml
   - ./filebrowser/ks.yaml
+  - ./photoprism/ks.yaml
