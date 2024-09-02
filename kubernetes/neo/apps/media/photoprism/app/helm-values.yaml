@@ -32,9 +32,6 @@ service:
     ports:
       http:
         port: 2342
-defaultPodOptions:
-  nodeSelector:
-    kubernetes.io/hostname: neotc1bm-w2
 route:
   app:
     parentRefs:
