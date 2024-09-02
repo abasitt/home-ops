@@ -62,6 +62,5 @@ persistence:
       - path: *storage
   originals:
     existingClaim: media-nfs
-    path: *originals
     globalMounts:
       - path: *originals
