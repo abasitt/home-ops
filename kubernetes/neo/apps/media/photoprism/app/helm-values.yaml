@@ -1,6 +1,7 @@
 ---
 controllers:
   photoprism:
+    type: statefulset
     strategy: RollingUpdate
     annotations:
       reloader.stakater.com/auto: "true"
@@ -19,6 +20,7 @@ controllers:
         envFrom:
           - secretRef:
               name: photoprism-secret
+              optional: false
         resources:
           requests:
             cpu: 100m
