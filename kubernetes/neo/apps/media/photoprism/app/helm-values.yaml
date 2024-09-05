@@ -30,12 +30,9 @@ controllers:
             memory: 1Gi
 defaultPodOptions:
   securityContext:
-    runAsNonRoot: true
     runAsUser: 2000
     runAsGroup: 2000
     fsGroup: 2000
-    fsGroupChangePolicy: OnRootMismatch
-    seccompProfile: { type: RuntimeDefault }
 service:
   app:
     controller: photoprism
@@ -71,4 +68,4 @@ persistence:
     existingClaim: media-nfs
     globalMounts:
       - path: *originals
-        subPath: photos/abasit
+        subPath: photos/abasit/
