@@ -13,7 +13,7 @@ controllers:
         env:
           PHOTOPRISM_STORAGE_PATH: &storage /config
           PHOTOPRISM_ORIGINALS_PATH: &originals /originals
-          PHOTOPRISM_DEBUG: "true"
+          PHOTOPRISM_DEBUG: "false"
           PHOTOPRISM_PUBLIC: "false"
           PHOTOPRISM_SITE_URL: "https://photos.${SECRET_DOMAIN}/"
           PHOTOPRISM_ORIGINALS_LIMIT: 4000 # in MB (default 1000)
