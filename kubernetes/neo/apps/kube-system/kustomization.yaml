@@ -7,4 +7,3 @@ resources:
   - ./metrics-server/ks.yaml
   - ./multus/ks.yaml
   - ./reloader/ks.yaml
-  - ./spegel/ks.yaml
