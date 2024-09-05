@@ -11,6 +11,7 @@ resources:
   - ./external-dns.yaml
   - ./goldpinger.yaml
   - ./grafana.yaml
+  - ./intel.yaml
   - ./istio.yaml
   - ./jetstack.yaml
   - ./kiali.yaml
