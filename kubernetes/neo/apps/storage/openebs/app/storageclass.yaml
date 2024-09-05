@@ -19,6 +19,7 @@ allowedTopologies:
     values:
       - neotc1bm-w2
       - neobl1bm-m3
+      - neotc2bm-m2
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
