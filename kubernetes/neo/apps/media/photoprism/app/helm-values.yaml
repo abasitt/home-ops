@@ -68,4 +68,3 @@ persistence:
     existingClaim: media-nfs
     globalMounts:
       - path: *originals
-        subPath: photos/abasit/
