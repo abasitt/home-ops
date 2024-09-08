@@ -29,9 +29,6 @@ spec:
     port: 5432
     allowedRoutes:
       namespaces:
-        from: Selector
-        selector:
-          matchLabels:
-            kubernetes.io/metadata.name: database
+        from: All
       kinds:
       - kind: TCPRoute
