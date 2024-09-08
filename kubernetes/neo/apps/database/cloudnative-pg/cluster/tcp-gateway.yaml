@@ -5,7 +5,10 @@ metadata:
   name: postgres-cluster16-tcproute
 spec:
   parentRefs:
-    - name: private-gateway
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: private-gateway
+    namespace: istio-gateways
   rules:
     - backendRefs:
         - name: postgres16-rw
