@@ -24,4 +24,5 @@ resources:
   - ./openebs.yaml
   - ./piraeus.yaml
   - ./prometheus-community.yaml
+  - ./runix.yaml
   - ./stakater.yaml
