@@ -24,7 +24,7 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
-  - name: postgres-cluster16
+  - name: tcp-cnpgcluster16
     protocol: TCP
     port: 5432
     allowedRoutes:

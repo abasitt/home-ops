@@ -17,7 +17,7 @@ service:
       port: 443
       protocol: TCP
       targetPort: 443
-    - name: tcp-postgres
+    - name: tcp-cnpgcluster16
       port: 5432
       protocol: TCP
       targetPort: 5432
