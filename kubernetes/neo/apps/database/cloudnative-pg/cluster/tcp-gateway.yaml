@@ -9,6 +9,7 @@ spec:
     kind: Gateway
     name: private-gateway
     namespace: istio-gateways
+    sectionName: tcp-cnpgcluster16
   rules:
     - backendRefs:
         - name: postgres16-rw
