@@ -11,7 +11,7 @@ spec:
     namespace: istio-gateways
     sectionName: tcp-cnpgcluster16
   rules:
-    - backendRefs:
-        - name: postgres16-rw
-          port: 5432
-          kind: Service
+  - backendRefs:
+    - name: postgres16-rw
+      port: 5432
+      kind: Service
