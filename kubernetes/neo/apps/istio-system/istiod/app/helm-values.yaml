@@ -41,7 +41,7 @@ pilot:
   env:
     PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true # default is true also
     PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true # default is true also
-#    PILOT_FILTER_GATEWAY_CLUSTER_CONFIG: true # default is false
+    PILOT_FILTER_GATEWAY_CLUSTER_CONFIG: true # default is false
     PILOT_ENABLE_IP_AUTOALLOCATE: true
     ISTIO_DUAL_STACK: "true" #..enable dualstack
     PILOT_ENABLE_AMBIENT: "true" #..enable ambient mode
