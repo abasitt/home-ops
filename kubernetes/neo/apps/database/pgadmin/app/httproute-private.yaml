@@ -15,6 +15,6 @@ spec:
         type: PathPrefix
         value: /
     backendRefs:
-    - name: echo-server
-      port: 8080
+    - name: pgadmin
+      port: 80
       weight: 100
