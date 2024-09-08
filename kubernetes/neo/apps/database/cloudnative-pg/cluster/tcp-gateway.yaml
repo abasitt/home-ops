@@ -12,4 +12,3 @@ spec:
   - backendRefs:
     - name: postgres16-rw
       port: 5432
-      kind: Service
