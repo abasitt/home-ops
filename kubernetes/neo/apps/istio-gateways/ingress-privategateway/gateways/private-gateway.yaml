@@ -28,6 +28,7 @@ spec:
     protocol: TCP
     port: 5432
     allowedRoutes:
-      from: All
+      namespaces:
+        from: All
       kinds:
       - kind: TCPRoute
