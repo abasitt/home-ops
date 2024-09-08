@@ -24,11 +24,11 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
-  - name: tcp-cnpgcluster16
-    protocol: TCP
-    port: 5432
-    allowedRoutes:
-      namespaces:
-        from: All
-      kinds:
-      - kind: TCPRoute
+#  - name: tcp-cnpgcluster16
+#    protocol: TCP
+#    port: 5432
+#    allowedRoutes:
+#      namespaces:
+#        from: All
+#      kinds:
+#      - kind: TCPRoute
