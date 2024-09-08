@@ -29,17 +29,6 @@ spec:
     env:
       email: ${SECRET_ADMIN_EMAIL}
     existingSecret: pgadmin-secret
-    envVarsExtra:
-      - name: POSTGRES_USERNAME
-        valueFrom:
-          secretKeyRef:
-            name: cloudnative-pg-secret
-            key: username
-      - name: POSTGRES_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: cloudnative-pg-secret
-            key: password
 #    ingress: #..using httproute
 #      enabled: true
 #      ingressClassName: internal
