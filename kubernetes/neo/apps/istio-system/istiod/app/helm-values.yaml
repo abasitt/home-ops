@@ -45,6 +45,7 @@ pilot:
     PILOT_ENABLE_IP_AUTOALLOCATE: true
     ISTIO_DUAL_STACK: "true" #..enable dualstack
     PILOT_ENABLE_AMBIENT: "true" #..enable ambient mode
+    PILOT_ENABLE_ALPHA_GATEWAY_API: "true" #..enable support alpha gatewayapis
   #don't deploy on a laptop node
   affinity:
     nodeAffinity:
