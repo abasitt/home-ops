@@ -1,0 +1,30 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: postgres-cluster16-gateway
+spec:
+  addresses:
+  - value: istio-privategateway.istio-gateways.svc.cluster.local
+    type: Hostname
+  gatewayClassName: istio
+  listeners:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      allowedRoutes:
+        kinds:
+        - kind: TCPRoute
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: postgres-cluster16-tcproute
+spec:
+  parentRefs:
+    - name: postgres-cluster16-gateway
+  rules:
+    - backendRefs:
+        - name: postgres16-rw
+          port: 5432
+          kind: Service

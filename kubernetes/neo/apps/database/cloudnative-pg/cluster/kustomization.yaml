@@ -8,3 +8,4 @@ resources:
   - ./scheduledbackup.yaml
   - ./prometheusrule.yaml
 #  - ./service.yaml ... try with tcproute first
+  - ./tcp-gateway.yaml
