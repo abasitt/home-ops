@@ -58,9 +58,9 @@ pilot:
 meshConfig:
   defaultConfig:
     holdApplicationUntilProxyStarts: true #..Wait for the istio-proxy to start before starting application pods
-    discoverySelectors:
-      - matchLabels:
-          istio-discovery: enabled
+    #discoverySelectors:
+    #  - matchLabels:
+    #      istio-discovery: enabled
     proxyMetadata:
       ISTIO_META_DNS_CAPTURE: "true"
       #ISTIO_META_DNS_AUTO_ALLOCATE: "true" ..using the new approach PILOT_ENABLE_IP_AUTOALLOCATE
