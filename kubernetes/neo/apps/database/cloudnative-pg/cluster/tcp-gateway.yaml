@@ -5,7 +5,7 @@ metadata:
   name: postgres-cluster16-tcproute
 spec:
   parentRefs:
-    - name: postgres-cluster16-gateway
+    - name: private-gateway
   rules:
     - backendRefs:
         - name: postgres16-rw
