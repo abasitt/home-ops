@@ -6,13 +6,13 @@ metadata:
   name: &app pgadmin
   namespace: flux-system
 spec:
-  targetNamespace: dbms
+  targetNamespace: database
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cloudnative-pg-cluster
-  path: ./kubernetes/neo/apps/dbms/pgadmin/app
+  path: ./kubernetes/neo/apps/database/pgadmin/app
   prune: true
   sourceRef:
     kind: GitRepository
