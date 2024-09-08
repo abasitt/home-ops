@@ -17,6 +17,10 @@ service:
       port: 443
       protocol: TCP
       targetPort: 443
+    - name: tcp-postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
 resources:
   requests:
     cpu: 10m
