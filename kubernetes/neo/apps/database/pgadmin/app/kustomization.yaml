@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./pgadmin-secret.sops.yaml
   - ./helmrelease.yaml
-  - ../../../../templates/volsync
+  - ../../../../templating/volsync
