@@ -24,3 +24,14 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
+  - name: postgres-cluster16
+    protocol: TCP
+    port: 5432
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            kubernetes.io/metadata.name: database
+      kinds:
+      - kind: TCPRoute
