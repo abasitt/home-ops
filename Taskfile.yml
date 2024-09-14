@@ -23,6 +23,7 @@ includes:
   flux: .taskfiles/Flux/Taskfile.yaml
   sops: .taskfiles/Sops/Taskfile.yaml
   workstation: .taskfiles/Workstation/Taskfile.yaml
+  volsync: .taskfiles/VolSync/Taskfile.yaml
 
 tasks:
 
