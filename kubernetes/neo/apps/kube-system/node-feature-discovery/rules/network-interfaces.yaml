@@ -12,7 +12,10 @@ spec:
       matchFeatures:
         - feature: network.device
           matchExpressions:
-            name: { op: In, value: ["enp1s0", "enp2s0"] }
+            name: { op: In, value: ["enp1s0"] }
+        - feature: network.device
+          matchExpressions:
+            name: { op: In, value: ["enp2s0"] }
     - name: single-interface
       labels:
         feature.node.kubernetes.io/network-interface.en0: "true"
