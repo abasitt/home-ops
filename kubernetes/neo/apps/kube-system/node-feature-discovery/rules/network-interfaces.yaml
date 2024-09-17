@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/nfd.k8s-sigs.io/nodefeaturerule_v1alpha1.json
+apiVersion: nfd.k8s-sigs.io/v1alpha1
+kind: NodeFeatureRule
+metadata:
+  name: network-interfaces
+spec:
+  rules:
+    - name: bond-interface
+      labels:
+        feature.node.kubernetes.io/network-interface.bond: "true"
+      matchFeatures:
+        - feature: network.interfaces
+          matchExpressions:
+            interfaceName: { op: In, value: ["bond*"] }  # List specific bond interfaces
+    - name: eno1-interface
+      labels:
+        feature.node.kubernetes.io/network-interface.en0: "true"
+      matchFeatures:
+        - feature: network.interfaces
+          matchExpressions:
+            interfaceName: { op: In, value: ["eno*"] }

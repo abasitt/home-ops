@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curl-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: |
+      [
+        {
+          "name": "curl-test",
+          "namespace": "default",
+          "ips": ["192.168.30.241/24", "2001:470:ee86:30:192:168:30:241/64"],
+          "default-route": ["192.168.30.250", "2001:470:ee86:30:192:168:30:250"]
+        }
+      ]
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: neotc2bm-m2
+  initContainers:
+  - name: fixroutes
+    image: alpine:3.20.3
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: DEV
+      value: eth0
+    command:
+    - '/bin/sh'
+    - '-c'
+    - |
+      # Add static IPv4 route
+      ip route add 10.45.0.0/16 via 169.254.1.1 dev $DEV
+
+      # Add static IPv6 route
+      ip -6 route add 2001:470:ee86:4:10:43::/112 via fe80::ecee:eeff:feee:eeee dev $DEV
+    securityContext:
+      capabilities:
+        add:
+        - NET_ADMIN
+  containers:
+  - name: curl-container
+    image: quay.io/curl/curl:8.10.0
+    command: ["/bin/sleep", "infinity"]
