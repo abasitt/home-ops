@@ -12,11 +12,11 @@ spec:
       matchFeatures:
         - feature: network.device
           matchExpressions:
-            name: { op: In, value: ["bond"] }  # List specific bond interfaces
+            name: { op: InRegexp, value: ["^bond[0-9]+$"] }  # Matches bond0, bond1, etc.
     - name: single-interface
       labels:
         feature.node.kubernetes.io/network-interface.en0: "true"
       matchFeatures:
         - feature: network.device
           matchExpressions:
-            name: { op: In, value: ["eno"] }
+            name: { op: InRegexp, value: ["^eno[0-9]+$"] }  # Matches eno1, eno2, etc.
