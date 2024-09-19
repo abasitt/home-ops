@@ -103,6 +103,7 @@ spec:
               capabilities:
                 drop:
                   - ALL
+    applyDefaultContainerOptionsToInitContainers: "false"
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
