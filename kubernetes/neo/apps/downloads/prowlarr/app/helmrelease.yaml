@@ -111,7 +111,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
       nodeSelector:
-        feature.node.kubernetes.io/network-interface.en0: "true"
+        feature.node.kubernetes.io/network-interface.eno: "true"
     service:
       app:
         controller: prowlarr
