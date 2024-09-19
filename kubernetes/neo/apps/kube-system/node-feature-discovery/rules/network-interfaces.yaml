@@ -18,7 +18,7 @@ spec:
             name: { op: In, value: ["enp2s0"] }
     - name: single-interface
       labels:
-        feature.node.kubernetes.io/network-interface.en0: "true"
+        feature.node.kubernetes.io/network-interface.eno: "true"
       matchFeatures:
         - feature: network.device
           matchExpressions:
