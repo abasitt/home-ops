@@ -57,6 +57,7 @@ spec:
               # Add static IPv6 route
               ip -6 route add ${SERVICE_V6CIDR} via fe80::ecee:eeff:feee:eeee dev $DEV
             securityContext:
+              runAsUser: 0
               capabilities:
                 add:
                 - NET_ADMIN
