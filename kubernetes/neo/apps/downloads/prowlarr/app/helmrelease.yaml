@@ -1,0 +1,122 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prowlarr
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.4.0
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+
+  values:
+    controllers:
+      prowlarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+          k8s.v1.cni.cncf.io/networks: |
+            [
+              {
+                "name": "downloads",
+                "ips": ["192.168.32.1/23", "2001:470:ee86:30:192:168:31:1/23"],
+                "default-route": ["192.168.31.254", "2001:470:ee86:30:192:168:31:254"]
+              }
+            ]
+
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            runAsNonRoot: true
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+
+        initContainers:
+          fixroutes:
+            image:
+              repository: alpine
+              tag: 3.20.3
+            env:
+            - name: DEV
+              value: eth0
+            command:
+            - '/bin/sh'
+            - '-c'
+            - |
+              # Add static IPv4 route
+              ip route add ${SERVICE_CIDR} via 169.254.1.1 dev $DEV
+
+              # Add static IPv6 route
+              ip -6 route add ${SERVICE_V6CIDR} via fe80::ecee:eeff:feee:eeee dev $DEV
+            securityContext:
+              capabilities:
+                add:
+                - NET_ADMIN
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/prowlarr-nightly
+              tag: 1.24.2.4744@sha256:2b9c7d6d0ddf0a7b5894f5ebf380fde93ee404935acad0c87b7ed2dabe5fe06c
+            env:
+              PROWLARR__INSTANCE_NAME: Prowlarr
+              PROWLARR__APP__THEME: dark
+              PROWLARR__AUTH__METHOD: External
+              PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              PROWLARR__LOG__DBENABLED: "False"
+              PROWLARR__LOG__LEVEL: info
+              PROWLARR__PORT: &port 80
+              PROWLARR__UPDATE__BRANCH: develop
+              TZ: ${TIMEZONE}
+              PROWLARR__API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: prowlarr-secret
+                    key: api_key
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 15m
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+    service:
+      app:
+        controller: prowlarr
+        ports:
+          http:
+            port: *port
+
+    persistence:
+      config:
+        existingClaim: prowlarr-config
