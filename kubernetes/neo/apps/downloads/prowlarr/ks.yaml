@@ -20,6 +20,7 @@ spec:
   dependsOn:
     - name: volsync
     - name: openebs
+    - name: multus-config
   postBuild:
     substitute:
       APP: *app
