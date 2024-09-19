@@ -27,12 +27,3 @@ spec:
       APP_UID: "2000"
       APP_GID: "2000"
       VOLSYNC_CLAIM: prowlarr-config
-
-
-  postBuild:
-    substitute:
-      APP: *app
-      VOLSYNC_CLAIM: calibre-web-config-v1
-      VOLSYNC_CAPACITY: 1Gi
-      VOLSYNC_STORAGECLASS: openebs-zfs-ssd
-      RSOURCE_SCHEDULE: 0 4 * * *
