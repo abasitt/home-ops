@@ -39,14 +39,6 @@ spec:
               }
             ]
 
-        pod:
-          securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            runAsNonRoot: true
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
-
         initContainers:
           fixroutes:
             image:
@@ -110,14 +102,22 @@ spec:
               capabilities:
                 drop:
                   - ALL
-
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2000
+        runAsGroup: 2000
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+      nodeSelector:
+        feature.node.kubernetes.io/network-interface.en0: "true"
     service:
       app:
         controller: prowlarr
         ports:
           http:
             port: *port
-
     persistence:
       config:
         existingClaim: prowlarr-config
