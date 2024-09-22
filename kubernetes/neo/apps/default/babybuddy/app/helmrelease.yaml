@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: prowlarr
+  name: babybuddy
 spec:
   interval: 30m
   chart:
@@ -39,6 +39,8 @@ spec:
               pullPolicy: IfNotPresent
             env:
               TZ: ${TIMEZONE}
+              PUID: 2000
+              PGID: 2000
             probes:
               liveness:
                 enabled: true
