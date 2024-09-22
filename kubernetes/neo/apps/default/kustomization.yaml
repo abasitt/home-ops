@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
 #  - ./busybox/ks.yaml curl have the pretty much same features
-  - ./babybuddy/ks.yaml
+#  - ./babybuddy/ks.yaml
   - ./curl/ks.yaml
   - ./echo-server/ks.yaml
   - ./excalidraw/ks.yaml
