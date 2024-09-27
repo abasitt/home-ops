@@ -11,5 +11,8 @@ spec:
       "mode": "bridge",
       "ipam": {
         "type": "static"
+      },
+      {
+          "type": "sbr"
       }
     }
