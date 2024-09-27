@@ -37,7 +37,7 @@ spec:
                 {
                   "name": "downloads",
                   "namespace": "kube-system",
-                  "ips": ["192.168.31.1/23", "2001:470:ee86:30:192:168:31:1/23"],
+                  "ips": ["192.168.31.1/23", "2001:470:ee86:30:192:168:31:1/64"],
                   "default-route": ["192.168.31.254", "2001:470:ee86:30:192:168:31:254"]
                 }
               ]
@@ -86,7 +86,7 @@ spec:
                     key: api_key
             probes:
               liveness: &probes
-                enabled: false
+                enabled: true
                 custom: true
                 spec:
                   httpGet:
