@@ -28,4 +28,3 @@ spec:
       VOLSYNC_CLAIM: babybuddy-config
       VOLSYNC_CAPACITY: 1Gi
       VOLSYNC_STORAGECLASS: openebs-zfs-ssd
-      RSOURCE_SCHEDULE: 0 4 * * *
