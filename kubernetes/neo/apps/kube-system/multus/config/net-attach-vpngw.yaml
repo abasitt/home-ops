@@ -4,7 +4,7 @@ metadata:
   name: vpngw
 spec:
   config: |-
-    '{
+    {
       "cniVersion": "0.3.0",
       "plugins": [
         {
@@ -23,4 +23,4 @@ spec:
           }
         }
       ]
-    }'
+    }
