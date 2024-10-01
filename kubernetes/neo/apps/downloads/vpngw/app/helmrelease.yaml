@@ -61,6 +61,7 @@ spec:
                     name: vpngw-secret
                     key: private_key
             securityContext:
+              privileged: true
               capabilities:
                 add:
                 - NET_ADMIN
