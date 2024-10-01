@@ -1,4 +1,3 @@
-#just the example nad
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
@@ -13,7 +12,7 @@ spec:
           "master": "eno10.30",
           "mode": "bridge",
           "ipam": {
-            "type": "static",
+            "type": "static"
           }
         },
         {
