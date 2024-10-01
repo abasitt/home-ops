@@ -48,8 +48,6 @@ spec:
               tag: latest
             env:
               TZ: ${TIMEZONE}
-              NET_LOCAL: 192.168.0.0/16
-              NET6_LOCAL: 2001:470:ee86::/48
               QUERY:
                 valueFrom:
                   secretKeyRef:
@@ -66,12 +64,6 @@ spec:
                 add:
                 - NET_ADMIN
     defaultPodOptions:
-      #securityContext:
-      #  sysctls:
-      #  - name: net.ipv4.ip_forward
-      #    value: "1"
-      #  - name: net.ipv6.conf.all.forwarding
-      #    value: "1"
       nodeSelector:
         feature.node.kubernetes.io/network-interface.eno: "true"
     service:
