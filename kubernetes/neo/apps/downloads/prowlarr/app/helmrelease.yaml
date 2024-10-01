@@ -56,11 +56,11 @@ spec:
             - |
               # Add static IPv4 route
               ip route add ${SERVICE_CIDR} via 169.254.1.1 dev $DEV
-              # ip route add ${NODES_V4CIDR} via 169.254.1.1 dev $DEV
+              ip route add ${NODES_V4CIDR} via 169.254.1.1 dev $DEV
 
               # Add static IPv6 route
               ip -6 route add ${SERVICE_V6CIDR} via fe80::ecee:eeff:feee:eeee dev $DEV
-              # ip -6 route add ${NODES_V6CIDR} via fe80::ecee:eeff:feee:eeee dev $DEV
+              ip -6 route add ${NODES_V6CIDR} via fe80::ecee:eeff:feee:eeee dev $DEV
             securityContext:
               capabilities:
                 add:
