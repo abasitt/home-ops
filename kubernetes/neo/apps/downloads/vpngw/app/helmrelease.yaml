@@ -1,0 +1,72 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vpngw
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.4.0
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+
+  values:
+    controllers:
+      prowlarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "downloads",
+                  "namespace": "kube-system",
+                  "ips": ["192.168.36.1/24", "2001:470:ee86:36:192:168:36:1/64"]
+                }
+              ]
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/bubuntux/nordlynx
+              tag: latest
+            env:
+              TZ: ${TIMEZONE}
+              NET_LOCAL: 192.168.0.0/16
+              QUERY:
+                valueFrom:
+                  secretKeyRef:
+                    name: vpngw-secret
+                    key: query
+              PRIVATE_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: vpngw-secret
+                    key: private_key
+            securityContext:
+              capabilities:
+                add:
+                - NET_ADMIN
+    defaultPodOptions:
+      nodeSelector:
+        feature.node.kubernetes.io/network-interface.eno: "true"
+    service:
+      app:
+        controller: vpngw
+        enabled: false
