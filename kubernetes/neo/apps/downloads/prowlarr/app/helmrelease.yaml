@@ -55,12 +55,11 @@ spec:
             - '-c'
             - |
               # Add static IPv4 route
-              ip route add ${SERVICE_CIDR} via 169.254.1.1 dev $DEV
-              ip route add ${NODES_V4CIDR} via 169.254.1.1 dev $DEV
+              ip route add 10.0.0.0/8 via 169.254.1.1 dev $DEV
+              ip route add 192.168.0.0/16 via 169.254.1.1 dev $DEV
 
               # Add static IPv6 route
-              ip -6 route add ${SERVICE_V6CIDR} via fe80::ecee:eeff:feee:eeee dev $DEV
-              ip -6 route add ${NODES_V6CIDR} via fe80::ecee:eeff:feee:eeee dev $DEV
+              ip -6 route add 2001:470:ee86::/48 via fe80::ecee:eeff:feee:eeee dev $DEV
             securityContext:
               capabilities:
                 add:
