@@ -124,6 +124,25 @@ spec:
         ports:
           http:
             port: *port
+    route:
+      app:
+        parentRefs:
+          - group: ""
+            kind: Gateway
+            name: private-gateway
+            namespace: istio-gateways
+        hostnames:
+          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - kind: Service
+                port: http
+                name: app
+                weight: 100
     persistence:
       config:
         existingClaim: prowlarr-config
