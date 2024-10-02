@@ -9,4 +9,5 @@ resources:
   # Flux-Kustomizations
   - ./calibre-web/ks.yaml
   - ./filebrowser/ks.yaml
+  - ./isponsorblocktv/ks.yaml
 #  - ./photoprism/ks.yaml
