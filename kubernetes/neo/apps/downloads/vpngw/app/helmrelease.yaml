@@ -65,7 +65,7 @@ spec:
                 - NET_ADMIN
     defaultPodOptions:
       nodeSelector:
-        feature.node.kubernetes.io/network-interface.eno: "true"
+        feature.node.kubernetes.io/network-interface.bond: "true"
     service:
       app:
         controller: vpngw
