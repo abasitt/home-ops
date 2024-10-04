@@ -10,16 +10,7 @@ spec:
       labels:
         feature.node.kubernetes.io/network-interface.bond: "true"
       matchFeatures:
-        - feature: network.device
+        - feature: pci.device
           matchExpressions:
-            name: { op: In, value: ["enp1s0"] }
-        - feature: network.device
-          matchExpressions:
-            name: { op: In, value: ["enp2s0"] }
-    - name: single-interface
-      labels:
-        feature.node.kubernetes.io/network-interface.eno: "true"
-      matchFeatures:
-        - feature: network.device
-          matchExpressions:
-            name: { op: InRegexp, value: ["^eno[0-9]+$"] }  # Matches eno1, eno2, etc.
+            class: { op: In, value: ["0200"] }
+            vendor: { op: In, value: ["8086"] }
