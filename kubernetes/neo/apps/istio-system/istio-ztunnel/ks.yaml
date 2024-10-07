@@ -17,6 +17,8 @@ spec:
     name: home-kubernetes
   dependsOn:
     - name: istio-base
+    - name: istiod
+    - name: istio-cni
   wait: false
   interval: 30m
   retryInterval: 1m
