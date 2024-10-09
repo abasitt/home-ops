@@ -26,6 +26,10 @@ global:
         cpu: 200m
         memory: 256Mi
 pilot:
+  #only applicable for multus
+  cni:
+    enabled: true
+    provider: "multus"
   ipFamilyPolicy: "RequireDualStack"
   autoscaleEnabled: "false"
   autoscaleMin: 1
