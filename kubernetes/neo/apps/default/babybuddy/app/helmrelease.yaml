@@ -69,10 +69,10 @@ spec:
         parentRefs:
           - group: ""
             kind: Gateway
-            name: external-gateway
+            name: private-gateway
             namespace: istio-gateways
         hostnames:
-          - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
         rules:
           - matches:
               - path:
