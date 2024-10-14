@@ -25,9 +25,10 @@ global:
       limits:
         cpu: 200m
         memory: 256Mi
-#istio_cni:
-#  chained: false
-#  provider: multus
+istio_cni:
+  chained: true
+  enabled: true
+  provider: default #... either default or multus
 pilot:
   #only applicable for multus
   #cni:
