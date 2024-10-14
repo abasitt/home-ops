@@ -71,8 +71,13 @@ spec:
             kind: Gateway
             name: private-gateway
             namespace: istio-gateways
+          - group: ""
+            kind: Gateway
+            name: external-gateway
+            namespace: istio-gateways
         hostnames:
           - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.${SECRET_DOMAIN}
         rules:
           - matches:
               - path:
