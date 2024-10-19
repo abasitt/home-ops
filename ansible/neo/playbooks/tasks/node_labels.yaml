@@ -14,22 +14,23 @@
               node.kubernetes.io/infrastructure-type: baremetal
               node.kubernetes.io/storage-type: zfs
       loop:
+        - neotc1bm-m1
         - neobl1bm-m3
         - neotc2bm-m2
         - neotc1bm-w2
-    - name: Label VM nodes
-      kubernetes.core.k8s:
-        kubeconfig: /etc/rancher/k3s/k3s.yaml
-        api_version: v1
-        kind: Node
-        name: "{{ item }}"
-        state: present
-        definition:
-          metadata:
-            labels:
-              node.kubernetes.io/infrastructure-type: vm
-      loop:
-        - neohv1vm-m1
+#    - name: Label VM nodes
+#      kubernetes.core.k8s:
+#        kubeconfig: /etc/rancher/k3s/k3s.yaml
+#        api_version: v1
+#        kind: Node
+#        name: "{{ item }}"
+#        state: present
+#        definition:
+#          metadata:
+#            labels:
+#              node.kubernetes.io/infrastructure-type: vm
+#      loop:
+#        - neohv1vm-m1
     - name: Label and taint laptop node
       kubernetes.core.k8s:
         kubeconfig: /etc/rancher/k3s/k3s.yaml

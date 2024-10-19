@@ -6,7 +6,7 @@ kubernetes:
   children:
     master:
       hosts:
-        neohv1vm-m1:
+        neotc1bm-m1:
           ansible_host: 192.168.30.41
           ansible_v6host: 2001:470:ee86:30:192:168:30:41
         neotc2bm-m2: #thinkcenter2
