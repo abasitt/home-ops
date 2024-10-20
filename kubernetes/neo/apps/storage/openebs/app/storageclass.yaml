@@ -17,9 +17,10 @@ allowedTopologies:
 - matchLabelExpressions:
   - key: kubernetes.io/hostname
     values:
-      - neotc1bm-w2
-      - neobl1bm-m3
+      - neotc2bm-m1
       - neotc2bm-m2
+      - neobl1bm-m3
+      - neotc1bm-w2
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -37,4 +38,5 @@ allowedTopologies:
 - matchLabelExpressions:
   - key: kubernetes.io/hostname
     values:
+      - neotc1bm-m1
       - neotc1bm-w2
