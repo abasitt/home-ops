@@ -5,9 +5,9 @@ kind: Kustomization
 resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
-  - pvc
+#  - pvc
   # Flux-Kustomizations
 #  - ./calibre-web/ks.yaml
-  - ./filebrowser/ks.yaml
+#  - ./filebrowser/ks.yaml
   - ./isponsorblocktv/ks.yaml
 #  - ./photoprism/ks.yaml
