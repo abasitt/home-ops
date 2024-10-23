@@ -12,7 +12,7 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: zfs.home.internal
+    server: nfs.home.internal
     path: /z1ank/media
   mountOptions:
     - nfsvers=4.2
