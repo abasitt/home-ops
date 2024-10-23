@@ -12,8 +12,8 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: zfs.hv01.home.arpa
-    path: /zp_sda_sdb/k8s/data/media
+    server: zfs.home.internal
+    path: /z1ank/media
   mountOptions:
     - nfsvers=4.2
     - nconnect=8
