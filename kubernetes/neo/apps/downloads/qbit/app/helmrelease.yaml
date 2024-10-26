@@ -132,6 +132,8 @@ spec:
           qbit:
             app:
               - path: /config
+      tmp:
+        type: emptyDir
       contents:
         type: nfs
         server: nfs.home.internal
