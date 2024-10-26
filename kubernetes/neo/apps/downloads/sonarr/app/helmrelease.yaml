@@ -1,0 +1,157 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sonarr
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.5.0
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+
+  values:
+    controllers:
+      sonarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "downloads",
+                  "namespace": "kube-system",
+                  "ips": ["192.168.36.14/23", "2001:470:ee86:36:192:168:36:14/64"],
+                  "default-route": ["192.168.36.1", "2001:470:ee86:36:192:168:36:1"]
+                }
+              ]
+
+        initContainers:
+          fixroutes:
+            image:
+              repository: alpine
+              tag: 3.20.3
+            env:
+            - name: DEV
+              value: eth0
+            command:
+            - '/bin/sh'
+            - '-c'
+            - |
+              # Add static IPv4 route
+              ip route add 10.0.0.0/8 via 169.254.1.1 dev $DEV
+              ip route add 192.168.0.0/16 via 169.254.1.1 dev $DEV
+
+              # Add static IPv6 route
+              ip -6 route add 2001:470:ee86::/48 via fe80::ecee:eeff:feee:eeee dev $DEV
+            securityContext:
+              capabilities:
+                add:
+                - NET_ADMIN
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/sonarr-develop
+              tag: 4.0.9.2513@sha256:31c0f7881c18d496a45616bad4b02ab6588b95836615122042c8709d5edb0241
+            env:
+              SONARR__APP__INSTANCENAME: Sonarr
+              SONARR__APP__THEME: dark
+              SONARR__AUTH__METHOD: External
+              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              SONARR__LOG__DBENABLED: "False"
+              SONARR__LOG__LEVEL: info
+              SONARR__SERVER__PORT: &port 80
+              SONARR__UPDATE__BRANCH: develop
+              TZ: ${TIMEZONE}
+              SONARR__AUTH__APIKEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: sonarr-secret
+                    key: api_key
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 15m
+              limits:
+                memory: 2Gi
+            securityContext:
+              runAsUser: 2000
+              runAsGroup: 2000
+              runAsNonRoot: true
+              fsGroup: 2000
+              fsGroupChangePolicy: OnRootMismatch
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    defaultPodOptions:
+      nodeSelector:
+        feature.node.kubernetes.io/network-interface.bond: "true"
+    service:
+      app:
+        controller: sonarr
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        parentRefs:
+          - group: ""
+            kind: Gateway
+            name: private-gateway
+            namespace: istio-gateways
+        hostnames:
+          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - kind: Service
+                port: http
+                name: app
+                weight: 100
+    persistence:
+      config:
+        existingClaim: sonarr-config
+      add-ons:
+        type: emptyDir
+      tmp:
+        type: emptyDir
+      contents:
+        type: nfs
+        server: nfs.home.internal
+        path: /z1ank/contents
+        globalMounts:
+          - path: /data/nas-media
