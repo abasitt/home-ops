@@ -1,0 +1,157 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: radarr
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.5.0
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+
+  values:
+    controllers:
+      radarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "downloads",
+                  "namespace": "kube-system",
+                  "ips": ["192.168.36.13/23", "2001:470:ee86:36:192:168:36:13/64"],
+                  "default-route": ["192.168.36.1", "2001:470:ee86:36:192:168:36:1"]
+                }
+              ]
+
+        initContainers:
+          fixroutes:
+            image:
+              repository: alpine
+              tag: 3.20.3
+            env:
+            - name: DEV
+              value: eth0
+            command:
+            - '/bin/sh'
+            - '-c'
+            - |
+              # Add static IPv4 route
+              ip route add 10.0.0.0/8 via 169.254.1.1 dev $DEV
+              ip route add 192.168.0.0/16 via 169.254.1.1 dev $DEV
+
+              # Add static IPv6 route
+              ip -6 route add 2001:470:ee86::/48 via fe80::ecee:eeff:feee:eeee dev $DEV
+            securityContext:
+              capabilities:
+                add:
+                - NET_ADMIN
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/radarr-develop
+              tag: 5.13.1.9378@sha256:d6d6f561c071e54f8b70a609b7ec9948db0892771028d856ee1a76974f9dd7f7
+            env:
+              RADARR__APP__INSTANCENAME: Radarr
+              RADARR__APP__THEME: dark
+              RADARR__AUTH__METHOD: External
+              RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              RADARR__LOG__DBENABLED: "False"
+              RADARR__LOG__LEVEL: info
+              RADARR__SERVER__PORT: &port 80
+              RADARR__UPDATE__BRANCH: develop
+              TZ: ${TIMEZONE}
+              RADARR__API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-secret
+                    key: api_key
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 15m
+              limits:
+                memory: 2Gi
+            securityContext:
+              runAsUser: 2000
+              runAsGroup: 2000
+              runAsNonRoot: true
+              fsGroup: 2000
+              fsGroupChangePolicy: OnRootMismatch
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    defaultPodOptions:
+      nodeSelector:
+        feature.node.kubernetes.io/network-interface.bond: "true"
+    service:
+      app:
+        controller: radarr
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        parentRefs:
+          - group: ""
+            kind: Gateway
+            name: private-gateway
+            namespace: istio-gateways
+        hostnames:
+          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - kind: Service
+                port: http
+                name: app
+                weight: 100
+    persistence:
+      config:
+        existingClaim: radarr-config
+      add-ons:
+        type: emptyDir
+      tmp:
+        type: emptyDir
+      contents:
+        type: nfs
+        server: nfs.home.internal
+        path: /z1ank/contents
+        globalMounts:
+          - path: /data/nas-media
