@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.5.1
+      version: 3.5.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -123,7 +123,7 @@ spec:
                 port: http
                 name: app
                 weight: 100
-                
+
     persistence:
       config:
         enabled: true
