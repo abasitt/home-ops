@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app qbit
+  namespace: flux-system
+spec:
+  targetNamespace: downloads
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 10m
+  path: "./kubernetes/neo/apps/downloads/qbit/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-kubernetes
+  wait: false
+  dependsOn:
+    - name: volsync
+    - name: openebs
+    - name: multus-config
+    - name: vpngw
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CLAIM: qbit-config
+      VOLSYNC_CAPACITY: 1Gi
+      VOLSYNC_STORAGECLASS: openebs-zfs-ssd
+      RSOURCE_SCHEDULE: 0 4 * * *

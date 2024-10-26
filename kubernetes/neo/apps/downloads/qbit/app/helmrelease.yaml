@@ -1,0 +1,142 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: qbittorrent
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+      interval: 15m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      qbit:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "downloads",
+                  "namespace": "kube-system",
+                  "ips": ["192.168.36.12/23", "2001:470:ee86:36:192:168:36:12/64"],
+                  "default-route": ["192.168.36.1", "2001:470:ee86:36:192:168:36:1"]
+                }
+              ]
+
+        initContainers:
+          fixroutes:
+            image:
+              repository: alpine
+              tag: 3.20.3
+            env:
+            - name: DEV
+              value: eth0
+            command:
+            - '/bin/sh'
+            - '-c'
+            - |
+              # Add static IPv4 route
+              ip route add 10.0.0.0/8 via 169.254.1.1 dev $DEV
+              ip route add 192.168.0.0/16 via 169.254.1.1 dev $DEV
+
+              # Add static IPv6 route
+              ip -6 route add 2001:470:ee86::/48 via fe80::ecee:eeff:feee:eeee dev $DEV
+            securityContext:
+              capabilities:
+                add:
+                - NET_ADMIN
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/qbittorrent
+              tag: 5.0.0@sha256:4ba2360b71b95afe7d2b4459c54e5146ed682f37a1c1703eba0f29684636de50
+            env:
+              TZ: ${TIMEZONE}
+              QBITTORRENT__PORT: &port 8080
+              QBITTORRENT__BT_PORT: &port-bt 50413
+            securityContext:
+              runAsUser: 2000
+              runAsGroup: 2000
+              runAsNonRoot: true
+              fsGroup: 2000
+              fsGroupChangePolicy: OnRootMismatch
+    service:
+      app:
+        controller: qbit
+        ports:
+          http:
+            port: *port
+      bittorrent:
+        controller: qbit
+        #type: LoadBalancer
+        annotations:
+          prometheus.io/probe: "true"
+          prometheus.io/protocol: tcp
+        ports:
+          bittorrent:
+            enabled: true
+            port: *port-bt
+            protocol: TCP
+            targetPort: 6881
+    defaultPodOptions:
+      nodeSelector:
+        feature.node.kubernetes.io/network-interface.bond: "true"
+
+    route:
+      app:
+        parentRefs:
+          - group: ""
+            kind: Gateway
+            name: private-gateway
+            namespace: istio-gateways
+        hostnames:
+          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - kind: Service
+                port: http
+                name: app
+                weight: 100
+                
+    persistence:
+      config:
+        enabled: true
+        existingClaim: qbit-config
+        advancedMounts:
+          qbit:
+            app:
+              - path: /config
+      contents:
+        type: nfs
+        server: nfs.home.internal
+        path: /z1ank/contents
+        advancedMounts:
+          qbit:
+            app:
+              - path: /data/nas-contents
