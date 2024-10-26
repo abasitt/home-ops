@@ -10,11 +10,11 @@ spec:
     spec:
       chart: app-template
       version: 3.5.0
+      interval: 30m
       sourceRef:
         kind: HelmRepository
-        name: bjw-s-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 15m
   maxHistory: 3
   install:
     createNamespace: true
