@@ -154,4 +154,4 @@ spec:
         server: nfs.home.internal
         path: /z1ank/contents
         globalMounts:
-          - path: /data/nas-media
+          - path: /data/nas-contents
