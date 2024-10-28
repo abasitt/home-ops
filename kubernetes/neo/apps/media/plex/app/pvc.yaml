@@ -8,4 +8,4 @@ spec:
   resources:
     requests:
       storage: 50Gi
-  storageClassName: openebs-zfs-hdd
+  storageClassName: openebs-zfs-ssd
