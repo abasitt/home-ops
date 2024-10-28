@@ -1,0 +1,11 @@
+---
+#21-30 for k8s and 31-40 for LB range
+kubernetes:
+  vars:
+    ansible_user: k8s
+    ansible_ssh_port: 22
+  children:
+    master:
+      hosts:
+        k3s-m1:
+          ansible_host: 192.168.30.22

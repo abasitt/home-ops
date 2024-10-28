@@ -1,0 +1,9 @@
+---
+timezone: "Asia/Singapore"
+github_username: abasitt
+kubeapi_addr: "2001:470:ee86:30:192:168:30:22"
+cluster_v6cidr: "fd77:470:ee86:42::/56"
+service_v6cidr: "fd77:470:ee86:4:10:43::/112"
+coredns_v4addr: "{{ service_cidr.split(',')[0] | ansible.utils.nthhost(10) }}"
+coredns_v6addr: "{{ service_v6cidr.split(',')[0] | ansible.utils.nthhost(10) }}"
+linuxdataplane: BPF #Iptables or BPF for calico
