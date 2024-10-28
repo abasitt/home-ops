@@ -9,3 +9,4 @@ kubernetes:
       hosts:
         k3s-m1:
           ansible_host: 192.168.30.22
+          ansible_v6host: 2001:470:ee86:30:192:168:30:22
