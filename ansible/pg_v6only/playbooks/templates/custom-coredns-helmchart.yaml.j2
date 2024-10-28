@@ -19,8 +19,6 @@ spec:
     service:
       name: kube-dns
       clusterIP: {{ coredns_v6addr }}
-      clusterIPs: [{{ coredns_v6addr }},{{ coredns_v4addr }}]
-      ipFamilyPolicy: RequireDualStack
     serviceAccount:
       create: true
     deployment:
