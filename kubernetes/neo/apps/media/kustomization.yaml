@@ -11,3 +11,4 @@ resources:
   - ./filebrowser/ks.yaml
   - ./isponsorblocktv/ks.yaml
 #  - ./photoprism/ks.yaml
+  - ./plex/ks.yaml

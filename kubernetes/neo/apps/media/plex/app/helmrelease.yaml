@@ -106,7 +106,7 @@ spec:
                 weight: 100
     persistence:
       config:
-        existingClaim: plex
+        existingClaim: ${VOLSYNC_CLAIM}
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server
       # Separate PVC for cache to avoid backing up cache files
