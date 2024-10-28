@@ -91,13 +91,6 @@
 
     - name: System Configuration (1)
       block:
-        - name: System Configuration (1) | Disable ufw | Ubuntu
-          ansible.builtin.systemd:
-            service: ufw.service
-            enabled: false
-            masked: true
-            state: stopped
-          when: ansible_facts['distribution'] == 'Ubuntu'
         - name: System Configuration (1) | Enable fstrim
           ansible.builtin.systemd:
             service: fstrim.timer
