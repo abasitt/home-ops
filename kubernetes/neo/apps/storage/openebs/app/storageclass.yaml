@@ -13,6 +13,7 @@ parameters:
   fstype: "zfs"
   poolname: "zp_ssd"
 allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
 allowedTopologies:
 - matchLabelExpressions:
   - key: kubernetes.io/hostname
@@ -34,6 +35,7 @@ parameters:
   fstype: "zfs"
   poolname: "zp_hdd"
 allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
 allowedTopologies:
 - matchLabelExpressions:
   - key: kubernetes.io/hostname
