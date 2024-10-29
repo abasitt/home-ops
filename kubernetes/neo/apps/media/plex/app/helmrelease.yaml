@@ -74,8 +74,8 @@ spec:
         supplementalGroups: [44, 10000]
         seccompProfile: { type: RuntimeDefault }
       nodeSelector:
-        #intel.feature.node.kubernetes.io/gpu: "true"
-        kubernetes.io/hostname: neotc1bm-m1
+        intel.feature.node.kubernetes.io/gpu: "true"
+        #kubernetes.io/hostname: neotc1bm-m1
     service:
       app:
         controller: plex
