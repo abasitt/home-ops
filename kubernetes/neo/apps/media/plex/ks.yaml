@@ -28,3 +28,4 @@ spec:
       VOLSYNC_CAPACITY: 30Gi
       VOLSYNC_STORAGECLASS: openebs-zfs-ssd
       RSOURCE_SCHEDULE: 0 4 * * *
+      VOLSYNC_CACHE_SNAPSHOTCLASS: openebs-zfs-ssd
