@@ -128,8 +128,7 @@ spec:
         type: nfs
         server: nfs.home.internal
         path: /z1ank/contents
-        advancedMounts:
-          plex:
-            app:
-              - path: /data/nas-contents
+        globalMounts:
+          - path: /data/nas-contents
+            readOnly: true
 
