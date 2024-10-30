@@ -61,7 +61,7 @@ spec:
               storageClass: openebs-zfs-hdd
               size: 200Mi
               globalMounts:
-                - path: *data
+                - path: /var/lib/microbin
         type: statefulset
     defaultPodOptions:
       securityContext:
