@@ -23,6 +23,10 @@ cni:
   # reduce for home cluster
   repair:
     enabled: true
+
+seLinuxOptions:
+  type: spc_t
+
   resources:
     requests:
       cpu: 20m
