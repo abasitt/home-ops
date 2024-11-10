@@ -38,6 +38,19 @@ spec:
   uninstall:
     keepHistory: false
   maxHistory: 3
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: v1
+              kind: DaemonSet
+              name: istio-cni-node
+              namespace: kube-system
+            patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/securityContext
+                value:
+                  privileged: true
   valuesFrom:
     - kind: ConfigMap
       name: istiocni-helm-values
