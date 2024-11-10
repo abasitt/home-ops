@@ -1,29 +1,32 @@
+#cniConfFileName: 10-calico.conflist
+#provider: "multus"
+cniBinDir: /opt/cni/bin # Auto-detected based on version; defaults to /opt/cni/bin.
+cniConfDir: /etc/cni/net.d
+cniNetnsDir: # Defaults to '/var/run/netns', in minikube/docker/others can be '/var/run/docker/netns'.
+chained: false #... default true
+#cniConfFileName: "istio-cni.conf"
+logLevel: info
+# Configure ambient settings
+ambient:
+  # If enabled, ambient redirection will be enabled
+  enabled: true
+  # Set ambient config dir path: defaults to /etc/ambient-config
+  configDir: ""
+  # If enabled, and ambient is enabled, DNS redirection will be enabled
+  dnsCapture: true
+  # If enabled, and ambient is enabled, enables ipv6 support
+  ipv6: true
+# reduce for home cluster
+repair:
+  enabled: true
+resources:
+  requests:
+    cpu: 20m
+    memory: 20Mi
+# configure securitycontext
+securityContext:
+  privileged: true
+
 global:
   hub: gcr.io/istio-release
   variant: "distroless"
-cni:
-  #cniConfFileName: 10-calico.conflist
-  #provider: "multus"
-  cniBinDir: /opt/cni/bin # Auto-detected based on version; defaults to /opt/cni/bin.
-  cniConfDir: /etc/cni/net.d
-  cniNetnsDir: # Defaults to '/var/run/netns', in minikube/docker/others can be '/var/run/docker/netns'.
-  chained: false #... default true
-  #cniConfFileName: "istio-cni.conf"
-  logLevel: info
-  # Configure ambient settings
-  ambient:
-    # If enabled, ambient redirection will be enabled
-    enabled: true
-    # Set ambient config dir path: defaults to /etc/ambient-config
-    configDir: ""
-    # If enabled, and ambient is enabled, DNS redirection will be enabled
-    dnsCapture: true
-    # If enabled, and ambient is enabled, enables ipv6 support
-    ipv6: true
-  # reduce for home cluster
-  repair:
-    enabled: true
-  resources:
-    requests:
-      cpu: 20m
-      memory: 20Mi
