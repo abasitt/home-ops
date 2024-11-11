@@ -45,7 +45,7 @@ spec:
               version: v1
               kind: DaemonSet
               name: istio-cni-node
-              namespace: kube-system
+              namespace: istio-system
             patch: |
               - op: add
                 path: /spec/template/spec/containers/0/securityContext
