@@ -40,22 +40,27 @@ spec:
   maxHistory: 3
   postRenderers:
     - kustomize:
-        patch: |
-          - op: add
-            path: /spec/template/spec/containers/0/securityContext
-            value:
-              capabilities:
-                add:
-                - NET_ADMIN
-                - NET_RAW
-                - SYS_PTRACE
-                - SYS_ADMIN
-                drop:
-                - ALL
-              privileged: true
-              runAsGroup: 0
-              runAsNonRoot: false
-              runAsUser: 0
+        patches:
+          - target:
+              version: v1
+              kind: DaemonSet
+              name: istio-cni-node
+              namespace: kube-system
+            patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/securityContext
+                value:
+                  capabilities:
+                    add:
+                    - NET_ADMIN
+                    - NET_RAW
+                    - SYS_ADMIN
+                    drop:
+                    - ALL
+                  privileged: true
+                  runAsGroup: 0
+                  runAsNonRoot: false
+                  runAsUser: 0
   valuesFrom:
     - kind: ConfigMap
       name: istiocni-helm-values
