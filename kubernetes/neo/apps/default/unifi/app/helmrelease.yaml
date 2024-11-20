@@ -68,6 +68,7 @@ spec:
         annotations:
           metallb.universe.tf/loadBalancerIPs: ${METALLB_UNIFI_V6ADDR},${METALLB_UNIFI_V4ADDR}
         externalTrafficPolicy: "Local"
+        allocateLoadBalancerNodePorts: false
         ports:
           http:
             port: 8443
@@ -142,7 +143,7 @@ spec:
                   value: /
             backendRefs:
               - kind: Service
-                port: http
+                port: portal-https
                 name: app
                 weight: 100
 
