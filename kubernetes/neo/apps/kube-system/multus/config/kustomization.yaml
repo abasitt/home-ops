@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - ./net-attach-downloads.yaml
   - ./net-attach-egress.yaml
+  - ./net-attach-unifi.yaml
   - ./net-attach-vpngw.yaml

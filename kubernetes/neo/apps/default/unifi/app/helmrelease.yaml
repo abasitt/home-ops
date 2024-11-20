@@ -1,0 +1,133 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app unifi
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      unifi:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "unifi",
+                  "namespace": "kube-system",
+                  "ips": ["192.168.1.192/23"]
+                }
+              ]
+
+        containers:
+          app:
+            image:
+              repository: jacobalberty/unifi
+              tag: v8.6.9@sha256:b8eb551cc0aa61666357aab0078bba15fec557c81ba83284c2c9bfc217d6a529
+              pullPolicy: IfNotPresent
+            env:
+              TZ: ${TIMEZONE}
+              RUNAS_UID0: "false"
+              UNIFI_UID: "999"
+              UNIFI_GID: "999"
+              UNIFI_STDOUT: "true"
+              JVM_INIT_HEAP_SIZE:
+              JVM_MAX_HEAP_SIZE: 1024M
+            resources:
+              limits:
+                memory: 1.5Gi
+    service:
+      app:
+        controller: *app
+        loadBalancerClass: metallb
+        ipFamilyPolicy: PreferDualStack
+        annotations:
+          metallb.universe.tf/loadBalancerIPs: ${METALLB_UNIFI_V6ADDR},${METALLB_UNIFI_V4ADDR}
+        externalTrafficPolicy: "Local"
+        ports:
+          http:
+            port: 8443
+            protocol: HTTPS
+          controller:
+            enabled: true
+            port: 8080
+            protocol: TCP
+          portal-http:
+            enabled: false
+            port: 8880
+            protocol: HTTP
+          portal-https:
+            enabled: false
+            port: 8843
+            protocol: HTTPS
+          speedtest:
+            enabled: true
+            port: 6789
+            protocol: TCP
+          stun:
+            enabled: true
+            port: 3478
+            protocol: UDP
+          syslog:
+            enabled: true
+            port: 5514
+            protocol: UDP
+          discovery:
+            enabled: true
+            port: 10001
+            protocol: UDP
+#    ingress:
+#      app:
+#        enabled: true
+#        className: nginx
+#        annotations:
+#          nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+#          hajimari.io/icon: mdi:lan
+#          gethomepage.dev/enabled: "true"
+#          gethomepage.dev/name: Unifi
+#          gethomepage.dev/description: Centralized enterprise-grade networking for home and business.
+#          gethomepage.dev/group: Infrastructure
+#          gethomepage.dev/icon: unifi.png
+#          gethomepage.dev/pod-selector: >-
+#            app in (
+#              unifi
+#            )
+#        hosts:
+#          - host: &host "{{ .Release.Name }}.${SECRET_EXTERNAL_DOMAIN}"
+#            paths:
+#              - path: /
+#                service:
+#                  identifier: app
+#                  port: http
+#        tls:
+#          - hosts:
+#              - *host
+    persistence:
+      config:
+        enabled: true
+        existingClaim: unifi-config
+        globalMounts:
+          - path: /unifi
