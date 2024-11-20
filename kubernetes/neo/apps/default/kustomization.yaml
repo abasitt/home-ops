@@ -10,3 +10,4 @@ resources:
   - ./excalidraw/ks.yaml
   - ./homeassistant/ks.yaml
   - ./microbin/ks.yaml
+  - ./unifi/ks.yaml
