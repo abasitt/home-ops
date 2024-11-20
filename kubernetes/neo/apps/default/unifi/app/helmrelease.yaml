@@ -62,6 +62,7 @@ spec:
     service:
       app:
         controller: *app
+        type: LoadBalancer
         loadBalancerClass: metallb
         ipFamilyPolicy: PreferDualStack
         annotations:
