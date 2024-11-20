@@ -126,6 +126,26 @@ spec:
 #        tls:
 #          - hosts:
 #              - *host
+    route:
+      app:
+        parentRefs:
+          - group: ""
+            kind: Gateway
+            name: external-gateway
+            namespace: istio-gateways
+        hostnames:
+          - unifi.${SECRET_DOMAIN}
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - kind: Service
+                port: http
+                name: app
+                weight: 100
+
     persistence:
       config:
         enabled: true
