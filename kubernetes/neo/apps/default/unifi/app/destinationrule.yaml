@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: unifi-destination-rule
+  namespace: default
+spec:
+  host: unifi.default.svc.cluster.local
+  trafficPolicy:
+    portLevelSettings:
+    - port:
+        number: 8443
+      tls:
+        mode: SIMPLE
+        insecureSkipVerify: true
