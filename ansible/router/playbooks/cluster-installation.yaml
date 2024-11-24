@@ -47,7 +47,7 @@
         wait_sleep: 10
         wait_timeout: 360
       loop:
-        - { name: kubeovn,  kind: HelmChart, namespace: kube-system }
+      #  - { name: kubeovn, kind: HelmChart, namespace: kube-system }
         - { name: coredns, kind: HelmChart, namespace: kube-system }
 
     - name: Coredns

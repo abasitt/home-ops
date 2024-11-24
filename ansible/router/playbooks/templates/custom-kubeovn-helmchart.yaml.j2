@@ -12,7 +12,7 @@ spec:
   targetNamespace: kube-system
   bootstrap: true
   valuesContent: |-
-    MASTER_NODES: ""
+    MASTER_NODES: "{{ kubeapi_addr }}"
     MASTER_NODES_LABEL: "kube-ovn/role=master"
 
     namespace: kube-system
