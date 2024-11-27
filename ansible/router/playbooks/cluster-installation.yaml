@@ -54,10 +54,10 @@
       when: k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/coredns.yaml
 
-    - name: Kubeovn
-      when: k3s_primary_control_node
-      ansible.builtin.include_tasks: tasks/kubeovn.yaml
-
+#    - name: Kubeovn
+#      when: k3s_primary_control_node
+#      ansible.builtin.include_tasks: tasks/kubeovn.yaml
+#
     - name: Cruft
       when: k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/cruft.yaml

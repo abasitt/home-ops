@@ -8,10 +8,10 @@ k3s_server:
   tls-san:
     - "{{ kubeapi_addr }}"
   docker: false
-  flannel-backend: "none"             # This needs to be in quotes
+  flannel-backend: "host-gw"             # This needs to be in quotes
   disable:
     - coredns
-    - flannel                         # Disable flannel                 - replaced with Cilium
+#    - flannel                         # Disable flannel
     - local-storage                   # Disable local-path-provisioner  - installed with Flux
     - metrics-server                  # Disable metrics-server          - installed with Flux
     - servicelb                       # Disable servicelb               - replaced with metallb and installed with Flux
