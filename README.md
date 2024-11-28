@@ -54,7 +54,7 @@ This Git repository contains the following directories under [Kubernetes](./kube
 |-----------------------------|-----|--------------|---------------------------------|------|---------------|-------------------------|
 | Thinkcenter                 | 3   | 1TB SSD      | 1TB                             | 64GB | Ubuntu        | Kubernetes              |
 | Beelink EQ12                | 1   | 1TB SSD      | 1TB                             | 16GB | Ubuntu        | Kubernetes              |
-| JONSB) N4 (N100 MB)         | 1   | 1TB SSD      | 6x4TB ZFS Z1                    | 32GB | Ubuntu        | NFS + Backup Server     |
+| JONSB N4 (N100 MB)          | 1   | 1TB SSD      | 6x4TB ZFS Z1                    | 32GB | Ubuntu        | NFS + Backup Server     |
 
 ---
 
