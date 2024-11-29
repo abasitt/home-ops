@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   #- github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.1.0
   #extermintal contain all crds including standard
-  - github.com/kubernetes-sigs/gateway-api/config/crd/experimental?ref=v1.1.0
+  - github.com/kubernetes-sigs/gateway-api/config/crd/experimental?ref=v1.2.1
