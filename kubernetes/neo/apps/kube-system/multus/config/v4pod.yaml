@@ -16,7 +16,7 @@ spec:
     kubernetes.io/hostname: neotc2bm-m2
   initContainers:
   - name: fixroutes
-    image: alpine:3.20.3
+    image: alpine:3.21.0
     imagePullPolicy: IfNotPresent
     env:
     - name: DEV
