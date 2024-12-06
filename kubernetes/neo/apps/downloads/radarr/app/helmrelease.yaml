@@ -46,7 +46,7 @@ spec:
           fixroutes:
             image:
               repository: alpine
-              tag: 3.20.3
+              tag: 3.21.0
             env:
             - name: DEV
               value: eth0
