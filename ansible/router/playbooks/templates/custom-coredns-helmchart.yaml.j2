@@ -18,8 +18,8 @@ spec:
     k8sAppLabelOverride: kube-dns
     service:
       name: kube-dns
-      clusterIP: {{ coredns_v6addr }}
-      clusterIPs: [{{ coredns_v6addr }},{{ coredns_v4addr }}]
+      clusterIP: {{ coredns_v4addr }}
+      clusterIPs: [{{ coredns_v4addr }},{{ coredns_v6addr }}]
       ipFamilyPolicy: RequireDualStack
     serviceAccount:
       create: true

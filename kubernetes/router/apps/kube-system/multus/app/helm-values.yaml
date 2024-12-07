@@ -1,0 +1,161 @@
+---
+configMaps:
+  cni-config:
+    data:
+      cni-config.json: |
+        {
+          "name": "multus-cni-network",
+          "type": "multus",
+          "capabilities": {
+            "portMappings": true
+          },
+          "delegates": [
+            {
+              "cniVersion": "0.3.1",
+              "name": "default-cni-network",
+              "plugins": [
+                {
+                  "type": "flannel",
+                  "name": "flannel.1",
+                    "delegate": {
+                      "isDefaultGateway": true,
+                      "hairpinMode": true
+                    }
+                  },
+                  {
+                    "type": "portmap",
+                    "capabilities": {
+                      "portMappings": true
+                    }
+                  }
+              ]
+            }
+          ],
+          "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
+        }
+
+controllers:
+  uninstall:
+    type: job
+    annotations:
+      # This is what defines this resource as a hook. Without this line, the
+      # job is considered part of the release.
+      helm.sh/hook: pre-delete, pre-upgrade
+      helm.sh/hook-weight: "-5"
+      helm.sh/hook-delete-policy: hook-succeeded
+    pod:
+      hostNetwork: true
+    containers:
+      uninstall:
+        image:
+          repository: alpine
+          tag: 3.20.3
+        command:
+          - /bin/sh
+          - -c
+        args:
+          - |
+            set -x
+            rm -rf /host/etc/cni/net.d/*multus*
+            rm -rf /host/opt/cni/bin/*multus*
+
+  multus:
+    type: daemonset
+
+    annotations:
+      reloader.stakater.com/auto: "true"
+
+    pod:
+      hostNetwork: true
+
+    containers:
+      multus-daemon:
+        image: &image
+          repository: ghcr.io/k8snetworkplumbingwg/multus-cni
+          tag: v4.1.3
+        command: ["/thin_entrypoint"]
+        args:
+          - "--multus-conf-file=auto"
+          - "--multus-autoconfig-dir=/host/etc/cni/net.d"
+          - "--cni-conf-dir=/host/etc/cni/net.d"
+          - "--multus-master-cni-file-name=10-calico.conflist"
+          - "--multus-log-level=verbose"
+          - "--multus-log-file=/var/log/multus.log"
+        env:
+          MULTUS_NODE_NAME:
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+        resources:
+          requests:
+            cpu: "5m"
+            memory: "96Mi"
+          limits:
+            memory: "512Mi"
+        securityContext:
+          privileged: true
+        terminationMessagePolicy: FallbackToLogsOnError
+
+    initContainers:
+      cni-plugins-installer:
+        image: *image
+        command: ["/install_multus"]
+        args:
+          - "--type"
+          - "thin"
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "15Mi"
+        securityContext:
+          privileged: true
+        terminationMessagePolicy: FallbackToLogsOnError
+
+persistence:
+  cni:
+    type: hostPath
+    hostPath: /etc/cni/net.d
+    advancedMounts:
+      uninstall:
+        uninstall:
+          - path: /host/etc/cni/net.d
+      multus:
+        multus-daemon:
+          - path: /host/etc/cni/net.d
+
+  cnibin:
+    type: hostPath
+    hostPath: /opt/cni/bin
+    advancedMounts:
+      uninstall:
+        uninstall:
+          - path: /host/opt/cni/bin
+      multus:
+        cni-plugins-installer:
+          - path: /host/opt/cni/bin
+            mountPropagation: Bidirectional
+        multus-daemon:
+          # multus-daemon expects that cnibin path must be identical between pod and container host.
+          # e.g. if the cni bin is in '/opt/cni/bin' on the container host side, then it should be
+          # mount to '/opt/cni/bin' in multus-daemon, not to any other directory, like '/opt/bin' or
+          # '/usr/bin'.
+          - path: /host/opt/cni/bin
+
+  config:
+    type: configMap
+    name: multus-cni-config
+    advancedMounts:
+      multus:
+        multus-daemon:
+          - path: /tmp/multus-conf
+
+serviceAccount:
+  create: true
+
+
+defaultPodOptions:
+  tolerations:
+    - operator: Exists
+      effect: NoSchedule
+    - operator: Exists
+      effect: NoExecute
