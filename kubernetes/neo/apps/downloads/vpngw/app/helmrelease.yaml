@@ -45,7 +45,7 @@ spec:
           app:
             image:
               repository: ghcr.io/bubuntux/nordlynx
-              tag: latest
+              tag: 2023-06-01
             env:
               TZ: ${TIMEZONE}
               QUERY:
