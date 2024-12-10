@@ -8,5 +8,5 @@ kubernetes:
     master:
       hosts:
         router:
-          ansible_host: 192.168.30.22
-          ansible_v6host: 2001:470:ee86:30:192:168:30:22
+          ansible_host: 192.168.30.2
+          ansible_v6host: 2001:470:ee86:30:192:168:30:2
