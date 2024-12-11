@@ -6,10 +6,10 @@ configMaps:
         #!/bin/bash
         ufw default deny incoming
         ufw default deny outgoing
-        sudo ufw allow out 53
-        sudo ufw allow out 80/tcp
-        sudo ufw allow out 443/tcp
-        sudo ufw allow out proto icmp
+        ufw allow out 53
+        ufw allow out 80/tcp
+        ufw allow out 443/tcp
+        ufw allow out proto icmp
         ufw allow ssh
         ufw enable
         # Add MASQUERADE rule
