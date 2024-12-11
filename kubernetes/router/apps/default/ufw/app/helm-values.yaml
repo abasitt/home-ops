@@ -1,0 +1,101 @@
+---
+configMaps:
+  config:
+    data:
+      ufw-rules.sh: |
+        #!/bin/bash
+        ufw default deny incoming
+        ufw default allow outgoing
+        ufw allow ssh
+        ufw allow 80/tcp
+        ufw allow 443/tcp
+        ufw enable
+        # Add MASQUERADE rule
+        # Create a custom chain for NAT
+        # iptables-nft -t nat -N ROUTER_MASQ
+        # Add MASQUERADE rule to the custom chain
+        # iptables-nft -t nat -A ROUTER_MASQ -s 192.168.1.0/23 -o vlan999 -j MASQUERADE
+        # iptables-nft -t nat -A ROUTER_MASQ -s 192.168.10.0/23 -o vlan999 -j MASQUERADE
+        # Insert a jump rule in the POSTROUTING chain to the custom chain
+        # iptables-nft -t nat -A POSTROUTING -j ROUTER_MASQ
+
+controllers:
+#  uninstall:
+#    type: job
+#    annotations:
+#      # This is what defines this resource as a hook. Without this line, the
+#      # job is considered part of the release.
+#      helm.sh/hook: pre-delete, pre-upgrade
+#      helm.sh/hook-weight: "-5"
+#      helm.sh/hook-delete-policy: hook-succeeded
+#    pod:
+#      hostNetwork: true
+#    containers:
+#      uninstall:
+#        image:
+#          repository: alpine
+#          tag: 3.20.3
+#        command:
+#          - /bin/sh
+#          - -c
+#        args:
+#          - |
+#            set -x
+#            echo "todo cleanup commands"
+
+  ufw:
+    type: daemonset
+    annotations:
+      reloader.stakater.com/auto: "true"
+    pod:
+      hostNetwork: true
+    containers:
+      ufw-daemon:
+        image: &image
+          repository: abasitt/ufw-alpine
+          tag: 29112024
+        command:
+        - /bin/bash
+        - -cex
+        - |
+          #!/bin/bash
+          #bash /tmp/ufw-rules.sh
+          sleep infinity
+        resources:
+          requests:
+            cpu: "5m"
+            memory: "96Mi"
+          limits:
+            memory: "512Mi"
+        securityContext:
+          privileged: true
+        terminationMessagePolicy: FallbackToLogsOnError
+
+persistence:
+  ufw:
+    type: hostPath
+    hostPath: /etc/ufw
+    advancedMounts:
+      uninstall:
+        uninstall:
+          - path: /etc/ufw
+      ufw:
+        ufw-daemon:
+          - path: /etc/ufw
+  config:
+    type: configMap
+    name: ufw-config
+    advancedMounts:
+      ufw:
+        ufw-daemon:
+          - path: /tmp/ufw-conf
+
+serviceAccount:
+  create: true
+
+defaultPodOptions:
+  tolerations:
+    - operator: Exists
+      effect: NoSchedule
+    - operator: Exists
+      effect: NoExecute
