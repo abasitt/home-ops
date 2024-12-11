@@ -76,9 +76,9 @@ persistence:
     type: hostPath
     hostPath: /etc/ufw
     advancedMounts:
-      uninstall:
-        uninstall:
-          - path: /etc/ufw
+#      uninstall:
+#        uninstall:
+#          - path: /etc/ufw
       ufw:
         ufw-daemon:
           - path: /etc/ufw
