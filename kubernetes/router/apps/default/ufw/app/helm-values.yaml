@@ -53,7 +53,7 @@ controllers:
       ufw-daemon:
         image: &image
           repository: abasitt/ufw-alpine
-          tag: 29112024
+          tag: "29112024"
         command:
         - /bin/bash
         - -cex
