@@ -1,0 +1,51 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: curl
+  namespace: tools
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+    controllers:
+      busybox:
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: quay.io/curl/curl
+              tag: 8.11.0
+            command: ["/bin/sleep", "infinity"]
+            env:
+              TZ: "${TIMEZONE}"
+            securityContext:
+              capabilities: { drop: ["ALL"] }
+            #resources:
+            #  limits:
+            #    cpu: 20m
+            #    memory: 50Mi
+    service:
+      app:
+        controller: sleep
+        enabled: false
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile: { type: RuntimeDefault }

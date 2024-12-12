@@ -4,13 +4,21 @@ configMaps:
     data:
       ufw-rules.sh: |
         #!/bin/bash
+        find /etc/ufw/ -name "*.rules.*" -type f -mtime +30 -exec rm -f {} \;
+        ufw --force reset
         ufw default deny incoming
         ufw default deny outgoing
         ufw allow out 53
         ufw allow out 80/tcp
         ufw allow out 443/tcp
         ufw allow out proto icmp
-        ufw allow ssh
+        # kubernetes internal rules
+        ufw allow out to 10.40.0.0/16 #kubelet healthcheck to podscidr
+        ufw allow from 10.40.0.0/16 to any port 6443 proto tcp #allow podcidr talk to kubeapi
+        # router input rules
+        ufw allow from 192.168.0.0/16 to any port 22 proto tcp
+        ufw allow from 192.168.0.0/16 to any port 6443 proto tcp #allow access to kubeapi
+        # enable ufw
         ufw enable
         # Add MASQUERADE rule
         # Create a custom chain for NAT
