@@ -17,6 +17,7 @@ resources:
   - ./jetstack.yaml
   - ./k8s-gateway.yaml
   - ./k8snetworkplumbingwg.yaml
+  - ./kea-dhcp.yaml
   - ./kiali.yaml
   - ./kubernetes-dashboard.yaml
   - ./metallb.yaml
