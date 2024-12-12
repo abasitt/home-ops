@@ -1,0 +1,117 @@
+---
+kea:
+  interface: "br0,vlan40"
+  dhcp4:
+    enabled: true
+    validlifetime: "4000"
+    renewtimer: "1000"
+    rebindtimer: "2000"
+    loglevel: "DEBUG"
+    options:
+      - name: domain-name-servers
+        data: 9.9.9.9,1.1.1.1
+      # - name: domain-name-servers
+      #   data: 192.168.1.2
+      # - name: domain-name
+      #   data: local
+      # - name: domain-search
+      #   data: local
+      # - code: 66
+      #   data: 192.168.1.2
+      #   name: tftp-server-name
+    reservations: {}
+      # - ip-address: "192.168.1.2"
+      #   hw-address: "aa:aa:aa:aa:aa:aa"
+      #   hostname: "hostname"
+      #   option-data:
+      #     - name: "tftp-servers"
+      #       data: "10.1.1.202,10.1.1.203"
+    subnets:
+      - subnet: "192.168.1.0/23"
+        pools:
+          - pool: "192.168.1.100-192.168.1.200"
+        option-data:
+          - name: "routers"
+            data: "192.168.1.1"
+      #- subnet: "192.168.10.0/23"
+      #  pools:
+      #    - pool: "192.168.10.10-192.168.10.150"
+      #  option-data:
+      #    - name: "routers"
+      #      data: "192.168.10.1"
+      #- subnet: "192.168.10.0/23"
+      #  pools:
+      #    - pool: "192.168.10.10-192.168.10.150"
+      #  option-data:
+      #    - name: "routers"
+      #      data: "192.168.10.1"
+      #- subnet: "192.168.20.0/23"
+      #  pools:
+      #    - pool: "192.168.20.10-192.168.20.127"
+      #  option-data:
+      #    - name: "routers"
+      #      data: "192.168.20.1"
+      #- subnet: "192.168.30.0/23"
+      #  pools:
+      #    - pool: "192.168.30.5-192.168.30.10"
+      #  option-data:
+      #    - name: "routers"
+      #      data: "192.168.30.1"
+      - subnet: "192.168.40.0/23"
+        pools:
+          - pool: "192.168.40.11-192.168.40.100"
+        option-data:
+          - name: "routers"
+            data: "192.168.40.1"
+  dhcp6:
+    enabled: false
+    validlifetime: "4000"
+    renewtimer: "1000"
+    rebindtimer: "2000"
+    loglevel: "DEBUG"
+    options: {}
+    reservations: {}
+      # - ip-address: "2001:db8:1::100"
+      #   duid: "aa:aa:aa:aa:aa:aa"
+      #   hostname: "hostname"
+      #   option-data:
+      #     - name: "dns-servers"
+      #       data: "2001:db8:2::45, 2001:db8:2::100"
+    subnets: {}
+      # - subnet: "2001:db8:1::/48"
+      #   pools:
+      #     - pool: "2001:db8:1::/80"
+  ddns:
+    enabled: false
+    loglevel: "DEBUG"
+    prefix: "myhost"
+    suffix: "home.arpa."
+    forward: {}
+      # ddns-domains:
+      # - name: home.arpa.
+      #   key-name: ''
+      #   dns-servers:
+      #   - ip-address: 172.16.32.2
+      #     port: 53
+    reverse: {}
+      # ddns-domains:
+      # - name: 168.192.in-addr.arpa.
+      #   key-name: ''
+      #   dns-servers:
+      #   - ip-address: 172.16.32.2
+      #     port: 53
+  ctrlagent:
+    #Needed for HA, monitoring and stork
+    enabled: false
+    loglevel: "DEBUG"
+metrics:
+  enabled: false
+  service:
+    type: ClusterIP
+    ## Use serviceLoadBalancerIP to request a specific static IP,
+    ## otherwise leave blank
+    # loadBalancerIP:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9547"
+    labels: {}
