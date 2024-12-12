@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/neo/apps/default/kea-dhcp/app
+  path: ./kubernetes/router/apps/default/kea-dhcp/app
   prune: true # never should be deleted
   sourceRef:
     kind: GitRepository
