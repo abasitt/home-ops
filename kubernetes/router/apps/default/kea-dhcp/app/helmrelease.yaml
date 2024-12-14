@@ -45,14 +45,15 @@ spec:
                   - |
                     set -ex
                     cp /mnt/config-map/* /mnt/kea/
-                    #manually add interfaces here, won't pick up from helmvalues
+                    # Manually add interfaces here, won't pick up from helm values
                     interfaces="br0,vlan40"
-                    echo "Selected interface $interfaces"
-                    interfaces_json=$(echo $interfaces | sed 's/,/","/g' | sed 's/^/"/' | sed 's/$/"/')
+                    echo "Selected interfaces: $interfaces"
+                    # Format interfaces as a JSON array
+                    interfaces_json=$(echo $interfaces | sed 's/,/","/g' | sed 's/^/["/' | sed 's/$/"]/')
                     echo "Interfaces JSON: $interfaces_json"
                     # Replace INTERFACE placeholder with JSON array of interfaces
-                    sed -i "s/\"INTERFACE\"/${interfaces_json}/g" /mnt/kea/kea-dhcp4.conf
-                    sed -i "s/\"INTERFACE\"/${interfaces_json}/g" /mnt/kea/kea-dhcp6.conf
+                    sed -i "s/\[\"INTERFACE\"\]/${interfaces_json}/g" /mnt/kea/kea-dhcp4.conf
+                    sed -i "s/\[\"INTERFACE\"\]/${interfaces_json}/g" /mnt/kea/kea-dhcp6.conf
                     sed -i "s/HOSTNAME/${HOSTNAME}/g" /mnt/kea/ha-init.json || true
                     touch /mnt/kea/ha.json
   valuesFrom:
