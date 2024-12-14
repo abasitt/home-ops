@@ -46,7 +46,7 @@ spec:
                     set -ex
                     cp /mnt/config-map/* /mnt/kea/
                     #manually add interfaces here, won't pick up from helmvalues
-                    interfaces=br0,vlan40
+                    interfaces="br0,vlan40"
                     echo "Selected interface $interfaces"
                     interfaces_json=$(echo $interfaces | sed 's/,/","/g' | sed 's/^/"/' | sed 's/$/"/')
                     echo "Interfaces JSON: $interfaces_json"
