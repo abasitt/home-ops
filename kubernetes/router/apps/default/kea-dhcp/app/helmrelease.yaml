@@ -52,8 +52,8 @@ spec:
                     interfaces_json=$(echo $interfaces | sed 's/,/","/g' | sed 's/^/["/' | sed 's/$/"]/')
                     echo "Interfaces JSON: $interfaces_json"
                     # Replace INTERFACE placeholder with JSON array of interfaces
-                    sed -i "s/\[\"INTERFACE\"\]/${interfaces_json}/g" /mnt/kea/kea-dhcp4.conf
-                    sed -i "s/\[\"INTERFACE\"\]/${interfaces_json}/g" /mnt/kea/kea-dhcp6.conf
+                    sed -i "s/\"INTERFACE\"/${interfaces_json}/g" /mnt/kea/kea-dhcp4.conf
+                    sed -i "s/\"INTERFACE\"/${interfaces_json}/g" /mnt/kea/kea-dhcp6.conf
                     sed -i "s/HOSTNAME/${HOSTNAME}/g" /mnt/kea/ha-init.json || true
                     touch /mnt/kea/ha.json
   valuesFrom:
