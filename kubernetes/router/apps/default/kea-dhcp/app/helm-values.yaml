@@ -1,6 +1,6 @@
 ---
 kea:
-  interface: "br0,vlan40"
+  #interface: added in the helmrelease patch manually to support multiple interfaces in hostnetwork
   dhcp4:
     enabled: true
     validlifetime: "4000"
