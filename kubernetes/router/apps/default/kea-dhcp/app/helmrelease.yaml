@@ -26,6 +26,40 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: StatefulSet
+              name: kea-dhcp
+              namespace: default
+            patch: |
+              - op: add
+                path: /spec/template/spec/hostNetwork
+                value: true
+              - op: replace
+                path: /spec/template/spec/initContainers/0/command
+                value:
+                  - sh
+                  - "-c"
+                  - |
+                    set -ex
+                    cp /mnt/config-map/* /mnt/kea/
+                    if [ -n "{{ .Values.kea.interface }}" ]; then
+                      interfaces="{{ .Values.kea.interface }}"
+                    else
+                      echo "Finding default interface..."
+                      interfaces=$(route | grep '^default' | grep -o '[^ ]*$')
+                    fi
+                    echo "Selected interfaces: $interfaces"
+                    # Format interfaces as a JSON array
+                    interfaces_json=$(echo $interfaces | sed 's/,/","/g' | sed 's/^/"/' | sed 's/$/"/')
+                    echo "Interfaces JSON: $interfaces_json"
+                    # Replace INTERFACE placeholder with JSON array of interfaces
+                    sed -i "s/\"INTERFACE\"/${interfaces_json}/g" /mnt/kea/kea-dhcp4.conf
+                    sed -i "s/\"INTERFACE\"/${interfaces_json}/g" /mnt/kea/kea-dhcp6.conf
+                    sed -i "s/HOSTNAME/${HOSTNAME}/g" /mnt/kea/ha-init.json || true
+                    touch /mnt/kea/ha.json
   valuesFrom:
     - kind: ConfigMap
       name: keadhcp-helm-values
