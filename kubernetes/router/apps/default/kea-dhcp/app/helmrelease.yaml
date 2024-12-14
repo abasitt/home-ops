@@ -45,15 +45,15 @@ spec:
                   - |
                     set -ex
                     cp /mnt/config-map/* /mnt/kea/
-                    if [ -n "{{ .Values.kea.interface }}" ]; then
-                      interfaces="{{ .Values.kea.interface }}"
-                    else
-                      echo "Finding default interface..."
-                      interfaces=$(route | grep '^default' | grep -o '[^ ]*$')
-                    fi
-                    echo "Selected interfaces: $interfaces"
+                    {{- if .Values.kea.interface }}
+                    interface={{ .Values.kea.interface }}
+                    {{- else }}
+                    echo "Finding interface..."
+                    interface=$(route | grep '^default' | grep -o '[^ ]*$')
+                    {{- end }}
+                    echo "Selected interface $interface"
                     # Format interfaces as a JSON array
-                    interfaces_json=$(echo $interfaces | sed 's/,/","/g' | sed 's/^/"/' | sed 's/$/"/')
+                    interfaces_json=$(echo $interface | sed 's/,/","/g' | sed 's/^/"/' | sed 's/$/"/')
                     echo "Interfaces JSON: $interfaces_json"
                     # Replace INTERFACE placeholder with JSON array of interfaces
                     sed -i "s/\"INTERFACE\"/${interfaces_json}/g" /mnt/kea/kea-dhcp4.conf
