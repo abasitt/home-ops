@@ -51,7 +51,7 @@ spec:
                     # Replace INTERFACE placeholder
                     sed -i "s/\"INTERFACE\"/${interfaces}/g" /mnt/kea/kea-dhcp4.conf
                     sed -i "s/\"INTERFACE\"/${interfaces}/g" /mnt/kea/kea-dhcp6.conf
-                    sed -i "s/HOSTNAME//g" /mnt/kea/ha-init.json || true
+                    sed -i "s/HOSTNAME/${HOSTNAME}/g" /mnt/kea/ha-init.json || true
                     touch /mnt/kea/ha.json
   valuesFrom:
     - kind: ConfigMap
