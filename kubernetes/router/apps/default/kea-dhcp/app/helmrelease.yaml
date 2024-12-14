@@ -46,11 +46,9 @@ spec:
                     set -ex
                     cp /mnt/config-map/* /mnt/kea/
                     # Manually add interfaces here, won't pick up from helm values
-                    interfaces="br0,vlan40"
-                    echo "Selected interfaces: $interfaces"
                     # Replace INTERFACE placeholder with the list of interfaces
-                    sed -i "s/INTERFACE/\$interfaces/g" /mnt/kea/kea-dhcp4.conf
-                    sed -i "s/INTERFACE/\$interfaces/g" /mnt/kea/kea-dhcp6.conf
+                    sed -i 's/INTERFACE/"br0","vlan40"/g' /mnt/kea/kea-dhcp4.conf
+                    sed -i 's/INTERFACE/"br0","vlan40"/g' /mnt/kea/kea-dhcp6.conf
                     sed -i "s/HOSTNAME/\$HOSTNAME/g" /mnt/kea/ha-init.json || true
                     touch /mnt/kea/ha.json
   valuesFrom:
