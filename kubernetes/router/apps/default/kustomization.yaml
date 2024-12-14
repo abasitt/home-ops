@@ -4,5 +4,5 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
 #  - ./curl/ks.yaml
-#  - ./kea-dhcp/ks.yaml
+  - ./kea-dhcp/ks.yaml
   - ./ufw/ks.yaml
