@@ -1,6 +1,6 @@
 ---
 kea:
-  interface: '"br0","vlan40"'
+  interface: "br0,vlan40"
   dhcp4:
     enabled: true
     validlifetime: "4000"
