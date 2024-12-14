@@ -49,8 +49,8 @@ spec:
                     interfaces='"br0","vlan40"'
                     echo "Selected interfaces: $interfaces"
                     # Replace INTERFACE placeholder with JSON array of interfaces
-                    sed -i "s/INTERFACE/$interfaces/g" /mnt/kea/kea-dhcp4.conf
-                    sed -i "s/INTERFACE/$interfaces/g" /mnt/kea/kea-dhcp6.conf
+                    sed -i "s/\"INTERFACE\"/\$interfaces/g" /mnt/kea/kea-dhcp4.conf
+                    sed -i "s/\"INTERFACE\"/\$interfaces/g" /mnt/kea/kea-dhcp6.conf
                     sed -i "s/HOSTNAME/$HOSTNAME/g" /mnt/kea/ha-init.json || true
                     touch /mnt/kea/ha.json
   valuesFrom:
