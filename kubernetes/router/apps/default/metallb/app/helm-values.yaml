@@ -4,12 +4,12 @@ crds:
 speaker:
   frr:
     enabled: false
-prometheus:
-  namespace: observability
-  serviceAccount: kube-prometheus-stack-prometheus
-  serviceMonitor:
-    enabled: true
-  prometheusRule:
-    enabled: true
+#prometheus:
+#  namespace: observability
+#  serviceAccount: kube-prometheus-stack-prometheus
+#  serviceMonitor:
+#    enabled: true
+#  prometheusRule:
+#    enabled: true
 frrk8s:
   enabled: true
