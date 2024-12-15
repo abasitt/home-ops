@@ -2,6 +2,7 @@
 crds:
   enabled: true
 speaker:
+  enabled: false
   frr:
     enabled: false
 #prometheus:
