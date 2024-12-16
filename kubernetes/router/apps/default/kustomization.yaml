@@ -5,5 +5,5 @@ resources:
   - ./namespace.yaml
 #  - ./curl/ks.yaml
   - ./kea-dhcp/ks.yaml
-  - ./metallb/ks.yaml
+#  - ./metallb/ks.yaml
   - ./ufw/ks.yaml
