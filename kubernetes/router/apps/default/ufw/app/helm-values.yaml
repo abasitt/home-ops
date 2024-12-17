@@ -12,10 +12,17 @@ configMaps:
         ufw allow out 80/tcp
         ufw allow out 443/tcp
         ufw allow out proto icmp
+
         # kubernetes internal rules
         ufw allow out to 10.40.0.0/16 #kubelet healthcheck to podscidr
         ufw allow out to 10.96.0.0/16 #allow local to output to kubeservice range
         ufw allow from 10.40.0.0/16 to any port 6443 proto tcp #allow podcidr talk to kubeapi
+
+        #allow outgoing to all nodes in vlan
+        #this is also mandatory to access kubeapiservvice from hostnetwork
+        #this can be restricted to k8s node list only
+        ufw allow out to 192.168.0.0/16
+
         # router input rules
         ufw allow from 192.168.0.0/16 to any port 22 proto tcp
         ufw allow from 192.168.0.0/16 to any port 6443 proto tcp #allow access to kubeapi
