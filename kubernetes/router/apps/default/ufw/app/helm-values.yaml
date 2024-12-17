@@ -19,7 +19,7 @@ configMaps:
         # router input rules
         ufw allow from 192.168.0.0/16 to any port 22 proto tcp
         ufw allow from 192.168.0.0/16 to any port 6443 proto tcp #allow access to kubeapi
-        
+
         # enable ufw
         ufw enable
         # Add MASQUERADE rule
@@ -94,6 +94,13 @@ persistence:
       ufw:
         ufw-daemon:
           - path: /etc/ufw
+  varlog:
+    type: hostPath
+    hostPath: /var/log
+    advancedMounts:
+      ufw:
+        ufw-daemon:
+          - path: /var/log
   config:
     type: configMap
     name: ufw-config
