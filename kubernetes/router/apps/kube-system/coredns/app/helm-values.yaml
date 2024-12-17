@@ -30,7 +30,15 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
-        parameters: . /etc/resolv.conf
+        #parameters: . /etc/resolv.conf
+        parameters: .
+        configBlock: |-
+          tls://9.9.9.9 tls://149.112.112.112 {
+            tls_servername dns.quad9.net
+            health_check 5s
+            expire 10s
+            max_fails 3
+          }
       - name: cache
         parameters: 30
       - name: loop
