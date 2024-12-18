@@ -41,14 +41,14 @@ servers:
       - name: loop
       - name: reload
       - name: loadbalance
-  - zones:
-      - zone: abasitt.tech
-        scheme: dns://
-        use_tcp: true
-    port: 53
-    plugins:
-      - name: file
-        parameters: /etc/coredns/abasittech.db
+#  - zones:
+#      - zone: abasitt.tech
+#        scheme: dns://
+#        use_tcp: true
+#    port: 53
+#    plugins:
+#      - name: file
+#        parameters: /etc/coredns/abasittech.db
 zoneFiles:
   - filename: abasittech.db
     domain: abasitt.tech
