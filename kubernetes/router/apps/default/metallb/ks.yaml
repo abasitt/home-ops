@@ -19,7 +19,7 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       name: metallb
-      namespace: network
+      namespace: default
   wait: true
   interval: 30m
   retryInterval: 1m
@@ -31,13 +31,13 @@ metadata:
   name: &app metallb-config
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: default
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: metallb
-  path: ./kubernetes/neo/apps/network/metallb/config
+  path: ./kubernetes/router/apps/default/metallb/config
   prune: true
   sourceRef:
     kind: GitRepository
