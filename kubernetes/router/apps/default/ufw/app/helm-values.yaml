@@ -6,6 +6,8 @@ configMaps:
         #!/bin/bash
         find /etc/ufw/ -name "*.rules.*" -type f -mtime +30 -exec rm -f {} \;
         ufw --force reset
+
+        #local host rules
         ufw default deny incoming
         ufw default deny outgoing
         ufw allow out 53
@@ -27,8 +29,14 @@ configMaps:
         ufw allow from 192.168.0.0/16 to any port 22 proto tcp
         ufw allow from 192.168.0.0/16 to any port 6443 proto tcp #allow access to kubeapi
 
-        # enable ufw
-        ufw enable
+        #forward chain rules
+        #allow everything from internal network to internet
+        route allow in on br0 out on vlan999  comment "allow br0 to internet"
+        route allow in on vlan10 out on vlan999 comment "allow vlan10 to internet"
+        route allow in on vlan20 out on vlan999 comment "allow vlan20 to internet"
+        route allow in on vlan30 out on vlan999 comment "allow vlan30 to internet"
+        route allow in on vlan40 out on vlan999 comment "allow vlan40 to internet"
+
         # Add MASQUERADE rule
         # Create a custom chain for NAT
         # iptables-nft -t nat -N ROUTER_MASQ
@@ -37,6 +45,9 @@ configMaps:
         # iptables-nft -t nat -A ROUTER_MASQ -s 192.168.10.0/23 -o vlan999 -j MASQUERADE
         # Insert a jump rule in the POSTROUTING chain to the custom chain
         # iptables-nft -t nat -A POSTROUTING -j ROUTER_MASQ
+
+        # enable ufw
+        ufw enable
 
 controllers:
 #  uninstall:
