@@ -47,9 +47,9 @@ configMaps:
 
         # Add DNAT rules
         iptables-nft -t nat -N ROUTER_DNAT
-        iptables-nft -t nat -A ROUTER_DNAT -p tcp --dport 80 -j DNAT --to-destination 192.168.33.1:80 -m comment --comment "Forward HTTP traffic to istio-ingress"
-        iptables-nft -t nat -A ROUTER_DNAT -p tcp --dport 443 -j DNAT --to-destination 192.168.33.1:443 -m comment --comment "Forward HTTPS traffic to istio-ingress"
-        iptables-nft -t nat -A ROUTER_DNAT -p tcp --dport 32400 -j DNAT --to-destination 192.168.20.192:32400 -m comment --comment "Forward Plex traffic"
+        iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 80 -j DNAT --to-destination 192.168.33.1:80 -m comment --comment "Forward HTTP traffic to istio-ingress"
+        iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 443 -j DNAT --to-destination 192.168.33.1:443 -m comment --comment "Forward HTTPS traffic to istio-ingress"
+        iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 32400 -j DNAT --to-destination 192.168.20.192:32400 -m comment --comment "Forward Plex traffic"
         #iptables-nft -t nat -A ROUTER_DNAT -s 192.168.30.0/24 -p tcp --dport 53 -j DNAT --to-destination 192.168.30.254:53 -m comment --comment "Forward DNS traffic to PiHole" #TODO
         # Insert a jump rule in the PREROUTING chain to the custom chain
         iptables-nft -t nat -A PREROUTING -j ROUTER_DNAT
