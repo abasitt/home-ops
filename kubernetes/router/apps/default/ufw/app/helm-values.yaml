@@ -7,30 +7,30 @@ configMaps:
         find /etc/ufw/ -name "*.rules.*" -type f -mtime +30 -exec rm -f {} \;
         ufw --force reset
 
-        #local host rules
+        #default rules
         ufw default deny incoming
         ufw default deny outgoing
-        ufw allow out 53
-        ufw allow out 80/tcp
-        ufw allow out 443/tcp
-        ufw allow out proto icmp
 
         # kubernetes internal rules
         ufw allow out to 10.40.0.0/16 #kubelet healthcheck to podscidr
         ufw allow out to 10.96.0.0/16 #allow local to output to kubeservice range
         ufw allow from 10.40.0.0/16 to any port 6443 proto tcp #allow podcidr talk to kubeapi
 
-        #allow outgoing to all nodes in vlan
-        #this is also mandatory to access kubeapiservvice from hostnetwork
-        #this can be restricted to k8s node list only
-        ufw allow out to 192.168.0.0/16
+        # router outgoing rules
+        ufw allow out 53
+        ufw allow out 80/tcp
+        ufw allow out 443/tcp
+        ufw allow out proto icmp
+        #allow outgoing to all home vlan subnets
+        #this rule is also mandatory to access kubeapiservvice from hostnetwork pods
+        ufw allow out to 192.168.0.0/16 comment "allow out to all vlan subnets"
 
         # router input rules
         ufw allow from 192.168.0.0/16 to any port 22 proto tcp
         ufw allow from 192.168.0.0/16 to any port 6443 proto tcp #allow access to kubeapi
 
-        #forward chain rules
-        #allow everything from internal network to internet
+        #forward filter chain rules
+        #allow internal networks to internet
         route allow in on br0 out on vlan999  comment "allow br0 to internet"
         route allow in on vlan10 out on vlan999 comment "allow vlan10 to internet"
         route allow in on vlan20 out on vlan999 comment "allow vlan20 to internet"
@@ -41,10 +41,18 @@ configMaps:
         # Create a custom chain for NAT
         # iptables-nft -t nat -N ROUTER_MASQ
         # Add MASQUERADE rule to the custom chain
-        # iptables-nft -t nat -A ROUTER_MASQ -s 192.168.1.0/23 -o vlan999 -j MASQUERADE
-        # iptables-nft -t nat -A ROUTER_MASQ -s 192.168.10.0/23 -o vlan999 -j MASQUERADE
+        # iptables-nft -t nat -A ROUTER_MASQ -s 192.168.0.0/16 -o vlan999 -j MASQUERADE
         # Insert a jump rule in the POSTROUTING chain to the custom chain
         # iptables-nft -t nat -A POSTROUTING -j ROUTER_MASQ
+
+        # Add DNAT rules
+        iptables-nft -t nat -N ROUTER_DNAT
+        iptables-nft -t nat -A ROUTER_DNAT -p tcp --dport 80 -j DNAT --to-destination 192.168.33.1:80 -m comment --comment "Forward HTTP traffic to istio-ingress"
+        iptables-nft -t nat -A ROUTER_DNAT -p tcp --dport 443 -j DNAT --to-destination 192.168.33.1:443 -m comment --comment "Forward HTTPS traffic to istio-ingress"
+        iptables-nft -t nat -A ROUTER_DNAT -p tcp --dport 32400 -j DNAT --to-destination 192.168.20.192:32400 -m comment --comment "Forward Plex traffic"
+        #iptables-nft -t nat -A ROUTER_DNAT -s 192.168.30.0/24 -p tcp --dport 53 -j DNAT --to-destination 192.168.30.254:53 -m comment --comment "Forward DNS traffic to PiHole" #TODO
+        # Insert a jump rule in the PREROUTING chain to the custom chain
+        iptables-nft -t nat -A PREROUTING -j ROUTER_DNAT
 
         # enable ufw
         ufw enable
