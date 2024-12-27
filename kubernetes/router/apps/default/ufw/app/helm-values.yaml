@@ -31,11 +31,11 @@ configMaps:
 
         #forward filter chain rules
         #allow internal networks to internet
-        route allow in on br0 out on vlan999  comment "allow br0 to internet"
-        route allow in on vlan10 out on vlan999 comment "allow vlan10 to internet"
-        route allow in on vlan20 out on vlan999 comment "allow vlan20 to internet"
-        route allow in on vlan30 out on vlan999 comment "allow vlan30 to internet"
-        route allow in on vlan40 out on vlan999 comment "allow vlan40 to internet"
+        ufw route allow in on br0 out on vlan999  comment "allow br0 to internet"
+        ufw route allow in on vlan10 out on vlan999 comment "allow vlan10 to internet"
+        ufw route allow in on vlan20 out on vlan999 comment "allow vlan20 to internet"
+        ufw route allow in on vlan30 out on vlan999 comment "allow vlan30 to internet"
+        ufw route allow in on vlan40 out on vlan999 comment "allow vlan40 to internet"
 
         # Add MASQUERADE rule
         # Create a custom chain for NAT
