@@ -30,6 +30,11 @@ configMaps:
         ufw allow from 192.168.0.0/16 to any port 6443 proto tcp #allow access to kubeapi
 
         #forward filter chain rules
+        #block rules towards internet before allow rules
+        ufw route deny to 208.67.222.222 comment "block opendns"
+        ufw route deny to 208.67.220.220 comment "block opendns"
+        ufw route deny to 2620:119:53::53 comment "block opendns"
+        ufw route deny to 2620:119:35::35 comment "block opendns"
         #allow internal networks to internet
         ufw route allow in on br0 out on vlan999  comment "allow br0 to internet"
         ufw route allow in on vlan10 out on vlan999 comment "allow vlan10 to internet"
