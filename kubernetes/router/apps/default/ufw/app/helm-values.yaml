@@ -16,7 +16,7 @@ configMaps:
         ufw allow out to 10.96.0.0/16 #allow local to output to kubeservice range
         ufw allow from 10.40.0.0/16 to any port 6443 proto tcp #allow podcidr talk to kubeapi
 
-        # router outgoing rules
+        # *** Router outgoing Rules ***
         ufw allow out 53
         ufw allow out 80/tcp
         ufw allow out 443/tcp
@@ -25,16 +25,27 @@ configMaps:
         #this rule is also mandatory to access kubeapiservvice from hostnetwork pods
         ufw allow out to 192.168.0.0/16 comment "allow out to all vlan subnets"
 
-        # router input rules
+        # *** Router Input Rules ***
         ufw allow from 192.168.0.0/16 to any port 22 proto tcp
         ufw allow from 192.168.0.0/16 to any port 6443 proto tcp #allow access to kubeapi
 
-        #forward filter chain rules
+        # *** Router Forward Rules ***
+        #allow from LAN vlan10 to servers vlan30
+        ufw route allow in on vlan10 out on vlan30 to 192.168.30.9 port 22 proto tcp comment "Allow LAN to servers jumpbox on port 22"
+        ufw route allow in on vlan10 out on vlan30 to 192.168.30.10 port 22 proto tcp comment "Allow LAN to servers nas on port 22"
+        ufw route allow in on vlan10 out on vlan30 to 192.168.33.0/24 port 443 proto tcp comment "Allow LAN to servers Metallb pool on port 443"
+        ufw route allow in on vlan10 out on vlan30 to 192.168.33.0/24 port 80 proto tcp comment "Allow LAN to servers Metallb pool on port 443"
+        ufw route allow in on vlan10 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow LAN to servers Plex"
+
+        #allow from IOT vlan20 to servers vlan30
+        ufw route allow in on vlan20 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow IOT to servers Plex"
+
         #block rules towards internet before allow rules
         ufw route deny to 208.67.222.222 comment "block opendns"
         ufw route deny to 208.67.220.220 comment "block opendns"
         ufw route deny to 2620:119:53::53 comment "block opendns"
         ufw route deny to 2620:119:35::35 comment "block opendns"
+
         #allow internal networks to internet
         ufw route allow in on br0 out on vlan999  comment "allow br0 to internet"
         ufw route allow in on vlan10 out on vlan999 comment "allow vlan10 to internet"
