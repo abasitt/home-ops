@@ -40,6 +40,9 @@ configMaps:
         #allow from IOT vlan20 to servers vlan30
         ufw route allow in on vlan20 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow IOT to servers Plex"
 
+        #allow from server to IOT vlan20
+        ufw route allow in on vlan30 out on vlan20 to 192.168.20.5 port 8123 proto tcp comment "Allow servers to IOT Home Assistant"
+
         #block rules towards internet before allow rules
         ufw route deny to 208.67.222.222 comment "block opendns"
         ufw route deny to 208.67.220.220 comment "block opendns"
