@@ -15,7 +15,6 @@ data:
   COREDNS_V4ADDR: "10.54.0.10"
   COREDNS_V6ADDR: "2001:470:ee86:5500:10:45:0:a"
   KUBE_API_ADDR: "192.168.30.2"
-  KEA_DHCP_IFS: "ens3"
   CLUSTER_NAME: "router"
   PUBLIC_DOMAIN: "abasitt.tech"
   CLUSTER_DOMAIN: "router.abasitt.tech"
