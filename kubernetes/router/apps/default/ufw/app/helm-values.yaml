@@ -196,7 +196,7 @@ persistence:
           - path: /tmp/ufw-conf
   ipsum:
     type: configMap
-    name: ipsum-config
+    name: ufw-ipsum
     advancedMounts:
       ufw:
         ufw-daemon:
