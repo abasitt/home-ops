@@ -184,12 +184,6 @@ kea:
         option-data:
           - name: "routers"
             data: "192.168.10.1"
-      - subnet: "192.168.10.0/23"
-        pools:
-          - pool: "192.168.10.10-192.168.10.150"
-        option-data:
-          - name: "routers"
-            data: "192.168.10.1"
       - subnet: "192.168.20.0/23"
         pools:
           - pool: "192.168.20.10-192.168.20.127"
