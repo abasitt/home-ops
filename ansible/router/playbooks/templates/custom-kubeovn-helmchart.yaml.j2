@@ -5,153 +5,19 @@ metadata:
   name: kubeovn
   namespace: kube-system
 spec:
-  repo: https://kubeovn.github.io/kube-ovn/
-  chart: kube-ovn
-  # renovate: datasource=helm depName=calico registryUrl=https://kubeovn.github.io/kube-ovn/
-  version: "v1.12.28"
+  repo: https://github.com/flannel-io/flannel
+  chart: flannel
+  # renovate: datasource=helm depName=calico registryUrl=https://flannel-io.github.io/flannel/
+  version: "v0.26.2"
   targetNamespace: kube-system
   bootstrap: true
   valuesContent: |-
-    MASTER_NODES: "{{ kubeapi_addr }}"
-    MASTER_NODES_LABEL: "kube-ovn/role=master"
-
-    namespace: kube-system
-    replicaCount: 1
-
-    networking:
-      # NET_STACK could be dual_stack, ipv4, ipv6
-      NET_STACK: dual_stack
-      ENABLE_SSL: false
-      # network type could be geneve or vlan
-      NETWORK_TYPE: geneve
-      # tunnel type could be geneve, vxlan or stt
-      TUNNEL_TYPE: geneve
-      IFACE: ""
-      DPDK_TUNNEL_IFACE: "br-phy"
-      EXCLUDE_IPS: ""
-      POD_NIC_TYPE: "veth-pair"
-      vlan:
-        PROVIDER_NAME: "provider"
-        VLAN_INTERFACE_NAME: ""
-        VLAN_NAME: "ovn-vlan"
-        VLAN_ID: "100"
-      ENABLE_EIP_SNAT: true
-      EXCHANGE_LINK_NAME: false
-      DEFAULT_SUBNET: "ovn-default"
-      DEFAULT_VPC: "ovn-cluster"
-      NODE_SUBNET: "join"
-      ENABLE_ECMP: false
-      ENABLE_METRICS: true
-      NODE_LOCAL_DNS_IP: ""
-      PROBE_INTERVAL: 180000
-      OVN_NORTHD_PROBE_INTERVAL: 5000
-      OVN_LEADER_PROBE_INTERVAL: 5
-      OVN_REMOTE_PROBE_INTERVAL: 10000
-      OVN_REMOTE_OPENFLOW_INTERVAL: 180
-      OVN_NORTHD_N_THREADS: 1
-      ENABLE_COMPACT: false
-
-    func:
-      ENABLE_LB: true
-      ENABLE_NP: true
-      ENABLE_EXTERNAL_VPC: true
-      HW_OFFLOAD: false
-      ENABLE_LB_SVC: false
-      ENABLE_KEEP_VM_IP: true
-      LS_DNAT_MOD_DL_DST: true
-      LS_CT_SKIP_DST_LPORT_IPS: true
-      ENABLE_BIND_LOCAL_IP: true
-      SECURE_SERVING: false
-      U2O_INTERCONNECTION: false
-      ENABLE_TPROXY: false
-      ENABLE_IC: false
-      ENABLE_NAT_GW: true
-      OVSDB_CON_TIMEOUT: 3
-      OVSDB_INACTIVITY_TIMEOUT: 10
-
-    ipv4:
-      POD_CIDR: "10.16.0.0/16"
-      POD_GATEWAY: "10.16.0.1"
-      SVC_CIDR: "10.96.0.0/12"
-      JOIN_CIDR: "100.64.0.0/16"
-      PINGER_EXTERNAL_ADDRESS: "114.114.114.114"
-      PINGER_EXTERNAL_DOMAIN: "alauda.cn."
-
-    ipv6:
-      POD_CIDR: "fd00:10:16::/112"
-      POD_GATEWAY: "fd00:10:16::1"
-      SVC_CIDR: "fd00:10:96::/112"
-      JOIN_CIDR: "fd00:100:64::/112"
-      PINGER_EXTERNAL_ADDRESS: "2400:3200::1"
-      PINGER_EXTERNAL_DOMAIN: "google.com."
-
-    dual_stack:
-      POD_CIDR: "10.16.0.0/16,fd00:10:16::/112"
-      POD_GATEWAY: "10.16.0.1,fd00:10:16::1"
-      SVC_CIDR: "10.96.0.0/12,fd00:10:96::/112"
-      JOIN_CIDR: "100.64.0.0/16,fd00:100:64::/112"
-      PINGER_EXTERNAL_ADDRESS: "114.114.114.114,2400:3200::1"
-      PINGER_EXTERNAL_DOMAIN: "google.com."
-
-    performance:
-      MODULES: "kube_ovn_fastpath.ko"
-      RPMS: "openvswitch-kmod"
-      GC_INTERVAL: 360
-      INSPECT_INTERVAL: 20
-      OVS_VSCTL_CONCURRENCY: 100
-
-    debug:
-      ENABLE_MIRROR: false
-      MIRROR_IFACE: "mirror0"
-
-    cni_conf:
-      CHECK_GATEWAY: true
-      LOGICAL_GATEWAY: false
-      CNI_CONFIG_PRIORITY: "01"
-      CNI_CONF_DIR: "/etc/cni/net.d"
-      CNI_BIN_DIR: "/opt/cni/bin"
-      CNI_CONF_FILE: "/kube-ovn/01-kube-ovn.conflist"
-
-    ovn-central:
-      requests:
-        cpu: "300m"
-        memory: "200Mi"
-      limits:
-        cpu: "3"
-        memory: "4Gi"
-    ovs-ovn:
-      requests:
-        cpu: "200m"
-        memory: "200Mi"
-      limits:
-        cpu: "2"
-        memory: "1000Mi"
-    kube-ovn-controller:
-      requests:
-        cpu: "200m"
-        memory: "200Mi"
-      limits:
-        cpu: "1000m"
-        memory: "1Gi"
-    kube-ovn-cni:
-      requests:
-        cpu: "100m"
-        memory: "100Mi"
-      limits:
-        cpu: "1000m"
-        memory: "1Gi"
-    kube-ovn-pinger:
-      requests:
-        cpu: "100m"
-        memory: "100Mi"
-      limits:
-        cpu: "200m"
-        memory: "400Mi"
-    kube-ovn-monitor:
-      requests:
-        cpu: "200m"
-        memory: "200Mi"
-      limits:
-        cpu: "200m"
-        memory: "200Mi"
-
+    podCidr: "10.244.0.0/16"
+    podCidrv6: ""
+    flannel:
+      enableNFTables: false
+      args:
+      - "--ip-masq"
+      - "--kube-subnet-mgr"
+      - "--iptables-forward-rules=false" #disable iptable forward chain rules
+      backend: "host-gw"
