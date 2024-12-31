@@ -20,8 +20,6 @@ configMaps:
         ufw allow out 53
         ufw allow out 80/tcp
         ufw allow out 443/tcp
-        #allow icmp out, currently could only do it with iptables-nft
-        iptables-nft -I ufw-before-output -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
         #allow outgoing to all home vlan subnets
         #this rule is also mandatory to access kubeapiservvice from hostnetwork pods
         ufw allow out to 192.168.0.0/16 comment "allow out to all vlan subnets"
@@ -60,6 +58,9 @@ configMaps:
         ufw route allow in on vlan20 out on vlan999 comment "allow vlan20 to internet"
         ufw route allow in on vlan30 out on vlan999 comment "allow vlan30 to internet"
         ufw route allow in on vlan40 out on vlan999 comment "allow vlan40 to internet"
+
+        # *** Router outgoing Custom Rrules that are not possible via ufw ***
+        sudo iptables-nft -A OUTPUT -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing ICMP traffic"
 
         # *** MASQUERADE Rules ***
         # Create a custom chain for NAT
