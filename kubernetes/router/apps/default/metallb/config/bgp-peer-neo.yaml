@@ -15,8 +15,8 @@ spec:
        toAdvertise:
          allowed:
            prefixes:
-           - 10.40.0.0/16
-           - 10.96.0.0/16
+           - 10.54.0.0/16
+           - 10.55.0.0/16
        toReceive:
          allowed:
            mode: all
@@ -26,8 +26,8 @@ spec:
        toAdvertise:
          allowed:
            prefixes:
-           - 10.40.0.0/16
-           - 10.96.0.0/16
+           - 10.54.0.0/16
+           - 10.55.0.0/16
        toReceive:
          allowed:
            mode: all
@@ -37,11 +37,11 @@ spec:
        toAdvertise:
          allowed:
            prefixes:
-           - 10.40.0.0/16
-           - 10.96.0.0/16
+           - 10.54.0.0/16
+           - 10.55.0.0/16
        toReceive:
          allowed:
            mode: all
      prefixes:
-     - 10.40.0.0/16
-     - 10.96.0.0/16
+     - 10.54.0.0/16
+     - 10.55.0.0/16
