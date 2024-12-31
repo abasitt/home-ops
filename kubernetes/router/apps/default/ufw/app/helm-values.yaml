@@ -79,7 +79,42 @@ configMaps:
 
         # enable ufw
         ufw enable
+  ipsum:
+    data:
+      ipsum-rules.sh: |
+        #!/bin/bash
 
+        # URL to download the IP blocklist from the ipsum repository
+        ipsum_url='https://raw.githubusercontent.com/stamparm/ipsum/master/ipsum.txt'
+        ipsetname=ipsum-blocklist
+
+        # Create the original ipset if it doesn't exist
+        ipset create "$ipsetname" hash:ip -exist
+
+        # Create a temporary ipset
+        tmpsetname="${ipsetname}-tmp"
+        ipset create "$tmpsetname" hash:ip -exist
+
+        # Download the latest IP blocklist
+        rawlist=$(curl -sS -f --compressed "$ipsum_url")
+        if [ $? -ne 0 ]; then
+            echo "Failed to download IP blocklist"
+            exit 1
+        fi
+
+        # Add IPs to the temporary ipset with filtering
+        for ip in $(echo "$rawlist" | grep -v "#" | grep -v -E "\s[1-2]$" | cut -f 1); do
+            ipset add "$tmpsetname" $ip -exist
+        done
+
+        # Swap the temporary ipset with the existing ipset
+        ipset swap "$tmpsetname" "$ipsetname"
+        ipset destroy "$tmpsetname"
+
+        # Ensure the iptables rule is in place
+        if ! iptables -t raw -C PREROUTING -i vlan999 -m set --match-set "$ipsetname" src -j DROP 2>/dev/null; then
+          iptables -t raw -I PREROUTING -i vlan999 -m set --match-set "$ipsetname" src -j DROP
+        fi
 controllers:
 #  uninstall:
 #    type: job
@@ -119,9 +154,11 @@ controllers:
         - /bin/bash
         - -cex
         - |
-          #!/bin/bash
           bash /tmp/ufw-conf/ufw-rules.sh
-          sleep infinity
+          while true; do
+            bash /tmp/ipsum-conf/ipsum-rules.sh
+            sleep 86400  # Sleep for 24 hours
+          done
         resources:
           requests:
             cpu: "5m"
@@ -157,6 +194,13 @@ persistence:
       ufw:
         ufw-daemon:
           - path: /tmp/ufw-conf
+  ipsum:
+    type: configMap
+    name: ipsum-config
+    advancedMounts:
+      ufw:
+        ufw-daemon:
+         - path: /tmp/ipsum-conf
 
 serviceAccount:
   create: true
