@@ -60,7 +60,7 @@ configMaps:
         ufw route allow in on vlan40 out on vlan999 comment "allow vlan40 to internet"
 
         # *** Router outgoing Custom Rrules that are not possible via ufw ***
-        sudo iptables-nft -A OUTPUT -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing ICMP traffic"
+        iptables-nft -A OUTPUT -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing ICMP traffic"
 
         # *** MASQUERADE Rules ***
         # Create a custom chain for NAT
