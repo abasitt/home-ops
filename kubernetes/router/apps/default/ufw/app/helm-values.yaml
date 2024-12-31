@@ -12,9 +12,9 @@ configMaps:
         ufw default deny outgoing
 
         # kubernetes internal rules
-        ufw allow out to 10.40.0.0/16 #kubelet healthcheck to podscidr
-        ufw allow out to 10.96.0.0/16 #allow local to output to kubeservice range
-        ufw allow from 10.40.0.0/16 to any port 6443 proto tcp #allow podcidr talk to kubeapi
+        ufw allow out to ${CLUSTER_CIDR} #kubelet healthcheck to podscidr
+        ufw allow out to ${SERVICE_CIDR} #allow local to output to kubeservice range
+        ufw allow from ${CLUSTER_CIDR} to any port 6443 proto tcp #allow podcidr talk to kubeapi
 
         # *** Router outgoing Rules ***
         ufw allow out 53
