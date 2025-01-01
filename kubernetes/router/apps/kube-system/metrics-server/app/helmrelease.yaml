@@ -32,13 +32,3 @@ spec:
       enabled: true
     serviceMonitor:
       enabled: true
-    #don't deploy on a laptop node
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: "kubernetes.io/hostname"
-              operator: "NotIn"
-              values:
-              - "neok3slm-w1"
