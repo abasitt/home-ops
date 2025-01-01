@@ -15,6 +15,7 @@ configMaps:
         ufw allow out to 10.54.0.0/16 #kubelet healthcheck to podscidr
         ufw allow out to 10.55.0.0/16 #allow local to output to kubeservice range
         ufw allow from 10.54.0.0/16 to any port 6443 proto tcp #allow podcidr talk to kubeapi
+        ufw allow from 10.54.0.0/16 to any port 10250 proto tcp #allow podcidr talk to kubelet
 
         # *** Router outgoing Rules ***
         ufw allow out 53
