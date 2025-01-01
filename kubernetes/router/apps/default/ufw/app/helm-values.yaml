@@ -39,18 +39,23 @@ configMaps:
         #allow from IOT vlan20 to servers vlan30
         ufw route allow in on vlan20 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow IOT to servers Plex"
 
-        #allow from server to IOT vlan20
+        #allow from vlan30 server to IOT vlan20
         ufw route allow in on vlan30 out on vlan20 to 192.168.20.5 port 8123 proto tcp comment "Allow servers to IOT Home Assistant"
+
+        #allow from internet vlan999 to servers vlan30
+        ufw route allow in on vlan999 out on vlan30 to 192.168.33.1 port 80 proto tcp comment "Allow internet to servers istio-ingress on port 80"
+        ufw route allow in on vlan999 out on vlan30 to 192.168.33.1 port 443 proto tcp comment "Allow internet to servers istio-ingress on port 443"
+        #ufw route allow in on vlan999 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow internet to servers Plex"
+
+        #allow from internet vlan999 tunnel broker icmp echo-request, currently allowed from all. todo may be block default and allow only specific
+        #ufw route allow in on vlan999 from 66.220.2.74 proto icmp type echo-request comment "allow tunnel broker echo-request from 66.220.2.74"
+        #ufw route allow in on vlan999 from 216.218.221.42 proto icmp type echo-request comment "allow tunnel broker echo-request from 216.218.221.42"
 
         #block rules towards internet before allow rules
         ufw route deny to 208.67.222.222 comment "block opendns"
         ufw route deny to 208.67.220.220 comment "block opendns"
         ufw route deny to 2620:119:53::53 comment "block opendns"
         ufw route deny to 2620:119:35::35 comment "block opendns"
-
-        #allow tunnel broker echo from internet vlan999, todo maybe block on WAN, currently icmp is allowed by default
-        #ufw route allow in on vlan999 from 66.220.2.74 proto icmp type echo-request comment "allow tunnel broker echo-request from 66.220.2.74"
-        #ufw route allow in on vlan999 from 216.218.221.42 proto icmp type echo-request comment "allow tunnel broker echo-request from 216.218.221.42"
 
         #allow internal networks to internet
         ufw route allow in on br0 out on vlan999  comment "allow br0 to internet"
@@ -74,7 +79,7 @@ configMaps:
         iptables-nft -t nat -N ROUTER_DNAT
         iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 80 -j DNAT --to-destination 192.168.33.1:80 -m comment --comment "Forward HTTP traffic to istio-ingress"
         iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 443 -j DNAT --to-destination 192.168.33.1:443 -m comment --comment "Forward HTTPS traffic to istio-ingress"
-        iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 32400 -j DNAT --to-destination 192.168.20.192:32400 -m comment --comment "Forward Plex traffic"
+        iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 32400 -j DNAT --to-destination 192.168.33.6:32400 -m comment --comment "Forward Plex traffic"
         #iptables-nft -t nat -A ROUTER_DNAT -s 192.168.30.0/24 -p tcp --dport 53 -j DNAT --to-destination 192.168.30.254:53 -m comment --comment "Forward DNS traffic to PiHole" #TODO
         # Insert a jump rule in the PREROUTING chain to the custom chain
         iptables-nft -t nat -A PREROUTING -j ROUTER_DNAT
