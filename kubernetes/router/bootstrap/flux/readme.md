@@ -3,5 +3,5 @@
 ## Install Flux into the cluster
 
 ```sh
-task flux:bootstrap cluster=neo
+task flux:bootstrap cluster=router
 ```
