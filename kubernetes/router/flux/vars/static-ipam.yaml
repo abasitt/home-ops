@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: static-ipam
+  namespace: flux-system
+data:
+  COREDNS_V4ADDR: ""

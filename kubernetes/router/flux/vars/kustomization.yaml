@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - ./cluster-settings.yaml
   - ./cluster-secrets.secret.sops.yaml
+  - ./static-ipam.yaml

@@ -20,6 +20,8 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: cluster-settings
+      - kind: ConfigMap
+        name: static-ipam
       - kind: Secret
         name: cluster-secrets
   patches:

@@ -44,3 +44,6 @@ spec:
       - kind: Secret
         name: cluster-secrets
         optional: false
+      - kind: ConfigMap
+        name: static-ipam
+        optional: false
