@@ -1,0 +1,71 @@
+---
+configMaps:
+  entrypoint:
+    data:
+      entrypoint.sh: |
+        #!/bin/sh
+        # Load the WireGuard configuration from the secret
+        #cp /etc/wireguard-secret/wg0.conf /etc/wireguard/wg0.conf
+        # Start WireGuard
+        #wg-quick up wg0
+        # Keep the container running
+        sleep infinity
+
+
+controllers:
+  wg-daemon:
+    type: deployment
+    annotations:
+      reloader.stakater.com/auto: "true"
+    pod:
+      hostNetwork: true
+    containers:
+      wg:
+        image: &image
+          repository: abasitt/wg-alpine
+          tag: "06012025"
+        command:
+        - /bin/bash
+        - -cex
+        - |
+          bash /tmp/ufw-conf/ufw-rules.sh
+          while true; do
+            bash /tmp/ipsum-conf/ipsum-rules.sh
+            sleep 86400  # Sleep for 24 hours
+          done
+        resources:
+          requests:
+            cpu: "5m"
+            memory: "96Mi"
+          limits:
+            memory: "512Mi"
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
+        terminationMessagePolicy: FallbackToLogsOnError
+
+persistence:
+  dev-net-tun:
+    type: hostPath
+    hostPath: /dev/net/tun
+    advancedMounts:
+      dev-net-tun:
+        wg-daemon:
+          - path: /dev/net/tun
+  config:
+    type: configMap
+    name: wg-entrypoint
+    advancedMounts:
+      entrypoint:
+        wg-daemon:
+          - path: /entrypoint.sh
+
+serviceAccount:
+  create: true
+
+defaultPodOptions:
+  tolerations:
+    - operator: Exists
+      effect: NoSchedule
+    - operator: Exists
+      effect: NoExecute
