@@ -7,3 +7,4 @@ resources:
   - ./kea-dhcp/ks.yaml
   - ./metallb/ks.yaml
   - ./ufw/ks.yaml
+  - ./wireguard/ks.yaml

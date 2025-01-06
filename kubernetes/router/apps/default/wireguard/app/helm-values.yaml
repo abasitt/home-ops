@@ -24,15 +24,6 @@ controllers:
         image: &image
           repository: abasitt/wg-alpine
           tag: "06012025"
-        command:
-        - /bin/bash
-        - -cex
-        - |
-          bash /tmp/ufw-conf/ufw-rules.sh
-          while true; do
-            bash /tmp/ipsum-conf/ipsum-rules.sh
-            sleep 86400  # Sleep for 24 hours
-          done
         resources:
           requests:
             cpu: "5m"
