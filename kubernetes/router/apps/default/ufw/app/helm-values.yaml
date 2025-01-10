@@ -30,6 +30,14 @@ configMaps:
         ufw allow from 192.168.0.0/16 to any port 6443 proto tcp #allow access to kubeapi
 
         # *** Router Forward Rules ***
+        #allow bridged traffic within same vlan
+        #todo this is cause by net.bridge.bridge-nf-call-iptables, net.bridge.bridge-nf-call-ip6tables, net.bridge.bridge-nf-call-arptables set to 1 in sysctl for k3s to work
+        ufw route allow in on br0 out on br0 comment "allow bridged traffic within same vlan"
+        ufw route allow in on vlan10 out on vlan10 comment "allow bridged traffic within same vlan"
+        ufw route allow in on vlan20 out on vlan20 comment "allow bridged traffic within same vlan"
+        ufw route allow in on vlan30 out on vlan30 comment "allow bridged traffic within same vlan"
+        ufw route allow in on vlan40 out on vlan40 comment "allow bridged traffic within same vlan"
+
         #allow from LAN vlan10 to servers vlan30
         ufw route allow in on vlan10 out on vlan30 to 192.168.30.9 port 22 proto tcp comment "Allow LAN to servers jumpbox on port 22"
         ufw route allow in on vlan10 out on vlan30 to 192.168.30.10 port 22 proto tcp comment "Allow LAN to servers nas on port 22"
