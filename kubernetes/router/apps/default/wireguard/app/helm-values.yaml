@@ -47,7 +47,7 @@ persistence:
     type: configMap
     name: wg-entrypoint
     advancedMounts:
-      entrypoint:
+      wg:
         wg-app:
           - path: /entrypoint.sh
 
