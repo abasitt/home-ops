@@ -77,21 +77,27 @@ configMaps:
         iptables-nft -A OUTPUT -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing ICMP traffic"
 
         # *** MASQUERADE Rules ***
-        # Create a custom chain for NAT
-        iptables-nft -t nat -N ROUTER_MASQ
+        # Flush existing rules
+        iptables-nft -t nat -F ROUTER_MASQ
+        # Create the custom chain if it does not exist
+        iptables-nft -t nat -N ROUTER_MASQ || true
         # Add MASQUERADE rule to the custom chain
-        iptables-nft -t nat -A ROUTER_MASQ -s 192.168.0.0/16 -o vlan999 -j MASQUERADE
+        iptables-nft -t nat -A ROUTER_MASQ -s 192.168.0.0/16 -o vlan999 -j MASQUERADE -m comment --comment "Masquerade traffic from internal network to the internet"
         # Insert a jump rule in the POSTROUTING chain to the custom chain
-        iptables-nft -t nat -A POSTROUTING -j ROUTER_MASQ
+        iptables-nft -t nat -C POSTROUTING -j ROUTER_MASQ 2>/dev/null || iptables-nft -t nat -A POSTROUTING -j ROUTER_MASQ
 
         # *** DNAT Rules ***
-        iptables-nft -t nat -N ROUTER_DNAT
+        # Flush existing ROUTER_DNAT chain
+        iptables-nft -t nat -F ROUTER_DNAT
+        # Create a new ROUTER_DNAT chain if it doesn't exist
+        iptables-nft -t nat -N ROUTER_DNAT || true
+        # Add DNAT rules to the custom chain
         iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 80 -j DNAT --to-destination 192.168.33.1:80 -m comment --comment "Forward HTTP traffic to istio-ingress"
         iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 443 -j DNAT --to-destination 192.168.33.1:443 -m comment --comment "Forward HTTPS traffic to istio-ingress"
         iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 32400 -j DNAT --to-destination 192.168.33.6:32400 -m comment --comment "Forward Plex traffic"
         #iptables-nft -t nat -A ROUTER_DNAT -s 192.168.30.0/24 -p tcp --dport 53 -j DNAT --to-destination 192.168.30.254:53 -m comment --comment "Forward DNS traffic to PiHole" #TODO
-        # Insert a jump rule in the PREROUTING chain to the custom chain
-        iptables-nft -t nat -A PREROUTING -j ROUTER_DNAT
+        # Check if the jump rule exists in the PREROUTING chain before adding it
+        iptables-nft -t nat -C PREROUTING -j ROUTER_DNAT 2>/dev/null || iptables-nft -t nat -A PREROUTING -j ROUTER_DNAT
 
         # enable ufw
         ufw enable
