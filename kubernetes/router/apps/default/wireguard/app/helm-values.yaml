@@ -24,6 +24,13 @@ controllers:
         image: &image
           repository: abasitt/wg-alpine
           tag: "06012025"
+        command:
+        - /bin/bash
+        - -cex
+        - |
+          chmod +x /entrypoint.sh
+          /entrypoint.sh
+          sleep infinity
         resources:
           requests:
             cpu: "5m"
