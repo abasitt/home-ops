@@ -50,6 +50,7 @@ persistence:
       wg:
         wg-app:
           - path: /entrypoint.sh
+            subPath: entrypoint.sh
 
 serviceAccount:
   create: true
