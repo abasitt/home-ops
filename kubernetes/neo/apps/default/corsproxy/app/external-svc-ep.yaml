@@ -1,0 +1,28 @@
+# endpoints.yaml
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: corsproxy
+subsets:
+  - addresses:
+      - ip: 192.168.20.75
+    ports:
+      - port: 8080
+        protocol: TCP
+        name: http
+---
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: corsproxy
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+      name: http-corsproxy
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  ipFamilies:
+    - IPv4

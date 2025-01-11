@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: external-svc-corsproxy
+spec:
+  hosts:
+  - corsproxy.default.svc.cluster.local
+  exportTo:
+  - "."
+  location: MESH_INTERNAL
+  resolution: DNS
+  ports:
+  - number: 8080
+    name: http-corsproxy
+    protocol: HTTP
+  endpoints:
+  - address: 192.168.20.75
