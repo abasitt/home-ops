@@ -28,8 +28,8 @@ controllers:
         - /bin/bash
         - -cex
         - |
-          chmod +x /entrypoint.sh
-          /entrypoint.sh
+          chmod +x /tmp/wg-entrypoint/entrypoint.sh
+          /tmp/wg-entrypoint/entrypoint.sh
           sleep infinity
         resources:
           requests:
@@ -56,8 +56,7 @@ persistence:
     advancedMounts:
       wg:
         wg-app:
-          - path: /entrypoint.sh
-            subPath: entrypoint.sh
+          - path: /tmp/wg-entrypoint
 
 serviceAccount:
   create: true
