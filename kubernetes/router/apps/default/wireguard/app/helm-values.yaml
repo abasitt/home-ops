@@ -29,7 +29,7 @@ controllers:
         - -cex
         - |
           chmod +x /tmp/wg-entrypoint/entrypoint.sh
-          /tmp/wg-entrypoint/entrypoint.sh
+          bash /tmp/wg-entrypoint/entrypoint.sh
           sleep infinity
         resources:
           requests:
