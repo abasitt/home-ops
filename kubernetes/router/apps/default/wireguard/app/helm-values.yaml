@@ -13,14 +13,14 @@ configMaps:
 
 
 controllers:
-  wg-daemon:
+  wg:
     type: deployment
     annotations:
       reloader.stakater.com/auto: "true"
     pod:
       hostNetwork: true
     containers:
-      wg:
+      wg-app:
         image: &image
           repository: abasitt/wg-alpine
           tag: "06012025"
@@ -36,19 +36,19 @@ controllers:
         terminationMessagePolicy: FallbackToLogsOnError
 
 persistence:
-  dev-net-tun:
+  wg:
     type: hostPath
     hostPath: /dev/net/tun
     advancedMounts:
-      dev-net-tun:
-        wg-daemon:
+      wg:
+        wg-app:
           - path: /dev/net/tun
   entrypoint:
     type: configMap
     name: wg-entrypoint
     advancedMounts:
       entrypoint:
-        wg-daemon:
+        wg-app:
           - path: /entrypoint.sh
 
 serviceAccount:
