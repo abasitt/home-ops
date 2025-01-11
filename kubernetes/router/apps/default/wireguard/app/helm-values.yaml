@@ -43,7 +43,7 @@ persistence:
       dev-net-tun:
         wg-daemon:
           - path: /dev/net/tun
-  config:
+  entrypoint:
     type: configMap
     name: wg-entrypoint
     advancedMounts:
