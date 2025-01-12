@@ -16,7 +16,7 @@ controllers:
     annotations:
       reloader.stakater.com/auto: "true"
     pod:
-      hostNetwork: false
+      hostNetwork: true
     containers:
       wg-app:
         image: &image
