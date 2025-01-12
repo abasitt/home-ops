@@ -5,11 +5,9 @@ configMaps:
       entrypoint.sh: |
         #!/bin/sh
         # Load the WireGuard configuration from the secret
-        #cp /etc/wireguard-secret/wg0.conf /etc/wireguard/wg0.conf
+        cp /tmp/wg-config/wg0.conf /etc/wireguard/wg0.conf
         # Start WireGuard
         #wg-quick up wg0
-        # Keep the container running
-        sleep infinity
 
 
 controllers:
@@ -56,6 +54,14 @@ persistence:
       wg:
         wg-app:
           - path: /tmp/wg-entrypoint
+  config:
+    enabled: true
+    type: secret
+    name: wg-config
+    advancedMounts:
+      wg:
+        wg-app:
+          - path: /tmp/wg-config
 
 serviceAccount:
   create: true
