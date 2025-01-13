@@ -7,7 +7,7 @@ configMaps:
         # Load the WireGuard configuration from the secret
         cp /tmp/wg-config/wg0.conf /etc/wireguard/wg0.conf
         # Start WireGuard
-        #wg-quick up wg0
+        wg-quick up wg0
 
 
 controllers:
