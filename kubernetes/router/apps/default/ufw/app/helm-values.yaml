@@ -26,8 +26,12 @@ configMaps:
         ufw allow out to 192.168.0.0/16 comment "allow out to all vlan subnets"
 
         # *** Router Input Rules ***
-        ufw allow from 192.168.0.0/16 to any port 22 proto tcp
-        ufw allow from 192.168.0.0/16 to any port 6443 proto tcp #allow access to kubeapi
+        ufw allow from 192.168.10.0/23 to any port 22 proto tcp comment "allow ssh from LAN"
+        ufw allow from 192.168.30.0/23 to any port 22 proto tcp comment "allow ssh from servers"
+        ufw allow from 192.168.254.0/29 to any port 22 proto tcp comment "allow ssh from wireguard"
+        ufw allow from 192.168.10.0/23 to any port 6443 proto tcp comment "allow kubeapi from LAN"
+        ufw allow from 192.168.30.0/23 to any port 6443 proto tcp comment "allow kubeapi from servers"
+        ufw allow 51820/udp comment "allow wireguard"
 
         # *** Router Forward Rules ***
         #allow bridged traffic within same vlan
@@ -44,6 +48,12 @@ configMaps:
         ufw route allow in on vlan10 out on vlan30 to 192.168.33.0/24 port 443 proto tcp comment "Allow LAN to servers Metallb pool on port 443"
         ufw route allow in on vlan10 out on vlan30 to 192.168.33.0/24 port 80 proto tcp comment "Allow LAN to servers Metallb pool on port 443"
         ufw route allow in on vlan10 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow LAN to servers Plex"
+
+        #allow from wireguard to servers vlan30
+        ufw route allow in on wg0 out on vlan30 to 192.168.30.9 port 22 proto tcp comment "Allow wireguard to servers jumpbox on port 22"
+
+        #allow from wireguard to  IOT vlan20
+        ufw route allow in on wg0 out on vlan20 to 192.168.20.75 port 22 proto tcp comment "Allow wireguard to cors server"
 
         #allow from IOT vlan20 to servers vlan30
         ufw route allow in on vlan20 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow IOT to servers Plex"
