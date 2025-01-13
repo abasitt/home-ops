@@ -4,8 +4,15 @@ configMaps:
     data:
       entrypoint.sh: |
         #!/bin/sh
+
         # Load the WireGuard configuration from the secret
         cp /tmp/wg-config/wg0.conf /etc/wireguard/wg0.conf
+
+        # Check if wg0 interface exists and shutdown if it does
+        if ip link show wg0 > /dev/null 2>&1; then
+          wg-quick down wg0
+        fi
+
         # Start WireGuard
         wg-quick up wg0
 
