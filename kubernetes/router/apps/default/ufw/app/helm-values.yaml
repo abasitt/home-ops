@@ -60,6 +60,7 @@ configMaps:
 
         #allow from vlan30 server to IOT vlan20
         ufw route allow in on vlan30 out on vlan20 to 192.168.20.5 port 8123 proto tcp comment "Allow servers to IOT Home Assistant"
+        ufw route allow in on vlan30 out on vlan20 to 192.168.20.75 port 8080 proto tcp comment "Allow servers to IOT cors server"
 
         #allow from internet vlan999 to servers vlan30
         ufw route allow in on vlan999 out on vlan30 to 192.168.33.1 port 80 proto tcp comment "Allow internet to servers istio-ingress on port 80"
