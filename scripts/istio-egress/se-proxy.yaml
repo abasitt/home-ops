@@ -1,0 +1,84 @@
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: squid-proxy
+  namespace: demo
+spec:
+  hosts:
+  - squid-proxy.local
+  addresses:
+  - 192.168.10.191/32
+  ports:
+  - number: 3128
+    name: https
+    protocol: HTTPS
+  location: MESH_EXTERNAL
+  resolution: STATIC
+  endpoints:
+  - address: 192.168.10.191
+---
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: edition-cnn-com
+  namespace: demo
+spec:
+  hosts:
+  - edition.cnn.com
+  ports:
+  - number: 80
+    name: http-port
+    protocol: HTTP
+    targetPort: 443
+  - number: 443
+    name: https-port
+    protocol: HTTPS
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: edition-cnn-com
+  namespace: demo
+spec:
+  host: edition.cnn.com
+  trafficPolicy:
+    portLevelSettings:
+    - port:
+        number: 80
+      tls:
+        mode: SIMPLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: squid-proxy
+  namespace: demo
+spec:
+  host: squid-proxy.local
+  trafficPolicy:
+    tunnel:
+      protocol: CONNECT
+      targetHost: edition.cnn.com
+      targetPort: 443
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: cnn-via-squid
+  namespace: demo
+spec:
+  hosts:
+  - edition.cnn.com
+  gateways:
+  - mesh
+  tls:
+  - match:
+    - port: 443
+      sniHosts:
+      - edition.cnn.com
+    route:
+    - destination:
+        host: squid-proxy.local
+        port:
+          number: 3128

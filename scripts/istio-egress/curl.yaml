@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curl
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: curl
+  template:
+    metadata:
+      labels:
+        app: curl
+    spec:
+      containers:
+      - name: curl
+        image: quay.io/curl/curl:8.11.1
+        imagePullPolicy: Always
+        command: ["/bin/sleep", "infinity"]
+        env:
+        - name: TZ
+          value: Asia/Singapore
+        resources: {}
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
