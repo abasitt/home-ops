@@ -1,0 +1,147 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: direct-cnn-through-egress-gateway
+  namespace: tunneltest
+spec:
+  hosts:
+  - edition.cnn.com
+  gateways:
+  - mesh
+  http:
+    - match:
+        - headers:
+            x-zeta-inhouse-required:
+              exact: "true"
+      rewrite:
+        uri: "/"
+        authority: httpbin.org
+      route:
+        - destination:
+            host: httpbin.org
+            port:
+              number: 80
+    - match:
+        - headers:
+            x-zeta-inhouse-required:
+              exact: "false"
+      route:
+        - destination:
+            host: istio-egressgateway.istio-system.svc.cluster.local
+            subset: cnn
+            port:
+              number: 443
+    - name: default
+      route:
+      - destination:
+            host: istio-egressgateway.istio-system.svc.cluster.local
+            subset: cnn
+            port:
+              number: 443
+  exportTo:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: egressgateway-for-cnn
+  namespace: tunneltest
+spec:
+  host: istio-egressgateway.istio-system.svc.cluster.local
+  subsets:
+  - name: cnn
+    trafficPolicy:
+      portLevelSettings:
+      - port:
+          number: 443
+        tls:
+          mode: SIMPLE
+          sni: edition.cnn.com
+  exportTo:
+    - "*"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: force-tunneling-mesh
+  namespace: tunneltest
+spec:
+  hosts:
+  - edition.cnn.com
+  gateways:
+  - istio-egressgateway
+  tls:
+  - match:
+    - sniHosts:
+        - edition.cnn.com
+    route:
+    - destination:
+        host: external-forward-proxy.tunneltest.svc.cluster.local
+        subset: tunnel-traffic-to-cnn
+        port:
+          number: 8888
+  exportTo:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: originate-tls-to-connect-proxy-and-tunnel-traffic-to-google-com
+  namespace: tunneltest
+spec:
+  host: external-forward-proxy.tunneltest.svc.cluster.local
+  subsets:
+  - name: tunnel-traffic-to-cnn
+    trafficPolicy:
+      tunnel:
+        targetHost: edition.cnn.com
+        targetPort: 443
+        protocol: CONNECT
+  exportTo:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-egressgateway
+  namespace: tunneltest
+spec:
+  selector:
+    istio: egressgateway
+  servers:
+  - port:
+      number: 80
+      name: http-port-for-tls-origination
+      protocol: HTTPS
+    hosts:
+    - edition.cnn.com
+    tls:
+      mode: PASSTHROUGH
+  - port:
+      number: 443
+      name: https-port-for-tls-origination
+      protocol: TLS
+    hosts:
+    - edition.cnn.com
+    tls:
+      mode: PASSTHROUGH
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: cnn
+  namespace: tunneltest
+spec:
+  hosts:
+  - edition.cnn.com
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+    # targetPort: 443
+  - number: 443
+    name: http-port
+    protocol: TLS
+  resolution: DNS
+  exportTo:
+    - "*"

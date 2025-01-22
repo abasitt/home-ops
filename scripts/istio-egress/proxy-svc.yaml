@@ -1,0 +1,62 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyproxy
+  namespace: tunneltest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinyproxy
+  template:
+    metadata:
+      labels:
+        app: tinyproxy
+    spec:
+      containers:
+      # - image: 678258727640.dkr.ecr.ap-south-1.amazonaws.com/tunneltest:latest
+      - image: vimagick/tinyproxy
+        imagePullPolicy: IfNotPresent
+        name: tinyproxy
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: external-forward-proxy
+  namespace: tunneltest
+  annotations:
+    "networking.istio.io/exportTo": '*'
+    # "ingress.kubernetes.io/service-upstream": "true"
+    # "konghq.com/preserve-host": "false"
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 8888
+    name: tcp
+  selector:
+      app: tinyproxy
+  exportTo:
+    - ""
+    - "istio-system"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: external-forward-proxy.tunneltest.svc.cluster.local
+  namespace: tunneltest
+spec:
+  hosts:
+    - external-forward-proxy.tunneltest.svc.cluster.local
+  # addresses:
+  # - 172.20.80.166/32
+  location: MESH_EXTERNAL
+  ports:
+    - number: 8888
+      name: https
+      protocol: HTTPS
+  resolution: DNS
+  exportTo:
+    - "*"
+---
