@@ -49,6 +49,39 @@ spec:
       tls:
         mode: SIMPLE
 ---
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: google-com
+  namespace: demo
+spec:
+  hosts:
+  - google.com
+  ports:
+  - number: 80
+    name: http-port
+    protocol: HTTP
+    targetPort: 443
+  - number: 443
+    name: https-port
+    protocol: HTTPS
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: google-com
+  namespace: demo
+spec:
+  host: google.com
+  trafficPolicy:
+    portLevelSettings:
+    - port:
+        number: 80
+      tls:
+        mode: SIMPLE
+
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
@@ -56,11 +89,19 @@ metadata:
   namespace: demo
 spec:
   host: squid-proxy.local
-  trafficPolicy:
-    tunnel:
-      protocol: CONNECT
-      targetHost: edition.cnn.com
-      targetPort: 443
+  subsets:
+  - name: tunnel-traffic-to-cnn
+    trafficPolicy:
+      tunnel:
+        protocol: CONNECT
+        targetHost: edition.cnn.com
+        targetPort: 443
+  - name: tunnel-traffic-to-google
+    trafficPolicy:
+      tunnel:
+        protocol: CONNECT
+        targetHost: google.com
+        targetPort: 443
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -80,5 +121,28 @@ spec:
     route:
     - destination:
         host: squid-proxy.local
+        subset: tunnel-traffic-to-cnn
+        port:
+          number: 3128
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: google-via-squid
+  namespace: demo
+spec:
+  hosts:
+  - google.com
+  gateways:
+  - mesh
+  tls:
+  - match:
+    - port: 443
+      sniHosts:
+      - google.com
+    route:
+    - destination:
+        host: squid-proxy.local
+        subset: tunnel-traffic-to-google
         port:
           number: 3128
