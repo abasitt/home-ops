@@ -1,0 +1,121 @@
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: squid-proxy
+  namespace: demo
+spec:
+  hosts:
+  - squid-proxy.local
+  addresses:
+  - 192.168.10.191/32
+  ports:
+  - number: 3128
+    name: https
+    protocol: HTTPS
+  location: MESH_EXTERNAL
+  resolution: STATIC
+  endpoints:
+  - address: 192.168.10.191
+---
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: edition-cnn-com
+spec:
+  hosts:
+  - edition.cnn.com
+  ports:
+  - number: 80
+    name: http-port
+    protocol: HTTP
+  resolution: DNS
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: egressgateway-for-cnn
+  namespace: demo
+spec:
+  host: istio-ingressgateway.istio-gateways.svc.cluster.local
+  subsets:
+  - name: cnn
+    trafficPolicy:
+      portLevelSettings:
+      - port:
+          number: 443
+        tls:
+          mode: SIMPLE
+          sni: edition.cnn.com
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: squid-proxy
+  namespace: demo
+spec:
+  host: squid-proxy.local
+  subsets:
+  - name: tunnel-traffic-to-cnn
+    trafficPolicy:
+      tunnel:
+        protocol: CONNECT
+        targetHost: edition.cnn.com
+        targetPort: 443
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: cnn-to-gateway
+  namespace: demo
+spec:
+  hosts:
+  - edition.cnn.com
+  gateways:
+  - mesh
+  http:
+  - name: cnn-to-gw-route
+    route:
+    - destination:
+        host: istio-ingressgateway.istio-gateways.svc.cluster.local
+        subset: cnn
+        port:
+          number: 443
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: istio-egressgateway
+  namespace: demo
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 443
+      name: https-port-for-tls-origination
+      protocol: HTTPS
+    hosts:
+    - edition.cnn.com
+    tls:
+      mode: PASSTHROUGH
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: force-tunneling-mesh
+  namespace: demo
+spec:
+  hosts:
+  - edition.cnn.com
+  gateways:
+  - istio-egressgateway
+  tls:
+  - match:
+    - sniHosts:
+        - edition.cnn.com
+    route:
+    - destination:
+        host: squid-proxy.local
+        subset: tunnel-traffic-to-cnn
+        port:
+          number: 3128
