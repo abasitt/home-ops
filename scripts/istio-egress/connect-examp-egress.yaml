@@ -21,6 +21,7 @@ apiVersion: networking.istio.io/v1
 kind: ServiceEntry
 metadata:
   name: edition-cnn-com
+  namespace: demo
 spec:
   hosts:
   - edition.cnn.com
@@ -119,3 +120,29 @@ spec:
         subset: tunnel-traffic-to-cnn
         port:
           number: 3128
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: force-tls1.2-filter
+  namespace: demo
+spec:
+  workloadSelector:
+    labels:
+      app: curl
+  configPatches:
+  - applyTo: CLUSTER
+    match:
+      cluster:
+        service: istio-ingressgateway.istio-gateways.svc.cluster.local
+        subset: cnn
+    patch:
+      operation: MERGE
+      value:
+        transport_socket:
+          name: envoy.transport_sockets.tls
+          typed_config:
+            "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+            common_tls_context:
+              tls_params:
+                tls_maximum_protocol_version: TLSv1_2
