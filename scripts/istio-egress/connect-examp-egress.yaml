@@ -133,6 +133,7 @@ spec:
   configPatches:
   - applyTo: CLUSTER
     match:
+      context: SIDECAR_OUTBOUND
       cluster:
         service: istio-ingressgateway.istio-gateways.svc.cluster.local
         subset: cnn
