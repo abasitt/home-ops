@@ -5,5 +5,5 @@ kind: Kustomization
 namespace: default
 resources:
   - ./external-svc-ep.yaml
-  - ./service-entry.yaml
+#  - ./service-entry.yaml
   - ./httproute.yaml
