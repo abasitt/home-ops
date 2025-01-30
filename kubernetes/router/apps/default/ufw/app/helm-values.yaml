@@ -54,6 +54,7 @@ configMaps:
 
         #allow from wireguard to  IOT vlan20
         ufw route allow in on wg0 out on vlan20 to 192.168.20.75 port 22 proto tcp comment "Allow wireguard to cors server"
+        ufw route allow in on wg0 out on vlan20 to 192.168.20.75 port 8080 proto tcp comment "Allow wireguard to cors server"
 
         #allow from IOT vlan20 to servers vlan30
         ufw route allow in on vlan20 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow IOT to servers Plex"
