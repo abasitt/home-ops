@@ -7,11 +7,11 @@ spec:
   - corsproxy.default.svc.cluster.local
   exportTo:
   - "."
-  location: MESH_INTERNAL
+  location: MESH_EXTERNAL
   resolution: DNS
   ports:
   - number: 8080
-    name: http-corsproxy
-    protocol: HTTP
+    name: tcp-corsproxy
+    protocol: TCP
   endpoints:
   - address: 192.168.20.75
