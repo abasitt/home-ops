@@ -41,13 +41,13 @@ spec:
             command:
               - /thin_entrypoint
             args:
-              - --multus-conf-file=auto
-              - --multus-autoconfig-dir=/host/etc/cni/net.d
-              - --cni-conf-dir=/host/etc/cni/net.d
-              - --multus-master-cni-file-name=10-calico.conflist
-              - --multus-log-level=verbose
-              - --multus-log-file=/var/log/multus.log
-              - --cleanup-config-on-exit=true
+              - "--multus-conf-file=auto"
+              - "--multus-autoconfig-dir=/host/etc/cni/net.d"
+              - "--cni-conf-dir=/host/etc/cni/net.d"
+              - "--multus-master-cni-file-name=10-calico.conflist"
+              - "--multus-log-level=verbose"
+              - "--multus-log-file=/var/log/multus.log"
+              - "--cleanup-config-on-exit=true"
             resources:
               requests:
                 cpu: 10m
