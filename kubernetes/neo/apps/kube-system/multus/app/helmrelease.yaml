@@ -48,11 +48,6 @@ spec:
               - --multus-log-level=verbose
               - --multus-log-file=/var/log/multus.log
               - --cleanup-config-on-exit=true
-            env:
-              MULTUS_NODE_NAME:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: spec.nodeName
             resources:
               requests:
                 cpu: 10m
