@@ -24,6 +24,61 @@ spec:
       strategy: rollback
       retries: 3
 
-  valuesFrom:
-    - kind: ConfigMap
-      name: multus-helm-values
+  values:
+    controllers:
+      multus:
+        type: daemonset
+        initContainers:
+          cni-plugins:
+            image:
+              repository: ghcr.io/buroa/cni-plugins
+              tag: 1.6.2@sha256:b8bf519bda14762782525bb5607d852a76c4bf0da5ffbd8ca021469818ccd8f8
+        containers:
+          multus:
+            image:
+              repository: ghcr.io/k8snetworkplumbingwg/multus-cni
+              tag: v4.1.4@sha256:09fdfb7ce090ccbf8927d2728970c3cdeb5917d48209f692de849e384f00d893
+            command:
+              - /thin_entrypoint
+            args:
+              - --multus-conf-file=auto
+              - --multus-autoconfig-dir=/host/etc/cni/net.d
+              - --cni-conf-dir=/host/etc/cni/net.d
+              - --multus-master-cni-file-name=10-calico.conflist
+              - --multus-log-level=verbose
+              - --multus-log-file=/var/log/multus.log
+              - --cleanup-config-on-exit=true
+            env:
+              MULTUS_NODE_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 32Mi
+            securityContext:
+              privileged: true
+    defaultPodOptions:
+      hostNetwork: true
+      tolerations:
+        - operator: Exists
+          effect: NoSchedule
+        - operator: Exists
+          effect: NoExecute
+
+    persistence:
+      etc-cni-net-d:
+        type: hostPath
+        hostPath: /etc/cni/net.d
+        globalMounts:
+          - path: /host/etc/cni/net.d
+      opt-cni-bin:
+        type: hostPath
+        hostPath: /opt/cni/bin
+        globalMounts:
+          - path: /host/opt/cni/bin
+    serviceAccount:
+      create: true
+      name: *app
