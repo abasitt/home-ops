@@ -29,6 +29,7 @@ servers:
         configBlock: |-
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
+      # forwarding to blocky service ip
       - name: forward
         parameters: . 10.55.89.250
         configBlock: |-
