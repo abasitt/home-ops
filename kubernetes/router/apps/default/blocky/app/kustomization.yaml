@@ -9,7 +9,7 @@ resources:
 configMapGenerator:
   - name: blocky
     files:
-      - ./configs/config.yml
+      - ./config/config.yml
 
 configurations:
   - kustomizeconfig.yaml
