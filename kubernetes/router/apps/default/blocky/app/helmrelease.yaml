@@ -59,7 +59,7 @@ spec:
         globalMounts:
           - path: /app/config.yml
             subPath: config.yml
-        name: config
+        name: blocky-config
         type: configMap
     service:
       app:
