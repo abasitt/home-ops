@@ -30,9 +30,8 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
-        parameters: . tls://1.1.1.2 tls://1.0.0.2
+        parameters: . 10.55.89.250
         configBlock: |-
-            tls_servername cloudflare-dns.com
             health_check 5s
             expire 10s
             max_fails 3
