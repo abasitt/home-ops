@@ -7,7 +7,7 @@ resources:
   - helmrelease.yaml
 
 configMapGenerator:
-  - name: blocky
+  - name: config
     files:
       - ./config/config.yml
 
