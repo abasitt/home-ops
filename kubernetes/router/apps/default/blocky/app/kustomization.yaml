@@ -10,6 +10,7 @@ configMapGenerator:
   - name: blocky-config
     files:
       - ./config/config.yaml
-
+generatorOptions:
+  disableNameSuffixHash: true
 configurations:
   - kustomizeconfig.yaml
