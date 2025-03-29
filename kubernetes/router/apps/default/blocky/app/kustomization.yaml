@@ -9,7 +9,7 @@ resources:
 configMapGenerator:
   - name: config
     files:
-      - ./config/config.yml
+      - ./config/config.yaml
 
 configurations:
   - kustomizeconfig.yaml
