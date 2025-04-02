@@ -48,10 +48,12 @@ spec:
               tag: v3.40.0
             env:
               DOT: "off"
+              DNS_ADDRESS: "10.55.0.10"
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
               WIREGUARD_ENDPOINT_PORT: 51820
+              FIREWALL_OUTBOUND_SUBNETS: 10.0.0.0/8
             envFrom:
               - secretRef:
                   name: gluvpngw-secret
