@@ -57,8 +57,14 @@ spec:
             envFrom:
               - secretRef:
                   name: gluvpngw-secret
+            lifecycle:
+              postStart:
+                exec:
+                  command:
+                    - /bin/sh
+                    - -c
+                    - (ip rule del table 51820; ip -6 rule del table 51820) || true
             securityContext:
-              privileged: true
               capabilities:
                 add:
                 - NET_ADMIN
