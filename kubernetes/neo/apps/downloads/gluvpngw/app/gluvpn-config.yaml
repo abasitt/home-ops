@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iptables-post-rules
+data:
+  post-rules.txt: |
+    iptables -t nat -A POSTROUTING -o wg0 -j MASQUERADE
+    iptables -A FORWARD -i net1 -o wg0 -j ACCEPT
+    iptables -A FORWARD -i wg0 -o net1 -m state --state RELATED,ESTABLISHED -j ACCEPT

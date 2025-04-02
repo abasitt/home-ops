@@ -71,6 +71,15 @@ spec:
     defaultPodOptions:
       nodeSelector:
         feature.node.kubernetes.io/network-interface.bond: "true"
+
+    persistence:
+      config:
+        globalMounts:
+          - path: /iptables
+            subPath: post-rules.txt
+        name: iptables-post-rules
+        type: configMap
+
     service:
       app:
         controller: gluvpngw
