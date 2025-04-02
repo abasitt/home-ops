@@ -49,6 +49,7 @@ spec:
             env:
               DOT: "off"
               DNS_ADDRESS: "10.55.0.10"
+              HEALTH_TARGET_ADDRESS: "1.1.1.1"
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
