@@ -75,7 +75,7 @@ spec:
     persistence:
       config:
         globalMounts:
-          - path: /iptables
+          - path: /iptables/post-rules.txt
             subPath: post-rules.txt
         name: iptables-post-rules
         type: configMap
