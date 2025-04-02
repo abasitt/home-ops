@@ -47,6 +47,7 @@ spec:
               repository: ghcr.io/qdm12/gluetun
               tag: v3.40.0
             env:
+              DOT: "off"
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
