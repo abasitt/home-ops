@@ -21,7 +21,7 @@ spec:
     - name: volsync
     - name: openebs
     - name: multus-config
-    - name: vpngw
+    - name: gluvpngw
   postBuild:
     substitute:
       APP: *app
