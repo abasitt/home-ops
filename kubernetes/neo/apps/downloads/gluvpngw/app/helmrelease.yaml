@@ -1,0 +1,70 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gluvpngw
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.1
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+
+  values:
+    controllers:
+      prowlarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "vpngw",
+                  "namespace": "kube-system",
+                  "ips": ["192.168.36.1/24", "2001:470:ee86:36:192:168:36:1/64"]
+                }
+              ]
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/qdm12/gluetun
+              tag: v3.40.0
+            env:
+              DOT: "off"
+              DNS_ADDRESS: "127.0.0.2"
+              VPN_SERVICE_PROVIDER: custom
+              VPN_TYPE: wireguard
+              VPN_INTERFACE: wg0
+              WIREGUARD_ENDPOINT_PORT: 51820
+            envFrom:
+              - secretRef:
+                  name: gluvpngw-secret
+            securityContext:
+              privileged: true
+              capabilities:
+                add:
+                - NET_ADMIN
+    defaultPodOptions:
+      nodeSelector:
+        feature.node.kubernetes.io/network-interface.bond: "true"
+    service:
+      app:
+        controller: vpngw
+        enabled: false
