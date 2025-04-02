@@ -9,7 +9,7 @@ resources:
   #- ./autobrr/ks.yaml
   #- ./bazarr/ks.yaml
   #- ./cross-seed/ks.yaml
-  #- ./gluvpngw/ks.yaml
+  - ./gluvpngw/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbit/ks.yaml
   - ./radarr/ks.yaml
