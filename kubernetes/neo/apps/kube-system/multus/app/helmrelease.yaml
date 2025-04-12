@@ -43,7 +43,7 @@ spec:
             args:
               - "--multus-conf-file=auto"
               - "--multus-autoconfig-dir=/host/etc/cni/net.d"
-              - "--multus-cni-bin-dir=/host/opt/cni/bin"
+              - "--multus-cni-conf-dir=/host/opt/cni/bin"
               - "--cni-conf-dir=/host/etc/cni/net.d"
               - "--multus-master-cni-file-name=10-calico.conflist"
               - "--multus-log-level=verbose"
