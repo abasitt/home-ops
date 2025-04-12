@@ -1,6 +1,7 @@
 cni:
   cniBinDir: /opt/cni/bin # Auto-detected based on version; defaults to /opt/cni/bin.
-  cniConfDir: /etc/cni/multus/net.d
+  cniConfDir: /etc/cni/multus/net.d # since am using chain mode false, am changing istio-cni config to this location which is default and currently not possible to change in multus.
+  # https://github.com/k8snetworkplumbingwg/multus-cni/issues/1118#issuecomment-1633552095
   chained: false #... default true
   #cniConfFileName: 10-calico.conflist
   provider: "multus"
