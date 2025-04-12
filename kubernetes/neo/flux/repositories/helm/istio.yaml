@@ -5,5 +5,6 @@ metadata:
   name: istio
   namespace: flux-system
 spec:
-  interval: 120m0s
-  url: https://istio-release.storage.googleapis.com/charts
+  type: oci
+  interval: 5m
+  url: gcr.io/istio-release/charts
