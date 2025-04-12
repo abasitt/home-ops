@@ -1,6 +1,6 @@
 cni:
   cniBinDir: /opt/cni/bin # Auto-detected based on version; defaults to /opt/cni/bin.
-  cniConfDir: /etc/cni/net.d
+  cniConfDir: /etc/cni/multus/net.d
   chained: false #... default true
   #cniConfFileName: 10-calico.conflist
   provider: "multus"
