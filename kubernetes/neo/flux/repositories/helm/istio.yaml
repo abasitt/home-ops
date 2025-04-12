@@ -7,4 +7,4 @@ metadata:
 spec:
   type: oci
   interval: 5m
-  url: gcr.io/istio-release/charts
+  url: oci://gcr.io/istio-release/charts
