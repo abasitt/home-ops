@@ -38,7 +38,7 @@ service:
     controller: photoprism
     ports:
       http:
-        port: 2342
+        port: &port 2342
 route:
   app:
     parentRefs:
@@ -55,7 +55,7 @@ route:
               value: /
         backendRefs:
           - kind: Service
-            port: http
+            port: *port
             name: app
             weight: 100
 persistence:

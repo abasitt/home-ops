@@ -86,7 +86,7 @@ spec:
         externalTrafficPolicy: "Local"
         ports:
           http:
-            port: 32400
+            port: &port 32400
     route:
       app:
         parentRefs:
@@ -103,7 +103,7 @@ spec:
                   value: /
             backendRefs:
               - kind: Service
-                port: http
+                port: *port
                 name: app
                 weight: 100
     persistence:

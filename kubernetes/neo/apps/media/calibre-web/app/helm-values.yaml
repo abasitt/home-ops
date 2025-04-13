@@ -34,7 +34,7 @@ service:
     ipFamilyPolicy: PreferDualStack
     ports:
       http:
-        port: 8083
+        port: &port 8083
 route:
   app:
     parentRefs:
@@ -51,19 +51,9 @@ route:
               value: /
         backendRefs:
           - kind: Service
-            port: http
+            port: *port
             name: app
             weight: 100
-#ingress:
-#  app:
-#    className: external
-#    #annotations:
-#      #external-dns.alpha.kubernetes.io/target: external.${CLUSTER_DOMAIN}
-#      #hajimari.io/icon: mdi:chart-bar
-#      #gethomepage.dev/enabled: "true"
-#      #gethomepage.dev/group: Media
-#      #gethomepage.dev/name: Calibre
-#      #gethomepage.dev/icon: calibre.png
 persistence:
   config:
     existingClaim: ${VOLSYNC_CLAIM}
