@@ -58,7 +58,7 @@ spec:
         ipFamilyPolicy: PreferDualStack
         ports:
           http:
-            port: 80
+            port: &port 80
 
     route:
       app:
@@ -76,6 +76,6 @@ spec:
                   value: /
             backendRefs:
               - kind: Service
-                port: http
+                port: *port
                 name: app
                 weight: 100
