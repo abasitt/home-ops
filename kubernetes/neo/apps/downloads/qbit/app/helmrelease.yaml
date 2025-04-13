@@ -128,7 +128,7 @@ spec:
                   value: /
             backendRefs:
               - kind: Service
-                port: http
+                port: *port
                 name: app
                 weight: 100
 
