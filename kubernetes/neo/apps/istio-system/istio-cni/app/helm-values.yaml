@@ -17,6 +17,8 @@ cni:
     dnsCapture: true
     # If enabled, and ambient is enabled, enables ipv6 support
     ipv6: true
+    # If enabled, and ambient is enabled, the CNI agent will reconcile incompatible iptables rules and chains at startup.
+    reconcileIptablesOnStartup: true
   # reduce for home cluster
   repair:
     enabled: true
