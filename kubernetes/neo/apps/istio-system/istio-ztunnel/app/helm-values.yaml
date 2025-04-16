@@ -1,6 +1,7 @@
 ---
 hub: gcr.io/istio-release
 variant: "distroless"
+resourceName: "istio-ztunnel"
 multiCluster:
   clusterName: ${CLUSTER_NAME}
 meshConfig:

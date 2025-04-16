@@ -35,6 +35,7 @@ pilot:
   autoscaleMin: 1
   autoscaleMax: 1
   replicaCount: 1
+  trustedZtunnelName: "istio-ztunnel"
   # rollingMaxSurge: 100%
   # rollingMaxUnavailable: 25%
   traceSampling: 1 #...default is 1 also
@@ -50,16 +51,6 @@ pilot:
     ISTIO_DUAL_STACK: "true" #..enable dualstack
     PILOT_ENABLE_AMBIENT: "true" #..enable ambient mode
     PILOT_ENABLE_ALPHA_GATEWAY_API: "true" #..enable support alpha gatewayapis
-  #don't deploy on a laptop node
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: "kubernetes.io/hostname"
-            operator: "NotIn"
-            values:
-            - "neok3slm-w1"
 meshConfig:
   defaultConfig:
     holdApplicationUntilProxyStarts: true #..Wait for the istio-proxy to start before starting application pods
