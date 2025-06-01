@@ -45,7 +45,7 @@ spec:
           app:
             image:
               repository: ghcr.io/bubuntux/nordlynx
-              tag: 2023-06-01@sha256:351341e0c8248c42dde71216c95fea01654a41508198d860bac7b3d7f297045b
+              tag: 2025-06-01@sha256:a0b5742991a3556a2c340f79132ac2dcee1beea413508c86301d657e998924d2
             env:
               TZ: ${TIMEZONE}
               QUERY:
