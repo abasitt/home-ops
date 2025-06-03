@@ -35,7 +35,7 @@ spec:
                 name: microbin-secret
             image:
               repository: ghcr.io/vaskozl/microbin-bin
-              tag: 2.0.4@sha256:719bc0a474ae28ba312a1dc744ef4e2bb43edac44b76b481da675f0d4e33847c
+              tag: 2.0.4@sha256:0000f4437ebab722152aaba944d6efa512c8de273146c658648c7ac61f4d2ec8
             probes:
               liveness:
                 enabled: true
