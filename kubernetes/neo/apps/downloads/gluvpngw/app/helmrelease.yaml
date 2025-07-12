@@ -50,10 +50,11 @@ spec:
               DOT: "off"
               DNS_ADDRESS: "10.55.0.10"
               HEALTH_TARGET_ADDRESS: "1.1.1.1"
-              VPN_SERVICE_PROVIDER: custom
+              VPN_SERVICE_PROVIDER: nordvpn
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
-              WIREGUARD_ENDPOINT_PORT: 51820
+              SERVER_COUNTRIES: Singapore
+              #WIREGUARD_ENDPOINT_PORT: 51820
             envFrom:
               - secretRef:
                   name: gluvpngw-secret
