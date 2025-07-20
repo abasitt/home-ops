@@ -19,6 +19,6 @@ spec:
     backendRefs:
     - group: ''
       kind: Service
-      name: loki-gateway
-      port: 80
+      name: loki-headless
+      port: 3100
       weight: 100
