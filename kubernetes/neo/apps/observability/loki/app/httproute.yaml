@@ -2,7 +2,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: grafana-app
+  name: loki-app
 spec:
   parentRefs:
   - group: gateway.networking.k8s.io
@@ -10,7 +10,7 @@ spec:
     name: private-gateway
     namespace: istio-gateways
   hostnames:
-  - "grafana.${CLUSTER_DOMAIN}"
+  - "loki.${CLUSTER_DOMAIN}"
   rules:
   - matches:
     - path:
@@ -19,6 +19,6 @@ spec:
     backendRefs:
     - group: ''
       kind: Service
-      name: grafana
+      name: loki-gateway
       port: 80
       weight: 100
