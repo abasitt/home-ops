@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: quay.io/curl/curl
-              tag: 8.13.0
+              tag: 8.15.0
             command: ["/bin/sleep", "infinity"]
             env:
               TZ: "${TIMEZONE}"
