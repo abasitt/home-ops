@@ -72,7 +72,7 @@ controllers:
       multus-daemon:
         image: &image
           repository: ghcr.io/k8snetworkplumbingwg/multus-cni
-          tag: v4.2.0
+          tag: v4.2.2
         command: ["/thin_entrypoint"]
         args:
           - "--multus-conf-file=auto"
