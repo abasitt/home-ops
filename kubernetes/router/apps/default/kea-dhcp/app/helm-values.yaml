@@ -171,6 +171,9 @@ kea:
       - hw-address: "3c:6a:9d:15:4f:94"
         ip-address: "192.168.21.77"
         hostname: "Elgato-Key-Light-Air-00F9"
+      - hw-address: "98:ba:5f:1d:fe:5c"
+        ip-address: "192.168.21.78"
+        hostname: "tapo-tc74-lobby"
     subnets:
       - subnet: "192.168.1.0/23"
         pools:
