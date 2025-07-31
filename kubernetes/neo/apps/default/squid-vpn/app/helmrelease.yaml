@@ -32,29 +32,21 @@ spec:
               repository: ubuntu/squid
               tag: 6.10-24.10_beta
             ports:
-              - containerPort: 3128
+              - containerPort: &port 3128
                 name: squid
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
                 custom: true
                 spec:
-                  exec:
-                    command: ["/bin/sh", "-c", "squid -k check"]
-                  initialDelaySeconds: 5
+                  httpGet:
+                    path: /
+                    port: *port
+                  initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command: ["/bin/sh", "-c", "squid -k check"]
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
+              readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -96,7 +88,5 @@ spec:
         externalTrafficPolicy: "Local"
         allocateLoadBalancerNodePorts: false
         ports:
-          squid:
-            port: 3128
-            targetPort: 3128
-            protocol: TCP
+          http:
+            port: *port
