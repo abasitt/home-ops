@@ -5,6 +5,7 @@ resources:
   - ./namespace.yaml
   - ./coredns/ks.yaml
   - ./intel-device-plugin/ks.yaml
+  - ./kube-vip/ks.yaml
   - ./metrics-server/ks.yaml
   - ./multus/ks.yaml
   - ./node-feature-discovery/ks.yaml
