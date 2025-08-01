@@ -22,7 +22,7 @@ spec:
           args: ["manager"]
           env:
             - name: address
-              value: "{{ kubeapi_addr }}"
+              value: "${KUBE_API_ADDR}"
             - name: vip_arp
               value: "true"
             - name: lb_enable
