@@ -1,4 +1,10 @@
 ---
+loki:
+  enabled: false
+alloy:
+  enabled: false
+minio:
+  enabled: false
 localpv-provisioner:
   localpv:
     image:
