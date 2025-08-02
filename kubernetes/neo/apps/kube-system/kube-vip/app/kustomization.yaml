@@ -6,3 +6,6 @@ resources:
   - ./configmap.yaml
   - ./daemonset.yaml
   - ./rbac.yaml
+labels:
+  - pairs:
+      kustomize.toolkit.fluxcd.io/prune: disabled
