@@ -16,5 +16,4 @@ resources:
   #- ./recyclarr/ks.yaml
   #- ./sabnzbd/ks.yaml
   - ./sonarr/ks.yaml
-  - ./squid-vpn/ks.yaml
   #- ./vpngw/ks.yaml
