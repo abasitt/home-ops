@@ -68,7 +68,7 @@ spec:
           app:
             image:
               repository: ubuntu/squid
-              tag: 6.10-24.10_beta
+              tag: edge
             ports:
               - containerPort: &port 3128
                 name: squid
