@@ -113,6 +113,12 @@ spec:
       nodeSelector:
         feature.node.kubernetes.io/network-interface.bond: "true"
     persistence:
+      logs:
+        enabled: true
+        type: emptyDir
+        sizeLimit: 1Gi
+        globalMounts:
+          - path: /var/log/squid
       cache:
         enabled: true
         type: persistentVolumeClaim
