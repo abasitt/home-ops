@@ -112,8 +112,11 @@ spec:
         feature.node.kubernetes.io/network-interface.bond: "true"
     persistence:
       cache:
-        type: emptyDir
-        sizeLimit: 1Gi
+        enabled: true
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        storageClass: openebs-zfs-ssd
         globalMounts:
           - path: /var/spool/squid
       config:
