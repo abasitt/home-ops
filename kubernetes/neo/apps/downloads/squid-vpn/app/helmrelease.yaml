@@ -26,6 +26,44 @@ spec:
     controllers:
       squid-vpn:
         strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "downloads",
+                  "namespace": "kube-system",
+                  "ips": ["192.168.36.16/23", "2001:470:ee86:36:192:168:36:16/64"],
+                  "default-route": ["192.168.36.1", "2001:470:ee86:36:192:168:36:1"]
+                }
+              ]
+
+        initContainers:
+          fixroutes:
+            image:
+              repository: alpine
+              tag: 3.22.1
+            env:
+            - name: DEV
+              value: eth0
+            command:
+            - '/bin/sh'
+            - '-c'
+            - |
+              # Add static IPv4 route
+              ip route add 10.0.0.0/8 via 169.254.1.1 dev $DEV
+              ip route add 192.168.0.0/16 via 169.254.1.1 dev $DEV
+
+              # Add static IPv6 route
+              ip -6 route add 2001:470:ee86::/48 via fe80::ecee:eeff:feee:eeee dev $DEV
+            securityContext:
+              capabilities:
+                add:
+                - NET_ADMIN
+
         containers:
           app:
             image:
@@ -59,19 +97,17 @@ spec:
               limits:
                 memory: 128Mi
     defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
-        seccompProfile: { type: RuntimeDefault }
+      nodeSelector:
+        feature.node.kubernetes.io/network-interface.bond: "true"
     persistence:
       cache:
         type: emptyDir
+        sizeLimit: 1Gi
         globalMounts:
           - path: /var/spool/squid
       config:
         enabled: true
-        type: configMap
+        type: secret
         name: squid-vpn-config
         globalMounts:
           - path: /etc/squid/squid.conf
