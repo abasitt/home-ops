@@ -70,6 +70,11 @@ zoneFiles:
     contents: |
       home.internal.   IN SOA sns.dns.icann.com. noc.dns.icann.com. 2015082541 7200 3600 1209600 3600
       nfs.home.internal.  IN A   192.168.30.10
+      neotc1bm-m1.home.internal. IN A 192.168.30.41
+      neotc2bm-m2.home.internal. IN A 192.168.30.42
+      neobl1bm-m3.home.internal. IN A 192.168.30.43
+      neoas1lm-w1.home.internal. IN A 192.168.30.46
+      neotc1bm-w2.home.internal. IN A 192.168.30.47
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
