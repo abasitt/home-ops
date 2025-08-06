@@ -65,6 +65,13 @@ zoneFiles:
       abasitt.tech.       IN A   192.168.33.1
       *.abasitt.tech.     IN A   192.168.33.1
       *.neo.abasitt.tech. IN A   192.168.33.2
+  - filename: basitlab.db
+    domain: basitlab.com
+    contents: |
+      basitlab.com.   IN SOA sns.dns.icann.com. noc.dns.icann.com. 2015082541 7200 3600 1209600 3600
+      basitlab.com.       IN A   192.168.33.1
+      *.basitlab.com.     IN A   192.168.33.1
+      *.neo.basitlab.com. IN A   192.168.33.2
   - filename: homeinternal.db
     domain: home.internal
     contents: |
