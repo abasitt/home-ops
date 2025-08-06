@@ -10,7 +10,6 @@ spec:
     name: external-gateway
     namespace: istio-gateways
   hostnames:
-  - "ha.abasitt.tech"
   - "ha.${PUBLIC_DOMAIN}"
   rules:
   - matches:

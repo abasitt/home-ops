@@ -10,7 +10,7 @@ spec:
     name: external-gateway
     namespace: istio-gateways
   hostnames:
-  - "echo-server.abasitt.tech"
+  - "echo-server.${PUBLIC_DOMAIN}"
   rules:
   - matches:
     - path:

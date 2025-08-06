@@ -10,7 +10,7 @@ spec:
     name: external-gateway
     namespace: istio-gateways
   hostnames:
-  - "cors.abasitt.tech"
+  - "cors.${PUBLIC_DOMAIN}"
   rules:
   - matches:
     - path:
