@@ -9,8 +9,8 @@ spec:
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: abasitt.tech
+  commonName: ${PUBLIC_DOMAIN}
   dnsNames:
-    - abasitt.tech
-    - "*.abasitt.tech"
-    - "*.neo.abasitt.tech"
+    - ${PUBLIC_DOMAIN}
+    - "*.${PUBLIC_DOMAIN}"
+    - "*.${CUSTOM_DOMAIN}"
