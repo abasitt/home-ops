@@ -88,7 +88,7 @@ spec:
             name: external-gateway
             namespace: istio-gateways
         hostnames:
-          - "mb.${SECRET_DOMAIN}"
+          - "mb.${PUBLIC_DOMAIN}"
         rules:
           - matches:
               - path:

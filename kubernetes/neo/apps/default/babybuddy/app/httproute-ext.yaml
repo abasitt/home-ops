@@ -11,6 +11,7 @@ spec:
     namespace: istio-gateways
   hostnames:
   - "babybuddy.abasitt.tech"
+  - "babybuddy.${PUBLIC_DOMAIN}"
   rules:
   - matches:
     - path:

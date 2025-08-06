@@ -33,5 +33,5 @@ data:
   K3SM2_IPV4ADDR: "192.168.30.42"
   K3SM3_IPV4ADDR: "192.168.30.43"
   CLUSTER_NAME: "neo"
-  PUBLIC_DOMAIN: "abasitt.tech"
-  CLUSTER_DOMAIN: "neo.abasitt.tech"
+  PUBLIC_DOMAIN: "basitlab.com"
+  CLUSTER_DOMAIN: "neo.basitlab.com"
