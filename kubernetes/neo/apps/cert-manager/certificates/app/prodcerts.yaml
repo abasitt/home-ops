@@ -13,4 +13,3 @@ spec:
   dnsNames:
     - ${PUBLIC_DOMAIN}
     - "*.${PUBLIC_DOMAIN}"
-    - "*.${CLUSTER_DOMAIN}"
