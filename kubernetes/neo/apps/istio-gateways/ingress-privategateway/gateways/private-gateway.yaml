@@ -10,11 +10,11 @@ spec:
   gatewayClassName: istio
   listeners:
   - name: http
-    hostname: "*.neo.abasitt.tech"
+    hostname: "*.${CLUSTER_DOMAIN}"
     protocol: HTTP
     port: 80
   - name: https
-    hostname: "*.neo.abasitt.tech"
+    hostname: "*.${CLUSTER_DOMAIN}"
     port: 443
     protocol: HTTPS
     tls:

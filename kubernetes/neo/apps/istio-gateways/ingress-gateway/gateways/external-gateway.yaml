@@ -10,11 +10,11 @@ spec:
   gatewayClassName: istio
   listeners:
   - name: http
-    hostname: "*.abasitt.tech"
+    hostname: "*.${PUBLIC_DOMAIN}"
     protocol: HTTP
     port: 80
   - name: https
-    hostname: "*.abasitt.tech"
+    hostname: "*.${PUBLIC_DOMAIN}"
     port: 443
     protocol: HTTPS
     tls:
