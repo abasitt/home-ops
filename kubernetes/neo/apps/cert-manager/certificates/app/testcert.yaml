@@ -10,4 +10,4 @@ spec:
     name: letsencrypt-staging
     kind: ClusterIssuer
   dnsNames:
-    - test.abasitt.tech
+    - test.${PUBLIC_DOMAIN}
