@@ -40,4 +40,4 @@ spec:
               key: api-key
         selector:
           dnsZones:
-            - "${SECRET_DOMAIN}"
+            - "${PUBLIC_DOMAIN}"
