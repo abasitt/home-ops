@@ -45,6 +45,7 @@ configMaps:
         #allow from LAN vlan10 to servers vlan30
         ufw route allow in on vlan10 out on vlan30 to 192.168.30.9 port 22 proto tcp comment "Allow LAN to servers jumpbox on port 22"
         ufw route allow in on vlan10 out on vlan30 to 192.168.30.10 port 22 proto tcp comment "Allow LAN to servers nas on port 22"
+        ufw route allow in on vlan10 out on vlan30 to 192.168.30.253 port 9001 proto tcp comment "Allow LAN to servers Minio GUI on port 9001"
         ufw route allow in on vlan10 out on vlan30 to 192.168.33.0/24 port 443 proto tcp comment "Allow LAN to servers Metallb pool on port 443"
         ufw route allow in on vlan10 out on vlan30 to 192.168.33.0/24 port 80 proto tcp comment "Allow LAN to servers Metallb pool on port 443"
         ufw route allow in on vlan10 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow LAN to servers Plex"
