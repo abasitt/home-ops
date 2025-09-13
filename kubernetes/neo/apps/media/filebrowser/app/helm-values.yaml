@@ -7,7 +7,7 @@ controllers:
       app:
         image:
           repository: docker.io/filebrowser/filebrowser
-          tag: v2.42.3@sha256:822a6851fe09f967953cb60b596a140aa84cdcc002124ae530ba5b9a70a01d2a
+          tag: v2.43.0@sha256:1d0bcba4bd7d8886cc6f77c791694d69f9c7c78e889c4ed3a5734529daed9fa1
         env:
           TZ: ${TIMEZONE}
           FB_DATABASE: /config/filebrowser.db
