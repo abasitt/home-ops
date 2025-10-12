@@ -42,13 +42,13 @@ servers:
       - name: reload
       - name: loadbalance
   - zones:
-      - zone: abasitt.tech
+      - zone: basitlab.com
         scheme: dns://
         use_tcp: true
     port: 53
     plugins:
       - name: file
-        parameters: /etc/coredns/abasittech.db
+        parameters: /etc/coredns/basitlab.db
   - zones:
       - zone: home.internal
         scheme: dns://
