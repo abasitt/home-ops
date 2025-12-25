@@ -46,7 +46,7 @@ spec:
           app:
             image:
               repository: jacobalberty/unifi
-              tag: v9.3.45@sha256:6f1cc8eeda6a2303a3939f8f6565d4e4ca963b18b2d5dfae7e1ed4799d102eeb
+              tag: v10.0.162@sha256:896c0ab82d33300694dae82982fd7094497afcbea0be92cadc1e94bfead731d3
               pullPolicy: IfNotPresent
             env:
               TZ: ${TIMEZONE}
