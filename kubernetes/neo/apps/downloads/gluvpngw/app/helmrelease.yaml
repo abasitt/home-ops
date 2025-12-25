@@ -45,7 +45,7 @@ spec:
           app:
             image:
               repository: ghcr.io/qdm12/gluetun
-              tag: v3.40.0
+              tag: v3.41.0
             env:
               DOT: "off"
               DNS_ADDRESS: "10.55.0.10"
