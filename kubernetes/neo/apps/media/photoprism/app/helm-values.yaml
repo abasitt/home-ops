@@ -9,7 +9,7 @@ controllers:
       app:
         image:
           repository: docker.io/photoprism/photoprism
-          tag: latest@sha256:2ba3a774ca1acc498096d7a5cb50df9cfecb7e3117a617d648093ff74eec2793
+          tag: latest@sha256:5229f68bce0293320547f35c733de584d7c2d5725a0efbddb68d7a118a8fc21c
         env:
           PHOTOPRISM_STORAGE_PATH: &storage /config
           PHOTOPRISM_ORIGINALS_PATH: &originals /originals
