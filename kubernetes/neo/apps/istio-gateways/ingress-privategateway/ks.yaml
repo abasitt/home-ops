@@ -14,7 +14,7 @@ spec:
   prune: false
   sourceRef:
     kind: GitRepository
-    name: home-kubernetes
+    name: flux-system
   dependsOn:
     - name: istiod
     - name: cert-manager
@@ -38,7 +38,7 @@ spec:
   prune: false
   sourceRef:
     kind: GitRepository
-    name: home-kubernetes
+    name: flux-system
   dependsOn:
     - name: istio-privategateway
     - name: cert-manager
