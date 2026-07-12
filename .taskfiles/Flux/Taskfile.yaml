@@ -67,6 +67,7 @@ tasks:
     desc: Force update Flux to pull in changes from your Git repository
     cmds:
       - flux --context {{.cluster}} reconcile source git flux-system
+      - flux --context {{.cluster}} reconcile kustomization cluster-flux
       - flux --context {{.cluster}} reconcile kustomization cluster-apps
     preconditions:
       - msg: "Argument (cluster) is required"
