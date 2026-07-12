@@ -13,6 +13,8 @@ spec:
   dependsOn:
     - name: flux-operator
   values:
+    commonAnnotations:
+      fluxcd.controlplane.io/reconcileArtifactEvery: 1h
     instance:
       cluster:
         networkPolicy: false
@@ -27,15 +29,12 @@ spec:
         ref: refs/heads/main
         path: kubernetes/neo/flux/cluster
         interval: 1h
-      distribution:
-        version: ">=2.0.0"
-        registry: ghcr.io/fluxcd
       kustomize:
         patches:
           - patch: |-
               - op: add
                 path: /spec/template/spec/containers/0/args/-
-                value: --concurrent=8
+                value: --concurrent=10
               - op: add
                 path: /spec/template/spec/containers/0/args/-
                 value: --requeue-dependency=5s
@@ -59,6 +58,9 @@ spec:
               kind: Deployment
               name: (kustomize-controller|helm-controller|source-controller)
           - patch: |-
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --concurrent=20
               - op: replace
                 path: /spec/template/spec/volumes/0
                 value:
@@ -78,6 +80,9 @@ spec:
               - op: add
                 path: /spec/template/spec/containers/0/args/-
                 value: --helm-cache-purge-interval=5m
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --feature-gates=CacheSecretsAndConfigMaps=true
             target:
               kind: Deployment
               name: source-controller
@@ -91,6 +96,23 @@ spec:
               - op: add
                 path: /spec/template/spec/containers/0/args/-
                 value: --oom-watch-interval=500ms
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --feature-gates=DefaultToRetryOnFailure=true,DisableChartDigestTracking=true
             target:
               kind: Deployment
               name: helm-controller
+          - patch: |-
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --watch-configs-label-selector=owner!=helm
+            target:
+              kind: Deployment
+              name: (helm-controller|kustomize-controller)
+          - patch: |-
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --feature-gates=CancelHealthCheckOnNewRevision=true
+            target:
+              kind: Deployment
+              name: kustomize-controller
