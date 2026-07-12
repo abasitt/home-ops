@@ -107,8 +107,6 @@ spec:
               runAsUser: 2000
               runAsGroup: 2000
               runAsNonRoot: true
-              fsGroup: 2000
-              fsGroupChangePolicy: OnRootMismatch
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
@@ -117,6 +115,9 @@ spec:
     defaultPodOptions:
       nodeSelector:
         feature.node.kubernetes.io/network-interface.bond: "true"
+      securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
     service:
       app:
         controller: radarr
