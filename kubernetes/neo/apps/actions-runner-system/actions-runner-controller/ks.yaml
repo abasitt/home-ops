@@ -32,3 +32,7 @@ spec:
     kind: GitRepository
     name: flux-system
   targetNamespace: actions-runner-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
