@@ -3,19 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app kea-dhcp
+  name: flux-operator
   namespace: flux-system
 spec:
-  targetNamespace: default
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  path: ./kubernetes/router/apps/default/kea-dhcp/app
-  prune: false # never should be deleted
+  interval: 1h
+  path: ./kubernetes/router/apps/flux-system/flux-operator/app
+  prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: false
-  interval: 30m
-  retryInterval: 1m
-  timeout: 3m
