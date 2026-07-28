@@ -7,14 +7,9 @@ metadata:
   namespace: tools
 spec:
   interval: 15m
-  chart:
-    spec:
-      chart: app-template
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-      interval: 15m
+  chartRef:
+    kind: OCIRepository
+    name: busybox
   install:
     remediation:
       retries: 5
