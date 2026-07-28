@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - ./grafana-secret.sops.yaml
   - ./httproute.yaml
+  - ./ocirepository.yaml
   - ./helmrelease.yaml

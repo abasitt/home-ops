@@ -6,15 +6,9 @@ metadata:
   name: qbittorrent
 spec:
   interval: 15m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: qbit
   maxHistory: 3
   install:
     createNamespace: true

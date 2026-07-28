@@ -6,15 +6,9 @@ metadata:
   namespace: istio-system
 spec:
   interval: 5m
-  chart:
-    spec:
-      chart: base
-      version: 1.28.10
-      sourceRef:
-        kind: HelmRepository
-        name: istio
-        namespace: flux-system
-      interval: 10m
+  chartRef:
+    kind: OCIRepository
+    name: istio-base
   install:
     timeout: 10m
     replace: true
