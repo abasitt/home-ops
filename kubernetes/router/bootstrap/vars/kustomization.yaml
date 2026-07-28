@@ -1,6 +1,9 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
+# Bootstrap only — applied manually, not tracked by Flux
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./vars
+  - ./cluster-settings.yaml
+  - ./cluster-secrets.secret.sops.yaml
+  - ./static-ipam.yaml
