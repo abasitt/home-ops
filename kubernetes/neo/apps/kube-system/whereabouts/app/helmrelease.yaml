@@ -13,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: k8snetworkplumbingwg
-        namespace: flux-system
+        namespace: kube-system
   install:
     remediation:
       retries: 3
