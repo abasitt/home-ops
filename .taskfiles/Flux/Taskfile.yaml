@@ -16,13 +16,10 @@ tasks:
         cluster: Cluster to run command against (required)
     prompt: Bootstrap Flux into the '{{.cluster}}' cluster... continue?
     cmds:
-      # Apply bootstrap secrets (sops-age, github-deploy-key)
-      - sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml | kubectl --context {{.cluster}} apply -f -
-      - sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml | kubectl --context {{.cluster}} apply -f -
-      # Apply cluster vars (cluster-settings, cluster-secrets) — not tracked by Flux
-      - sops --decrypt --in-place {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/vars/cluster-secrets.secret.sops.yaml
-      - kubectl --context {{.cluster}} apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/vars
-      - defer: sops --encrypt --in-place {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/vars/cluster-secrets.secret.sops.yaml
+      # Apply all bootstrap resources (secrets + vars) in one shot
+      - sops --decrypt --in-place {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/cluster-secrets.secret.sops.yaml
+      - kubectl --context {{.cluster}} apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux
+      - defer: sops --encrypt --in-place {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/cluster-secrets.secret.sops.yaml
       # Install flux-operator and flux-instance via helm — takes over from here
       - helm --kube-context {{.cluster}} upgrade --install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator --namespace flux-system --create-namespace --wait
       - helm --kube-context {{.cluster}} upgrade --install flux-instance oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance --namespace flux-system --values {{.KUBERNETES_DIR}}/{{.cluster}}/apps/flux-system/flux-instance/app/helmrelease.yaml --wait
@@ -31,11 +28,11 @@ tasks:
       - { msg: "Age private key not found",             sh: "test -f {{.ROOT_DIR}}/age.key" }
       - { msg: "Age secret not found",                  sh: "test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml" }
       - { msg: "Github deploy secret not found",        sh: "test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml" }
-      - { msg: "Cluster settings not found",            sh: "test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/vars/cluster-settings.yaml" }
-      - { msg: "Cluster secrets not found",             sh: "test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/vars/cluster-secrets.secret.sops.yaml" }
+      - { msg: "Cluster settings not found",            sh: "test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/cluster-settings.yaml" }
+      - { msg: "Cluster secrets not found",             sh: "test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/cluster-secrets.secret.sops.yaml" }
       - { msg: "Unable to decrypt age secret",          sh: "sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml" }
       - { msg: "Unable to decrypt github secret",       sh: "sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml" }
-      - { msg: "Unable to decrypt cluster secrets",     sh: "sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/vars/cluster-secrets.secret.sops.yaml" }
+      - { msg: "Unable to decrypt cluster secrets",     sh: "sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/cluster-secrets.secret.sops.yaml" }
 
   apply:
     desc: Apply a Flux Kustomization resource for a cluster
