@@ -9,7 +9,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: curl
-    namespace: flux-system
   install:
     remediation:
       retries: 5
