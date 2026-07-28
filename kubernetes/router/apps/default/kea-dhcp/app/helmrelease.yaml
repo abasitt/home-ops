@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kea-dhcp
-        namespace: flux-system
+        namespace: default
       interval: 10m
   install:
     timeout: 10m
