@@ -1,0 +1,93 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Container Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - kubernetes/**/container/Dockerfile
+  pull_request:
+    branches:
+      - main
+    paths:
+      - kubernetes/**/container/Dockerfile
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  changes:
+    name: Detect Changed Dockerfiles
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changed.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Find Changed Dockerfiles
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            files=$(find kubernetes -name "Dockerfile" -path "*/container/Dockerfile")
+          else
+            files=$(git diff --name-only ${{ github.event.before || 'HEAD~1' }} HEAD -- 'kubernetes/**/container/Dockerfile' 2>/dev/null || find kubernetes -name "Dockerfile" -path "*/container/Dockerfile")
+          fi
+          matrix=$(echo "$files" | while read f; do
+            dir=$(dirname "$f")
+            name=$(basename $(dirname "$dir"))
+            echo "{\"name\":\"${name}\",\"dockerfile\":\"${f}\",\"context\":\"${dir}\"}"
+          done | jq -s -c '{"include": .}')
+          echo "matrix=${matrix}" >> $GITHUB_OUTPUT
+
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.matrix != '{"include":[]}' && needs.changes.outputs.matrix != '' }}
+    strategy:
+      matrix: ${{ fromJSON(needs.changes.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=sha,prefix=sha-
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

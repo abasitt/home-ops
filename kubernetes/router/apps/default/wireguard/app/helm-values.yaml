@@ -27,8 +27,9 @@ controllers:
     containers:
       wg-app:
         image: &image
-          repository: abasitt/wg-alpine
-          tag: "06012025"
+          repository: ghcr.io/abasitt/wireguard
+          tag: latest
+          pullPolicy: Always
         command:
         - /bin/bash
         - -cex

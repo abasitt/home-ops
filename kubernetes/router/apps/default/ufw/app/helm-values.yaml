@@ -183,8 +183,9 @@ controllers:
     containers:
       ufw-daemon:
         image: &image
-          repository: abasitt/ufw-alpine
-          tag: "29112024"
+          repository: ghcr.io/abasitt/ufw
+          tag: latest
+          pullPolicy: Always
         command:
         - /bin/bash
         - -cex
