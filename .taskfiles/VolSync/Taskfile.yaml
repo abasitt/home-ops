@@ -74,7 +74,6 @@ tasks:
       - bash {{.VOLSYNC_RESOURCES_DIR}}/wait-for-job.sh {{.job}} {{.ns}} {{.cluster}}
       - kubectl --context {{.cluster}} -n {{.ns}} wait job/{{.job}} --for condition=complete --timeout=1m
       - kubectl --context {{.cluster}} -n {{.ns}} logs job/{{.job}} --container minio
-      - kubectl --context {{.cluster}} -n {{.ns}} logs job/{{.job}} --container r2
       - kubectl --context {{.cluster}} -n {{.ns}} delete job {{.job}}
     env: *env-vars
     requires:
