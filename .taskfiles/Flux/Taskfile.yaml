@@ -28,7 +28,13 @@ tasks:
         fi
       # Install flux-operator and flux-instance via helm — takes over from here
       - helm --kube-context {{.cluster}} upgrade --install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator --namespace flux-system --create-namespace --wait
-      - helm --kube-context {{.cluster}} upgrade --install flux-instance oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance --namespace flux-system --values {{.KUBERNETES_DIR}}/{{.cluster}}/apps/flux-system/flux-instance/app/helmrelease.yaml --wait
+      - |
+        yq '.spec.values' {{.KUBERNETES_DIR}}/{{.cluster}}/apps/flux-system/flux-instance/app/helmrelease.yaml > /tmp/flux-instance-values.yaml
+        helm --kube-context {{.cluster}} upgrade --install flux-instance \
+          oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance \
+          --namespace flux-system --wait \
+          --values /tmp/flux-instance-values.yaml
+        rm /tmp/flux-instance-values.yaml
     preconditions:
       - { msg: "Argument (cluster) is required",        sh: "test -n {{.cluster}}" }
       - { msg: "Age private key not found",             sh: "test -f {{.ROOT_DIR}}/age.key" }
