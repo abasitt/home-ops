@@ -19,7 +19,7 @@ x-env-vars: &env-vars
   puid: "{{.puid}}"
 
 vars:
-  VOLSYNC_RESOURCES_DIR: "{{.ROOT_DIR}}/.taskfiles/volsync/resources"
+  VOLSYNC_RESOURCES_DIR: "{{.ROOT_DIR}}/.taskfiles/VolSync/resources"
 
 tasks:
 
