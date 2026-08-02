@@ -16,10 +16,16 @@ tasks:
         cluster: Cluster to run command against (required)
     prompt: Bootstrap Flux into the '{{.cluster}}' cluster... continue?
     cmds:
-      # Apply all bootstrap resources (secrets + vars) in one shot
-      - sops --decrypt --in-place {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/cluster-settings/cluster-secrets.secret.sops.yaml
-      - kubectl --context {{.cluster}} apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/cluster-settings
-      - defer: sops --encrypt --in-place {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/cluster-settings/cluster-secrets.secret.sops.yaml
+      # Apply SOPS-encrypted secrets individually (must decrypt first)
+      - sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/cluster-settings/age-key.secret.sops.yaml | kubectl --context {{.cluster}} apply --server-side -f -
+      - sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/cluster-settings/github-deploy-key.secret.sops.yaml | kubectl --context {{.cluster}} apply --server-side -f -
+      - sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/cluster-settings/cluster-secrets.secret.sops.yaml | kubectl --context {{.cluster}} apply --server-side -f -
+      # Apply non-encrypted vars
+      - kubectl --context {{.cluster}} apply --server-side -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/cluster-settings/cluster-settings.yaml
+      - |
+        if [ -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/cluster-settings/static-ipam.yaml ]; then
+          kubectl --context {{.cluster}} apply --server-side -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/cluster-settings/static-ipam.yaml
+        fi
       # Install flux-operator and flux-instance via helm — takes over from here
       - helm --kube-context {{.cluster}} upgrade --install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator --namespace flux-system --create-namespace --wait
       - helm --kube-context {{.cluster}} upgrade --install flux-instance oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance --namespace flux-system --values {{.KUBERNETES_DIR}}/{{.cluster}}/apps/flux-system/flux-instance/app/helmrelease.yaml --wait
