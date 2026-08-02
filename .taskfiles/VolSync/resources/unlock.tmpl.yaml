@@ -1,0 +1,28 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: volsync-unlock-${app}
+  namespace: ${ns}
+  labels:
+    app.kubernetes.io/created-by: volsync-task
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: unlock
+          image: quay.io/backube/volsync:0.13.0
+          command:
+            - /mover-restic/entry.sh
+          args:
+            - unlock
+          envFrom:
+            - secretRef:
+                name: ${app}-volsync-minio
+          env:
+            - name: DATA_DIR
+              value: /data
+            - name: RESTIC_CACHE_DIR
+              value: /cache
