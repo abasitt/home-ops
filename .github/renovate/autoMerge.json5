@@ -2,20 +2,93 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "description": ["Auto-merge container digests updates for trusted containers"],
+      "description": ["Auto-merge all container digest updates"],
       "matchDatasources": ["docker"],
-      "automerge": true,
-      "automergeType": "branch",
       "matchUpdateTypes": ["digest"],
-      "matchPackagePatterns": ["ghcr.io/bjw-s", "ghcr.io/onedr0p"]
+      "automerge": true,
+      "automergeType": "branch"
     },
     {
-      "description": ["Auto-merge GitHub Actions for minor and patch"],
-      "matchManagers": ["github-actions"],
-      "matchDatasources": ["github-tags"],
+      "description": ["Auto-merge container minor and patch for trusted registries"],
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackagePatterns": [
+        "ghcr.io/bjw-s",
+        "ghcr.io/home-operations",
+        "ghcr.io/grafana",
+        "ghcr.io/prometheus",
+        "ghcr.io/stakater",
+        "ghcr.io/coredns",
+        "ghcr.io/backube",
+        "ghcr.io/piraeusdatastore",
+        "ghcr.io/fluxcd",
+        "ghcr.io/controlplaneio-fluxcd"
+      ],
       "automerge": true,
       "automergeType": "branch",
-      "matchUpdateTypes": ["minor", "patch"]
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "description": ["Auto-merge Helm chart minor and patch updates"],
+      "matchManagers": ["helmv3", "helm-values"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "branch",
+      "minimumReleaseAge": "3 days",
+      "matchPackagePatterns": [
+        "app-template",
+        "cert-manager",
+        "metrics-server",
+        "reloader",
+        "snapshot-controller",
+        "volsync",
+        "grafana",
+        "loki",
+        "kube-prometheus-stack",
+        "prometheus-operator-crds",
+        "coredns",
+        "metallb",
+        "external-dns",
+        "node-feature-discovery",
+        "flux-operator",
+        "flux-instance"
+      ]
+    },
+    {
+      "description": ["Auto-merge GitHub Actions minor, patch and digest"],
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "automergeType": "branch",
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "description": ["Auto-merge trusted GitHub Actions immediately"],
+      "matchManagers": ["github-actions"],
+      "matchPackagePatterns": ["^actions/", "^renovatebot/", "^docker/"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "automergeType": "branch",
+      "minimumReleaseAge": "1 minute"
+    },
+    {
+      "description": ["Never automerge major versions or critical infrastructure"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "description": ["Never automerge storage and CNI components"],
+      "matchPackagePatterns": [
+        "openebs",
+        "calico",
+        "tigera",
+        "istio",
+        "cilium",
+        "multus",
+        "rook",
+        "ceph"
+      ],
+      "automerge": false
     }
   ]
 }
