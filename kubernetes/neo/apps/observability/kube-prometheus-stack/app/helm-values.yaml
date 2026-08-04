@@ -8,12 +8,6 @@ alertmanager:
   alertmanagerSpec:
     useExistingSecret: true
     configSecret: alertmanager-secret
-    nodeSelector:
-      kubernetes.io/hostname: neoas1lm-w1
-    tolerations:
-      - key: node-role.kubernetes.io/laptop
-        value: "true"
-        effect: NoSchedule
     storage:
       volumeClaimTemplate:
         spec:
