@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/neo/apps/istio-gateways/egress-gateway/app
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -34,7 +34,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/neo/apps/istio-gateways/egress-gateway/gateways
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

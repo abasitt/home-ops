@@ -19,7 +19,7 @@ spec:
       name: grafana
       namespace: observability
   path: ./kubernetes/neo/apps/observability/grafana/app
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

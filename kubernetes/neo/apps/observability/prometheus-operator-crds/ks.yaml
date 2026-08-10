@@ -16,7 +16,7 @@ spec:
       kind: HelmRelease
       name: prometheus-operator-crds
       namespace: observability
-  prune: false # never should be deleted
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

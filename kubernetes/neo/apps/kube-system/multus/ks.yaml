@@ -16,7 +16,7 @@ spec:
       kind: HelmRelease
       name: multus
       namespace: kube-system
-  prune: false # never should be deleted
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -38,7 +38,7 @@ spec:
   dependsOn:
     - name: multus
   path: ./kubernetes/neo/apps/kube-system/multus/config
-  prune: false # never should be deleted
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

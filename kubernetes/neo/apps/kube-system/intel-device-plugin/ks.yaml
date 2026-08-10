@@ -18,7 +18,7 @@ spec:
       name: intel-device-plugin-operator
       namespace: kube-system
   path: ./kubernetes/neo/apps/kube-system/intel-device-plugin/app
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -47,7 +47,7 @@ spec:
       name: intel-device-plugin-gpu
       namespace: kube-system
   path: ./kubernetes/neo/apps/kube-system/intel-device-plugin/gpu
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

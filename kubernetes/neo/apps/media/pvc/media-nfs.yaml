@@ -4,6 +4,8 @@ kind: PersistentVolume
 metadata:
   name: media-nfs
   namespace: media
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   storageClassName: media-nfs
   capacity:
@@ -24,6 +26,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: media-nfs
   namespace: media
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   accessModes:
     - ReadWriteMany

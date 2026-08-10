@@ -16,7 +16,7 @@ spec:
       kind: HelmRelease
       name: snapshot-controller
       namespace: storage
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
