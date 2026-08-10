@@ -11,6 +11,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/neo/apps/istio-system/istio-base/app
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: istio-base
+      namespace: istio-system
   prune: false
   sourceRef:
     kind: GitRepository

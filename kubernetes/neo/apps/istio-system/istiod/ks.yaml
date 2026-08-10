@@ -17,6 +17,11 @@ spec:
     name: flux-system
   dependsOn:
     - name: istio-base
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: istiod
+      namespace: istio-system
   wait: false
   interval: 30m
   retryInterval: 1m

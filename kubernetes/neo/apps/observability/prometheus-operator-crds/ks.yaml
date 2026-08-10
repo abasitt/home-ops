@@ -11,6 +11,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/neo/apps/observability/prometheus-operator-crds/app
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: prometheus-operator-crds
+      namespace: observability
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository

@@ -10,8 +10,14 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  #dependsOn:
-  #  - name: external-secrets-stores
+  dependsOn:
+    - name: openebs
+    - name: prometheus-operator-crds
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: kube-prometheus-stack
+      namespace: observability
   path: ./kubernetes/neo/apps/observability/kube-prometheus-stack/app
   prune: false
   sourceRef:

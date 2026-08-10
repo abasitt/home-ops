@@ -10,6 +10,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: kube-prometheus-stack
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: smartctl-exporter
+      namespace: observability
   path: ./kubernetes/neo/apps/observability/smartctl-exporter/app
   prune: false
   sourceRef:

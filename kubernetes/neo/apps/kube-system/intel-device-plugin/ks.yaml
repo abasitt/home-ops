@@ -10,6 +10,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: node-feature-discovery
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: intel-device-plugin-operator
+      namespace: kube-system
   path: ./kubernetes/neo/apps/kube-system/intel-device-plugin/app
   prune: false
   sourceRef:
@@ -31,6 +38,14 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: intel-device-plugin
+    - name: node-feature-discovery-rules
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: intel-device-plugin-gpu
+      namespace: kube-system
   path: ./kubernetes/neo/apps/kube-system/intel-device-plugin/gpu
   prune: false
   sourceRef:

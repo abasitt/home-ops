@@ -10,6 +10,14 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: kube-prometheus-stack
+    - name: loki
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: grafana
+      namespace: observability
   path: ./kubernetes/neo/apps/observability/grafana/app
   prune: false
   sourceRef:
