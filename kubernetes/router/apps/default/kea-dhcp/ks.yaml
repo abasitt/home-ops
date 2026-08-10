@@ -11,6 +11,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/router/apps/default/kea-dhcp/app
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: kea-dhcp
+      namespace: default
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository

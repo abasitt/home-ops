@@ -11,6 +11,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/router/apps/default/blocky/app
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: blocky
+      namespace: default
   prune: false
   sourceRef:
     kind: GitRepository
