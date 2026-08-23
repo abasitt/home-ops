@@ -31,6 +31,7 @@ configMaps:
         ufw allow from 192.168.254.0/29 to any port 22 proto tcp comment "allow ssh from wireguard"
         ufw allow from 192.168.10.0/23 to any port 6443 proto tcp comment "allow kubeapi from LAN"
         ufw allow from 192.168.30.0/23 to any port 6443 proto tcp comment "allow kubeapi from servers"
+        ufw allow from 192.168.30.0/23 to any port 9100 proto tcp comment "allow node exporter scrape from servers"
         ufw allow 51820/udp comment "allow wireguard"
 
         # *** Router Forward Rules ***

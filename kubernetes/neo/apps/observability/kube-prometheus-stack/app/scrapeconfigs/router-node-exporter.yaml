@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: router-node-exporter
+spec:
+  scrapeInterval: 1m
+  scrapeTimeout: 10s
+  staticConfigs:
+    - targets:
+        - 192.168.30.2:9100
+      labels:
+        cluster: router
+  relabelings:
+    - targetLabel: instance
+      replacement: router
+    - targetLabel: job
+      replacement: node-exporter
