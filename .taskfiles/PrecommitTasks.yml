@@ -1,19 +1,42 @@
 ---
 version: "3"
 
+vars:
+  PRE_COMMIT: "{{.ROOT_DIR}}/.venv/bin/pre-commit"
+
 tasks:
 
   init:
-    desc: Initialize pre-commit hooks
+    desc: Install pre-commit hooks for this checkout
+    preconditions:
+      - sh: test -x "{{.PRE_COMMIT}}"
+        msg: "pre-commit is missing; install the Python environment first"
     cmds:
-      - pre-commit install --install-hooks
+      - '"{{.PRE_COMMIT}}" install --install-hooks'
+
+  check:
+    desc: Verify the pre-commit hook is installed
+    preconditions:
+      - sh: test -x "{{.PRE_COMMIT}}"
+        msg: "pre-commit is missing; install the Python environment first"
+      - sh: test -x "{{.ROOT_DIR}}/.git/hooks/pre-commit"
+        msg: "pre-commit hook is missing; run: task precommit:init"
+    cmds:
+      - '"{{.PRE_COMMIT}}" --version'
+      - echo "pre-commit hook is installed"
 
   run:
-    desc: Run pre-commit
+    desc: Run all pre-commit checks
+    preconditions:
+      - sh: test -x "{{.PRE_COMMIT}}"
+        msg: "pre-commit is missing; install the Python environment first"
     cmds:
-      - pre-commit run --all-files
+      - '"{{.PRE_COMMIT}}" run --all-files'
 
   update:
     desc: Update pre-commit hooks
+    preconditions:
+      - sh: test -x "{{.PRE_COMMIT}}"
+        msg: "pre-commit is missing; install the Python environment first"
     cmds:
-      - pre-commit autoupdate
+      - '"{{.PRE_COMMIT}}" autoupdate'

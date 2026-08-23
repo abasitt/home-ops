@@ -21,6 +21,7 @@ includes:
     aliases: ["k8s"]
     taskfile: .taskfiles/Kubernetes/Taskfile.yaml
   flux: .taskfiles/Flux/Taskfile.yaml
+  precommit: .taskfiles/PrecommitTasks.yml
   sops: .taskfiles/Sops/Taskfile.yaml
   workstation: .taskfiles/Workstation/Taskfile.yaml
   volsync: .taskfiles/VolSync/Taskfile.yaml

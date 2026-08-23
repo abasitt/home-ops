@@ -48,6 +48,18 @@ This Git repository contains the following directories under [Kubernetes](./kube
 └── 📁 ...             # other clusters
 ```
 
+## 🧰 Local Setup
+
+Install the repository Python dependencies and Git pre-commit hook after cloning:
+
+```sh
+task ansible:deps
+task precommit:init
+task precommit:check
+```
+
+The hook blocks commits containing unencrypted Kubernetes Secrets. Run all configured checks manually with `task precommit:run`.
+
 ## 🔧 Hardware
 
 | Device                      | Num | OS Disk Size | Data Disk Size                  | Ram  | OS            | Function                |
