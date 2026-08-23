@@ -23,6 +23,8 @@ spec:
         grafana_dashboard: "1"
     server:
       fullnameOverride: victoria-logs
+      extraArgs:
+        httpListenAddr: "[::]:9428"
       persistentVolume:
         enabled: true
         storageClassName: openebs-zfs-hdd
