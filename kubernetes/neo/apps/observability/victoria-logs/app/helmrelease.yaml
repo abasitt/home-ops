@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-logs
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: victoria-logs
+  interval: 1h
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    dashboards:
+      enabled: true
+      labels:
+        grafana_dashboard: "1"
+    server:
+      fullnameOverride: victoria-logs
+      persistentVolume:
+        enabled: true
+        storageClassName: openebs-zfs-hdd
+        size: 50Gi
+      retentionPeriod: 14d
+      serviceMonitor:
+        enabled: true
