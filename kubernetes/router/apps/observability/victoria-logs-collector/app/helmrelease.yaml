@@ -19,12 +19,12 @@ spec:
   values:
     fullnameOverride: victoria-logs-collector
     podMonitor:
-      enabled: true
+      enabled: false
     remoteWrite:
-      - url: http://victoria-logs.observability.svc.cluster.local:9428
-        maxDiskUsagePerURL: 10GB
+      - url: https://vlogs.neo.basitlab.com
+        maxDiskUsagePerURL: 1GB
     collector:
-      extraFields: '{"cluster":"neo"}'
+      extraFields: '{"cluster":"router"}'
       streamFields:
         - cluster
         - kubernetes.pod_name
@@ -34,3 +34,9 @@ spec:
     extraArgs:
       enableTCP6: true
       kubernetesCollector.decolorizeFields: _msg
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 256Mi
