@@ -30,4 +30,5 @@ spec:
         - kubernetes.container_name
         - kubernetes.pod_labels.app.kubernetes.io/name
     extraArgs:
+      enableTCP6: true
       kubernetesCollector.decolorizeFields: _msg
