@@ -10,6 +10,7 @@ configMaps:
         #default rules
         ufw default deny incoming
         ufw default deny outgoing
+        ufw default deny routed
 
         # kubernetes internal rules
         ufw allow out to 10.54.0.0/16 #kubelet healthcheck to podscidr
@@ -19,6 +20,7 @@ configMaps:
 
         # *** Router outgoing Rules ***
         ufw allow out 53
+        ufw allow out 123/udp comment "allow NTP time synchronization"
         ufw allow out 80/tcp
         ufw allow out 443/tcp
         #allow outgoing to all home vlan subnets
@@ -32,6 +34,9 @@ configMaps:
         ufw allow from 192.168.10.0/23 to any port 6443 proto tcp comment "allow kubeapi from LAN"
         ufw allow from 192.168.30.0/23 to any port 6443 proto tcp comment "allow kubeapi from servers"
         ufw allow from 192.168.30.0/23 to any port 9100 proto tcp comment "allow node exporter scrape from servers"
+        ufw allow from 192.168.30.41 to any port 179 proto tcp comment "allow BGP from Neo control-plane 1"
+        ufw allow from 192.168.30.42 to any port 179 proto tcp comment "allow BGP from Neo control-plane 2"
+        ufw allow from 192.168.30.43 to any port 179 proto tcp comment "allow BGP from Neo control-plane 3"
         ufw allow 51820/udp comment "allow wireguard"
 
         # *** Router Forward Rules ***
@@ -108,7 +113,7 @@ configMaps:
         # Add DNAT rules to the custom chain
         iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 80 -j DNAT --to-destination 192.168.33.1:80 -m comment --comment "Forward HTTP traffic to istio-ingress"
         iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 443 -j DNAT --to-destination 192.168.33.1:443 -m comment --comment "Forward HTTPS traffic to istio-ingress"
-        iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 32400 -j DNAT --to-destination 192.168.33.6:32400 -m comment --comment "Forward Plex traffic"
+        #iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 32400 -j DNAT --to-destination 192.168.33.6:32400 -m comment --comment "Forward Plex traffic"
         #iptables-nft -t nat -A ROUTER_DNAT -s 192.168.30.0/24 -p tcp --dport 53 -j DNAT --to-destination 192.168.30.254:53 -m comment --comment "Forward DNS traffic to PiHole" #TODO
         # Check if the jump rule exists in the PREROUTING chain before adding it
         iptables-nft -t nat -C PREROUTING -j ROUTER_DNAT 2>/dev/null || iptables-nft -t nat -A PREROUTING -j ROUTER_DNAT
@@ -185,8 +190,8 @@ controllers:
       ufw-daemon:
         image: &image
           repository: ghcr.io/abasitt/ufw
-          tag: latest
-          pullPolicy: Always
+          tag: latest@sha256:217877fa0a115343f3eac4e450f4d0912b01b0cf42a94859380cb05862762247
+          pullPolicy: IfNotPresent
         command:
         - /bin/bash
         - -cex
