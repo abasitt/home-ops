@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: lscr.io/linuxserver/babybuddy
-              tag: 2.9.2@sha256:2be2869f44cf8867f42ab1eb84b64943de926c178a73e258f4324b34fccc6830
+              tag: 2.11.0@sha256:b19394db47554ab385e5513dcb4aed253f551a19ac89576a9df191ed59b683de
               pullPolicy: IfNotPresent
             env:
               TZ: ${TIMEZONE}
