@@ -73,6 +73,8 @@ configMaps:
         #allow from internet vlan999 to servers vlan30
         ufw route allow in on vlan999 out on vlan30 to 192.168.33.1 port 80 proto tcp comment "Allow internet to servers istio-ingress on port 80"
         ufw route allow in on vlan999 out on vlan30 to 192.168.33.1 port 443 proto tcp comment "Allow internet to servers istio-ingress on port 443"
+        # TEMP open-live-lab Strom SRT demo: remove this UDP forward after the phone test.
+        ufw route allow in on vlan999 out on vlan30 to 192.168.33.8 port 9000 proto udp comment "TEMP open-live-lab Strom SRT UDP 9000"
         #ufw route allow in on vlan999 out on vlan30 to 192.168.33.6 port 32400 proto tcp comment "Allow internet to servers Plex"
 
         #allow from internet vlan999 tunnel broker icmp echo-request, currently allowed from all. todo may be block default and allow only specific
@@ -113,6 +115,8 @@ configMaps:
         # Add DNAT rules to the custom chain
         iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 80 -j DNAT --to-destination 192.168.33.1:80 -m comment --comment "Forward HTTP traffic to istio-ingress"
         iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 443 -j DNAT --to-destination 192.168.33.1:443 -m comment --comment "Forward HTTPS traffic to istio-ingress"
+        # TEMP open-live-lab Strom SRT demo: remove this DNAT after the phone test.
+        iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p udp --dport 9000 -j DNAT --to-destination 192.168.33.8:9000 -m comment --comment "TEMP open-live-lab Strom SRT UDP 9000"
         #iptables-nft -t nat -A ROUTER_DNAT -i vlan999 -p tcp --dport 32400 -j DNAT --to-destination 192.168.33.6:32400 -m comment --comment "Forward Plex traffic"
         #iptables-nft -t nat -A ROUTER_DNAT -s 192.168.30.0/24 -p tcp --dport 53 -j DNAT --to-destination 192.168.30.254:53 -m comment --comment "Forward DNS traffic to PiHole" #TODO
         # Check if the jump rule exists in the PREROUTING chain before adding it
