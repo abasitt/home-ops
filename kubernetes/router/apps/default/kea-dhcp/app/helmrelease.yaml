@@ -5,52 +5,36 @@ metadata:
   name: kea-dhcp
 spec:
   interval: 5m
-  chart:
-    spec:
-      chart: kea-dhcp
-      version: 0.7.1
-      sourceRef:
-        kind: HelmRepository
-        name: kea-dhcp
-        namespace: default
-      interval: 10m
+  chartRef:
+    kind: OCIRepository
+    name: kea-dhcp
   install:
     timeout: 10m
-    replace: true
-    crds: CreateReplace
     remediation:
       retries: 3
   upgrade:
+    chartNameChangeStrategy: InPlaceUpdate
     cleanupOnFail: true
-    crds: CreateReplace
     remediation:
       strategy: rollback
       retries: 3
   postRenderers:
     - kustomize:
         patches:
+          # Preserve the existing StatefulSet's immutable selector and serviceName.
           - target:
               kind: StatefulSet
               name: kea-dhcp
-              namespace: default
             patch: |
-              - op: add
-                path: /spec/template/spec/hostNetwork
-                value: true
               - op: replace
-                path: /spec/template/spec/initContainers/0/command
+                path: /spec/selector
                 value:
-                  - sh
-                  - "-c"
-                  - |
-                    set -ex
-                    cp /mnt/config-map/* /mnt/kea/
-                    # Manually add interfaces here, won't pick up from helm values
-                    # Replace INTERFACE placeholder with the list of interfaces
-                    sed -i 's/"INTERFACE"/"br0","vlan10","vlan20","vlan30","vlan40"/g' /mnt/kea/kea-dhcp4.conf
-                    sed -i 's/"INTERFACE"/"br0","vlan10","vlan20","vlan30","vlan40"/g' /mnt/kea/kea-dhcp6.conf
-                    sed -i "s/HOSTNAME/$HOSTNAME/g" /mnt/kea/ha-init.json || true
-                    touch /mnt/kea/ha.json
+                  matchLabels:
+                    app.kubernetes.io/instance: kea-dhcp
+                    app.kubernetes.io/name: kea-dhcp
+              - op: replace
+                path: /spec/serviceName
+                value: kea-dhcp-headless
   valuesFrom:
     - kind: ConfigMap
       name: keadhcp-helm-values
