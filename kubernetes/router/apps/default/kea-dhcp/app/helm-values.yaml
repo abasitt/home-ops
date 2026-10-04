@@ -1,259 +1,57 @@
 ---
-kea:
-  #interface: added in the helmrelease patch manually to support multiple interfaces in hostnetwork
-  dhcp4:
-    enabled: true
-    validlifetime: "4000"
-    renewtimer: "1000"
-    rebindtimer: "2000"
-    loglevel: "DEBUG"
-    options:
-      - name: domain-name-servers
-        data: 10.55.0.10
-      #  data: 9.9.9.9,1.1.1.1
-      # - name: domain-name-servers
-      #   data: 192.168.1.2
-      # - name: domain-name
-      #   data: local
-      # - name: domain-search
-      #   data: local
-      # - code: 66
-      #   data: 192.168.1.2
-      #   name: tftp-server-name
-    reservations:
-      # - ip-address: "192.168.1.2"
-      #   hw-address: "aa:aa:aa:aa:aa:aa"
-      #   hostname: "hostname"
-      #   option-data:
-      #     - name: "tftp-servers"
-      #       data: "10.1.1.202,10.1.1.203"
-      - hw-address: "84:e3:42:d1:04:94"
-        ip-address: "192.168.21.1"
-        hostname: "stairs_sl1"
-      - hw-address: "84:e3:42:c8:cb:67"
-        ip-address: "192.168.21.2"
-        hostname: "study_sl1"
-      - hw-address: "84:e3:42:d2:c4:33"
-        ip-address: "192.168.21.3"
-        hostname: "study_sl2"
-      - hw-address: "84:e3:42:d0:e2:5d"
-        ip-address: "192.168.21.4"
-        hostname: "study_sl3"
-      - hw-address: "84:e3:42:c8:82:1c"
-        ip-address: "192.168.21.5"
-        hostname: "study_sl4"
-      - hw-address: "84:e3:42:d0:d4:e4"
-        ip-address: "192.168.21.6"
-        hostname: "common_sl1"
-      - hw-address: "84:e3:42:d0:75:54"
-        ip-address: "192.168.21.7"
-        hostname: "common_sl2"
-      - hw-address: "84:e3:42:d1:23:f6"
-        ip-address: "192.168.21.8"
-        hostname: "common_sl3"
-      - hw-address: "84:e3:42:d0:df:bf"
-        ip-address: "192.168.21.9"
-        hostname: "master_sl1"
-      - hw-address: "84:e3:42:cf:79:b5"
-        ip-address: "192.168.21.10"
-        hostname: "master_sl2"
-      - hw-address: "84:e3:42:d1:06:53"
-        ip-address: "192.168.21.11"
-        hostname: "master_sl3"
-      - hw-address: "84:e3:42:d1:14:d3"
-        ip-address: "192.168.21.12"
-        hostname: "master_sl4"
-      - hw-address: "84:e3:42:35:be:51"
-        ip-address: "192.168.21.13"
-        hostname: "kitchen_sl1"
-      - hw-address: "84:e3:42:35:b5:28"
-        ip-address: "192.168.21.14"
-        hostname: "kitchen_sl2"
-      - hw-address: "84:e3:42:d0:62:3d"
-        ip-address: "192.168.21.15"
-        hostname: "living_sl1"
-      - hw-address: "84:e3:42:cf:7f:13"
-        ip-address: "192.168.21.16"
-        hostname: "living_sl2"
-      - hw-address: "84:e3:42:c3:a6:49"
-        ip-address: "192.168.21.17"
-        hostname: "living_sl3"
-      - hw-address: "84:e3:42:c7:14:2b"
-        ip-address: "192.168.21.18"
-        hostname: "living_sl4"
-      - hw-address: "84:e3:42:c8:89:fc"
-        ip-address: "192.168.21.19"
-        hostname: "living_sl5"
-      - hw-address: "84:e3:42:cf:7d:4a"
-        ip-address: "192.168.21.20"
-        hostname: "living_sl6"
-      - hw-address: "84:e3:42:d0:72:89"
-        ip-address: "192.168.21.21"
-        hostname: "lobby_sl1"
-      - hw-address: "84:e3:42:c8:8e:d8"
-        ip-address: "192.168.21.22"
-        hostname: "lobby_sl2"
-      - hw-address: "84:e3:42:d0:9b:16"
-        ip-address: "192.168.21.23"
-        hostname: "lobby_sl3"
-      - hw-address: "84:e3:42:c8:85:d6"
-        ip-address: "192.168.21.24"
-        hostname: "lobby_sl4"
-      - hw-address: "84:e3:42:d1:31:c3"
-        ip-address: "192.168.21.25"
-        hostname: "lobby_sl5"
-      - hw-address: "84:e3:42:d1:06:d2"
-        ip-address: "192.168.21.26"
-        hostname: "dr_sl1"
-      - hw-address: "84:e3:42:c3:8d:b4"
-        ip-address: "192.168.21.27"
-        hostname: "dr_sl2"
-      - hw-address: "84:e3:42:d0:d4:df"
-        ip-address: "192.168.21.28"
-        hostname: "dr_sl3"
-      - hw-address: "84:e3:42:d0:87:94"
-        ip-address: "192.168.21.29"
-        hostname: "dr_sl4"
-      - hw-address: "84:e3:42:d0:88:c8"
-        ip-address: "192.168.21.30"
-        hostname: "common_sl4"
-      - hw-address: "84:e3:42:cf:99:07"
-        ip-address: "192.168.21.33"
-        hostname: "waterheater_sw1"
-      - hw-address: "7c:f6:66:78:d4:56"
-        ip-address: "192.168.21.34"
-        hostname: "master_Bath_sl1"
-      - hw-address: "7c:f6:66:78:d4:99"
-        ip-address: "192.168.21.35"
-        hostname: "master_Bath_sl2"
-      - hw-address: "fc:67:1f:f3:0a:f9"
-        ip-address: "192.168.21.36"
-        hostname: "TV_LED_STRIP"
-      - hw-address: "1c:90:ff:af:21:d6"
-        ip-address: "192.168.21.37"
-        hostname: "TABLE_LED_STRIP"
-      - hw-address: "10:5a:17:71:7b:21"
-        ip-address: "192.168.21.41"
-        hostname: "balcony_sl1"
-      - hw-address: "10:5a:17:71:6f:c9"
-        ip-address: "192.168.21.42"
-        hostname: "balcony_sl2"
-      - hw-address: "c4:dd:57:25:f7:94"
-        ip-address: "192.168.21.66"
-        hostname: "Monitor_smart_plug"
-      - hw-address: "c4:dd:57:26:b4:35"
-        ip-address: "192.168.21.67"
-        hostname: "PC_RACK_PLG"
-      - hw-address: "e8:68:e7:4b:fc:d2"
-        ip-address: "192.168.21.68"
-        hostname: "TV_socket_tuya"
-      - hw-address: "10:d5:61:d4:4a:8a"
-        ip-address: "192.168.21.69"
-        hostname: "Docking_socket"
-      - hw-address: "14:3f:a6:3f:d7:cc"
-        ip-address: "192.168.21.71"
-        hostname: "SonyTV_eth"
-      - hw-address: "1c:d6:be:7a:14:11"
-        ip-address: "192.168.21.72"
-        hostname: "SonyTV"
-      - hw-address: "ec:2e:98:b0:56:a6"
-        ip-address: "192.168.21.73"
-        hostname: "daikin-mr"
-      - hw-address: "20:4e:f6:da:04:1b"
-        ip-address: "192.168.21.74"
-        hostname: "daikin-lr"
-      - hw-address: "20:4e:f6:f6:1f:52"
-        ip-address: "192.168.21.75"
-        hostname: "daikin-dr"
-      - hw-address: "20:4e:f6:da:18:d4"
-        ip-address: "192.168.21.76"
-        hostname: "daikin-cr"
-      - hw-address: "3c:6a:9d:15:4f:94"
-        ip-address: "192.168.21.77"
-        hostname: "Elgato-Key-Light-Air-00F9"
-      - hw-address: "98:ba:5f:1d:fe:5c"
-        ip-address: "192.168.21.78"
-        hostname: "tapo-tc74-lobby"
-    subnets:
-      - subnet: "192.168.1.0/23"
-        pools:
-          - pool: "192.168.1.100-192.168.1.200"
-        option-data:
-          - name: "routers"
-            data: "192.168.1.1"
-      - subnet: "192.168.10.0/23"
-        pools:
-          - pool: "192.168.10.10-192.168.10.150"
-        option-data:
-          - name: "routers"
-            data: "192.168.10.1"
-      - subnet: "192.168.20.0/23"
-        pools:
-          - pool: "192.168.20.10-192.168.20.127"
-        option-data:
-          - name: "routers"
-            data: "192.168.20.1"
-      - subnet: "192.168.30.0/23"
-        pools:
-          - pool: "192.168.30.5-192.168.30.10"
-        option-data:
-          - name: "routers"
-            data: "192.168.30.1"
-      - subnet: "192.168.40.0/23"
-        pools:
-          - pool: "192.168.40.11-192.168.40.100"
-        option-data:
-          - name: "routers"
-            data: "192.168.40.1"
-  dhcp6:
-    enabled: false
-    validlifetime: "4000"
-    renewtimer: "1000"
-    rebindtimer: "2000"
-    loglevel: "DEBUG"
-    options: {}
-    reservations: {}
-      # - ip-address: "2001:db8:1::100"
-      #   duid: "aa:aa:aa:aa:aa:aa"
-      #   hostname: "hostname"
-      #   option-data:
-      #     - name: "dns-servers"
-      #       data: "2001:db8:2::45, 2001:db8:2::100"
-    subnets: {}
-      # - subnet: "2001:db8:1::/48"
-      #   pools:
-      #     - pool: "2001:db8:1::/80"
-  ddns:
-    enabled: false
-    loglevel: "DEBUG"
-    prefix: "myhost"
-    suffix: "home.arpa."
-    forward: {}
-      # ddns-domains:
-      # - name: home.arpa.
-      #   key-name: ''
-      #   dns-servers:
-      #   - ip-address: 172.16.32.2
-      #     port: 53
-    reverse: {}
-      # ddns-domains:
-      # - name: 168.192.in-addr.arpa.
-      #   key-name: ''
-      #   dns-servers:
-      #   - ip-address: 172.16.32.2
-      #     port: 53
-  ctrlagent:
-    #Needed for HA, monitoring and stork
-    enabled: false
-    loglevel: "DEBUG"
-metrics:
-  enabled: false
-  service:
-    type: ClusterIP
-    ## Use serviceLoadBalancerIP to request a specific static IP,
-    ## otherwise leave blank
-    # loadBalancerIP:
+controllers:
+  kea-dhcp:
+    type: statefulset
+    replicas: 1
+    revisionHistoryLimit: 10
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "9547"
-    labels: {}
+      reloader.stakater.com/auto: "true"
+    pod:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+    containers:
+      kea:
+        image:
+          repository: docker.cloudsmith.io/isc/docker/kea-dhcp4
+          tag: 3.0.3@sha256:ab73f52bca146a8df749490d464ca3b3f21cd00e114e6ed01cbb85b1bfc5ca32
+          pullPolicy: IfNotPresent
+        command: ["/usr/sbin/kea-dhcp4"]
+        args: ["-c", "/etc/kea/kea-dhcp4.conf"]
+    initContainers:
+      validate:
+        image:
+          repository: docker.cloudsmith.io/isc/docker/kea-dhcp4
+          tag: 3.0.3@sha256:ab73f52bca146a8df749490d464ca3b3f21cd00e114e6ed01cbb85b1bfc5ca32
+          pullPolicy: IfNotPresent
+        command: ["/bin/sh", "-ec"]
+        args:
+          - |
+            chmod 750 /var/run/kea /var/lib/kea
+            exec /usr/sbin/kea-dhcp4 -t /etc/kea/kea-dhcp4.conf
+service:
+  headless:
+    nameOverride: headless
+    controller: kea-dhcp
+    primary: true
+    clusterIP: None
+    ports:
+      dhcp:
+        port: 67
+        protocol: UDP
+persistence:
+  config:
+    type: configMap
+    name: kea-dhcp-config
+    globalMounts:
+      - path: /etc/kea/kea-dhcp4.conf
+        subPath: kea-dhcp4.conf
+        readOnly: true
+  data:
+    # Preserve existing behavior: leases survive container restarts, not pod replacement.
+    type: emptyDir
+    globalMounts:
+      - path: /var/lib/kea
+  run:
+    type: emptyDir
+    globalMounts:
+      - path: /var/run/kea

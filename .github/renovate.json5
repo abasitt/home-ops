@@ -23,6 +23,15 @@
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
   "onboarding": false,
+  "packageRules": [
+    {
+      "description": "Keep router DHCP on the reviewed Kea 3.0 LTS branch",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["docker.cloudsmith.io/isc/docker/kea-dhcp4"],
+      "allowedVersions": "/^3\\.0\\.\\d+$/",
+      "automerge": false
+    }
+  ],
   "requireConfig": "ignored",
   "ignorePaths": ["**/*.sops.*", "**/.archive/**", "**/resources/**"],
   "flux": {
