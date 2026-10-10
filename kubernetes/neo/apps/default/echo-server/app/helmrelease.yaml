@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-5.2.1/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -17,6 +17,23 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+  postRenderers:
+    - kustomize:
+        patches:
+          # Keep the v3 Deployment's immutable selector during the v5 upgrade.
+          - target:
+              kind: Deployment
+              name: echo-server
+            patch: |
+              - op: replace
+                path: /spec/selector/matchLabels
+                value:
+                  app.kubernetes.io/component: echo-server
+                  app.kubernetes.io/instance: echo-server
+                  app.kubernetes.io/name: echo-server
+              - op: add
+                path: /spec/template/metadata/labels/app.kubernetes.io~1component
+                value: echo-server
   values:
     controllers:
       echo-server:
@@ -69,6 +86,8 @@ spec:
             port: *port
     serviceMonitor:
       app:
+        # Preserve the existing Prometheus job label across the chart upgrade.
+        jobLabel: echo-server
         serviceName: echo-server
         endpoints:
           - port: http
