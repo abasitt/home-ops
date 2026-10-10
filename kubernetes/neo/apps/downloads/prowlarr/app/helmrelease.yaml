@@ -127,6 +127,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
+        ipFamilyPolicy: PreferDualStack
         controller: prowlarr
         ports:
           http:

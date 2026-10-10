@@ -99,6 +99,7 @@ spec:
                 memory: 8Gi
     service:
       app:
+        ipFamilyPolicy: PreferDualStack
         controller: qbit
         ports:
           http:
