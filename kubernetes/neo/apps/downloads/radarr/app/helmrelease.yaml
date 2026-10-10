@@ -49,13 +49,15 @@ spec:
             - '/bin/sh'
             - '-ec'
             - |
-              # Clear Calico routes, including both internet defaults.
-              ip -4 route flush dev "$DEV"
-              ip -6 route flush dev "$DEV"
+              # Remove only the Calico defaults; preserve CNI connected routes.
+              while ip -4 route show default dev "$DEV" | grep -q '^default'; do
+                ip -4 route del default dev "$DEV"
+              done
+              while ip -6 route show default dev "$DEV" | grep -q '^default'; do
+                ip -6 route del default dev "$DEV"
+              done
 
-              # Restore gateway reachability and the existing eth0 exceptions.
-              ip -4 route replace 169.254.1.1/32 dev "$DEV"
-              ip -6 route replace fe80::/64 dev "$DEV"
+              # Keep the existing cluster/LAN exceptions through eth0.
               ip -4 route replace 10.0.0.0/8 via 169.254.1.1 dev "$DEV"
               ip -4 route replace 192.168.0.0/16 via 169.254.1.1 dev "$DEV"
               ip -6 route replace 2001:470:ee86::/48 via fe80::ecee:eeff:feee:eeee dev "$DEV"
