@@ -17,23 +17,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  postRenderers:
-    - kustomize:
-        patches:
-          # Keep the v3 Deployment's immutable selector during the v5 upgrade.
-          - target:
-              kind: Deployment
-              name: echo-server
-            patch: |
-              - op: replace
-                path: /spec/selector/matchLabels
-                value:
-                  app.kubernetes.io/component: echo-server
-                  app.kubernetes.io/instance: echo-server
-                  app.kubernetes.io/name: echo-server
-              - op: add
-                path: /spec/template/metadata/labels/app.kubernetes.io~1component
-                value: echo-server
   values:
     controllers:
       echo-server:
