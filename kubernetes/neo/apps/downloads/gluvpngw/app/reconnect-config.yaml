@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gluvpngw-reconnect
+data:
+  auth.toml: |
+    # Only the in-pod scheduler can reach the loopback-bound control server.
+    [[roles]]
+    name = "nightly-reconnect"
+    routes = ["GET /v1/vpn/status", "PUT /v1/vpn/status"]
+    auth = "none"
+  root: |
+    # Daily at 03:00 in the scheduler's TZ (cluster TIMEZONE).
+    0 3 * * * /bin/sh /scripts/reconnect.sh > /proc/1/fd/1 2>&1
+  reconnect.sh: |
+    #!/bin/sh
+    set -eu
+    echo "$(date -Iseconds) Starting nightly VPN reconnect"
+    # Always attempt to start again, even if the stop request times out.
+    wget -q --timeout=10 --tries=3 --method=PUT \
+      --body-data='{"status":"stopped"}' -O /dev/null \
+      http://127.0.0.1:8000/v1/vpn/status || echo "Stop request failed; attempting start"
+    wget -q --timeout=10 --tries=3 --method=PUT \
+      --body-data='{"status":"running"}' -O /dev/null \
+      http://127.0.0.1:8000/v1/vpn/status
+    # The health server can briefly retain the previous connection's status.
+    sleep 10
+    for attempt in $(seq 1 30); do
+      if wget -q --timeout=5 --tries=1 -O /dev/null http://127.0.0.1:9999/; then
+        echo "$(date -Iseconds) VPN reconnect healthy"
+        exit 0
+      fi
+      sleep 10
+    done
+    echo "VPN is still unhealthy; Gluetun's automatic recovery remains active" >&2
+    exit 1

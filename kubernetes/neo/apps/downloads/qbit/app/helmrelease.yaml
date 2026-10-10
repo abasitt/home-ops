@@ -33,6 +33,7 @@ spec:
                 {
                   "name": "downloads",
                   "namespace": "kube-system",
+                  "interface": "net1",
                   "ips": ["192.168.36.12/23", "2001:470:ee86:36:192:168:36:12/64"],
                   "default-route": ["192.168.36.1", "2001:470:ee86:36:192:168:36:1"]
                 }
@@ -48,14 +49,24 @@ spec:
               value: eth0
             command:
             - '/bin/sh'
-            - '-c'
+            - '-ec'
             - |
-              # Add static IPv4 route
-              ip route add 10.0.0.0/8 via 169.254.1.1 dev $DEV
-              ip route add 192.168.0.0/16 via 169.254.1.1 dev $DEV
+              # Clear Calico routes, including both internet defaults.
+              ip -4 route flush dev "$DEV"
+              ip -6 route flush dev "$DEV"
 
-              # Add static IPv6 route
-              ip -6 route add 2001:470:ee86::/48 via fe80::ecee:eeff:feee:eeee dev $DEV
+              # Restore gateway reachability and the existing eth0 exceptions.
+              ip -4 route replace 169.254.1.1/32 dev "$DEV"
+              ip -6 route replace fe80::/64 dev "$DEV"
+              ip -4 route replace 10.0.0.0/8 via 169.254.1.1 dev "$DEV"
+              ip -4 route replace 192.168.0.0/16 via 169.254.1.1 dev "$DEV"
+              ip -6 route replace 2001:470:ee86::/48 via fe80::ecee:eeff:feee:eeee dev "$DEV"
+
+              # All other traffic must use Gluetun; no eth0 fallback default.
+              ip -4 route replace default via 192.168.36.1 dev net1
+              ip -6 route replace default via 2001:470:ee86:36:192:168:36:1 dev net1
+              ip -4 route get 1.1.1.1 | grep -q 'via 192.168.36.1 dev net1'
+              ip -6 route get 2606:4700:4700::1111 | grep -q 'dev net1'
             securityContext:
               capabilities:
                 add:

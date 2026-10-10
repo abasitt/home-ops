@@ -5,5 +5,6 @@ kind: Kustomization
 resources:
   - ./vpngw-secret.sops.yaml
   - ./gluvpn-config.yaml
+  - ./reconnect-config.yaml
   - ./ocirepository.yaml
   - ./helmrelease.yaml
