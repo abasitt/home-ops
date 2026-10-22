@@ -52,7 +52,7 @@ route:
         backendRefs:
           - kind: Service
             port: *port
-            name: app
+            name: calibre-web
             weight: 100
 persistence:
   config:

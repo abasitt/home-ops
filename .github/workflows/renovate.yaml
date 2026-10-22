@@ -8,7 +8,7 @@ on:
       - main
     paths:
       - .github/renovate.json5
-      - .github/renovate/**.json5
+      - .github/renovate/**/*.json5
   schedule:
     - cron: 20 * * * *
   workflow_dispatch:
@@ -39,8 +39,31 @@ permissions:
   contents: read
 
 jobs:
+  validate:
+    name: Validate Renovate configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24"
+
+      - name: Validate configuration and local presets
+        env:
+          VALIDATOR_VERSION: "${{ inputs.version || 'latest' }}"
+        run: >-
+          npx --yes --package="renovate@${VALIDATOR_VERSION}"
+          renovate-config-validator --strict --no-global
+          .github/renovate.json5 .github/renovate/*.json5
+
   renovate:
     name: Renovate
+    needs: validate
     runs-on: ubuntu-latest
     permissions:
       packages: read
@@ -67,6 +90,8 @@ jobs:
         env:
           LOG_LEVEL: "${{ inputs.logLevel || 'debug' }}"
           RENOVATE_AUTODISCOVER: true
+          RENOVATE_ONBOARDING: "false"
+          RENOVATE_REQUIRE_CONFIG: "ignored"
           RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
           RENOVATE_DRY_RUN: "${{ inputs.dryRun }}"
           RENOVATE_INTERNAL_CHECKS_FILTER: strict

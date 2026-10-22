@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "description": ["Separate PRs for main cluster"],
+      "description": "Separate PRs for main cluster",
       "matchFileNames": [
         "**/kubernetes/neo/**",
         "**/ansible/neo/**"
@@ -11,22 +11,13 @@
       "commitMessageSuffix": " [neo]"
     },
     {
-      "description": ["Separate PRs for playground cluster"],
+      "description": "Separate PRs for router cluster",
       "matchFileNames": [
-        "**/kubernetes/playground/**",
-        "**/ansible/playground/**"
+        "**/kubernetes/router/**",
+        "**/ansible/router/**"
       ],
-      "additionalBranchPrefix": "playground-",
-      "commitMessageSuffix": " [playground]"
-    },
-    {
-      "description": ["Separate PRs for neo_pg"],
-      "matchFileNames": [
-        "**/kubernetes/neo_pg/**",
-        "**/ansible/neo_pg/**"
-      ],
-      "additionalBranchPrefix": "neo_pg-",
-      "commitMessageSuffix": " [neo_pg]"
+      "additionalBranchPrefix": "router-",
+      "commitMessageSuffix": " [router]"
     }
   ]
 }

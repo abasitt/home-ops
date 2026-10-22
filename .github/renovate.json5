@@ -22,7 +22,6 @@
   ],
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
-  "onboarding": false,
   "packageRules": [
     {
       "description": "Keep router DHCP on the reviewed Kea 3.0 LTS branch",
@@ -30,25 +29,29 @@
       "matchPackageNames": ["docker.cloudsmith.io/isc/docker/kea-dhcp4"],
       "allowedVersions": "/^3\\.0\\.\\d+$/",
       "automerge": false
+    },
+    {
+      "description": "Use semantic versions for app-template OCI charts",
+      "matchManagers": ["flux"],
+      "matchPackageNames": ["ghcr.io/bjw-s/helm/app-template", "ghcr.io/bjw-s-labs/helm/app-template"],
+      "versioning": "semver"
+    },
+    {
+      "description": "Review app-template upgrades for router and cluster networking",
+      "matchManagers": ["flux"],
+      "matchPackageNames": ["ghcr.io/bjw-s/helm/app-template", "ghcr.io/bjw-s-labs/helm/app-template"],
+      "matchFileNames": ["kubernetes/router/**", "kubernetes/neo/apps/kube-system/**"],
+      "automerge": false
     }
   ],
-  "requireConfig": "ignored",
   "ignorePaths": ["**/*.sops.*", "**/.archive/**", "**/resources/**"],
   "flux": {
-    "fileMatch": [
-      "(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$"
-    ]
+    "managerFilePatterns": ["/(^|\\/)kubernetes\\/.+\\.ya?ml(?:\\.j2)?$/"]
   },
   "helm-values": {
-    "fileMatch": [
-      "(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$"
-    ]
+    "managerFilePatterns": ["/(^|\\/)kubernetes\\/.+\\.ya?ml(?:\\.j2)?$/"]
   },
   "kubernetes": {
-    "fileMatch": [
-      "(^|/)\\.taskfiles/.+\\.ya?ml(?:\\.j2)?$",
-      "(^|/)ansible/.+\\.ya?ml(?:\\.j2)?$",
-      "(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$"
-    ]
+    "managerFilePatterns": ["/(^|\\/)\\.taskfiles\\/.+\\.ya?ml(?:\\.j2)?$/", "/(^|\\/)ansible\\/.+\\.ya?ml(?:\\.j2)?$/", "/(^|\\/)kubernetes\\/.+\\.ya?ml(?:\\.j2)?$/"]
   }
 }

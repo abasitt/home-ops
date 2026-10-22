@@ -69,14 +69,10 @@ route:
         backendRefs:
           - kind: Service
             port: *port
-            name: app
+            name: filebrowser
             weight: 100
 persistence:
   config:
-    type: persistentVolumeClaim
-    accessMode: ReadWriteOnce
-    size: 1Gi
-    storageClass: openebs-zfs-ssd
-    retain: true
+    existingClaim: filebrowser-config
   media:
     existingClaim: media-nfs

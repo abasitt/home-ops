@@ -2,9 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "description": ["Actions Runner Controller Group"],
+      "description": "Actions Runner Controller Group",
       "groupName": "Actions Runner Controller",
-      "matchPackagePatterns": ["gha-runner-scale-set"],
+      "matchPackageNames": ["/gha-runner-scale-set/"],
       "matchDatasources": ["docker", "helm"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
@@ -12,9 +12,9 @@
       "separateMinorPatch": true
     },
     {
-      "description": ["Flux Group"],
+      "description": "Flux Group",
       "groupName": "Flux",
-      "matchPackagePatterns": ["fluxcd"],
+      "matchPackageNames": ["/fluxcd/"],
       "matchDatasources": ["docker", "github-tags"],
       "versioning": "semver",
       "group": {
@@ -23,9 +23,9 @@
       "separateMinorPatch": true
     },
     {
-      "description": ["Intel Device Plugins Group"],
+      "description": "Intel Device Plugins Group",
       "groupName": "Intel-Device-Plugins",
-      "matchPackagePatterns": ["intel-device-plugins"],
+      "matchPackageNames": ["/intel-device-plugins/"],
       "matchDatasources": ["helm"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
