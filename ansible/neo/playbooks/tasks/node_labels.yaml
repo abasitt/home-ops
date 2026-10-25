@@ -31,19 +31,3 @@
 #              node.kubernetes.io/infrastructure-type: vm
 #      loop:
 #        - neohv1vm-m1
-    - name: Label and taint laptop node
-      kubernetes.core.k8s:
-        kubeconfig: /etc/rancher/k3s/k3s.yaml
-        api_version: v1
-        kind: Node
-        name: neoas1lm-w1
-        state: present
-        definition:
-          metadata:
-            labels:
-              node.kubernetes.io/infrastructure-type: laptop
-          spec:
-            taints:
-              - key: node-role.kubernetes.io/laptop
-                value: "true"
-                effect: NoSchedule

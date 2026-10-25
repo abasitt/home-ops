@@ -6,50 +6,107 @@
   gather_facts: true
   any_errors_fatal: true
   serial: 1
+  vars:
+    maintenance_kubeconfig: "{{ playbook_dir }}/../../../kubernetes/neo/kubeconfig"
+  module_defaults:
+    kubernetes.core.k8s_drain:
+      kubeconfig: "{{ maintenance_kubeconfig }}"
   pre_tasks:
-    - name: Pausing for 2 seconds...
-      ansible.builtin.pause:
-        seconds: 2
-  tasks:
-    - name: Details
-      ansible.builtin.command: "kubectl get node {{ inventory_hostname }} -o json"
-      register: kubectl_get_node
-      delegate_to: "{{ groups['master'][0] }}"
-      failed_when: false
+    - name: Require all cluster nodes to be Ready before maintenance
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - "--kubeconfig={{ maintenance_kubeconfig }}"
+          - wait
+          - nodes
+          - --all
+          - --for=condition=Ready=True
+          - --timeout=60s
+      delegate_to: localhost
+      become: false
       changed_when: false
 
+    - name: Read node status
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - "--kubeconfig={{ maintenance_kubeconfig }}"
+          - get
+          - node
+          - "{{ inventory_hostname }}"
+          - -o
+          - json
+      register: kubectl_get_node
+      delegate_to: localhost
+      become: false
+      changed_when: false
+
+    - name: Require a Ready and schedulable node
+      ansible.builtin.assert:
+        that:
+          - >-
+            ((kubectl_get_node.stdout | from_json).status.conditions
+            | selectattr('type', 'equalto', 'Ready')
+            | map(attribute='status') | list) == ['True']
+          - not ((kubectl_get_node.stdout | from_json).spec.unschedulable | default(false))
+        fail_msg: "Refusing maintenance on an unready or already cordoned node."
+
+    - name: Refresh package indexes before draining
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+        lock_timeout: 300
+
+    - name: List application controllers for recovery checks
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - "--kubeconfig={{ maintenance_kubeconfig }}"
+          - get
+          - deployments,statefulsets
+          - --all-namespaces
+          - '-o=jsonpath={range .items[*]}{.metadata.namespace}{" "}{.kind}{" "}{.metadata.name}{"\n"}{end}'
+      delegate_to: localhost
+      become: false
+      register: maintenance_controllers
+      changed_when: false
+
+    - name: Preview package upgrades without removing packages
+      ansible.builtin.command:
+        argv: [apt-get, --simulate, --no-remove, dist-upgrade]
+      changed_when: false
+
+  tasks:
     - name: Update
-      when:
-        # When status.conditions[x].type == Ready then check stats.conditions[x].status for True|False
-        - kubectl_get_node['stdout'] | from_json | json_query("status.conditions[?type == 'Ready'].status")
-        # If spec.unschedulable is defined then the node is cordoned
-        - not (kubectl_get_node['stdout'] | from_json).spec.unschedulable is defined
       block:
         - name: Cordon
           kubernetes.core.k8s_drain:
             name: "{{ inventory_hostname }}"
-            kubeconfig: /etc/rancher/k3s/k3s.yaml
             state: cordon
-          delegate_to: "{{ groups['master'][0] }}"
+          delegate_to: localhost
+          become: false
+          vars:
+            ansible_python_interpreter: "{{ ansible_playbook_python }}"
 
         - name: Drain
           kubernetes.core.k8s_drain:
             name: "{{ inventory_hostname }}"
-            kubeconfig: /etc/rancher/k3s/k3s.yaml
             state: drain
             delete_options:
               delete_emptydir_data: true
               ignore_daemonsets: true
-              terminate_grace_period: 600
               wait_timeout: 900
-            pod_selectors:
-              - app!=rook-ceph-osd
-          delegate_to: "{{ groups['master'][0] }}"
+          delegate_to: localhost
+          become: false
+          vars:
+            ansible_python_interpreter: "{{ ansible_playbook_python }}"
 
         - name: Update
           ansible.builtin.apt:
             upgrade: dist
-            update_cache: true
+            force_apt_get: true
+            fail_on_autoremove: true
+            lock_timeout: 300
 
         - name: Check if reboot is required
           ansible.builtin.stat:
@@ -63,9 +120,59 @@
             post_reboot_delay: 120
             reboot_timeout: 3600
 
+        - name: Wait for Kubernetes readiness before uncordoning
+          ansible.builtin.command:
+            argv:
+              - kubectl
+              - "--kubeconfig={{ maintenance_kubeconfig }}"
+              - wait
+              - "node/{{ inventory_hostname }}"
+              - --for=condition=Ready=True
+              - --timeout=600s
+          delegate_to: localhost
+          become: false
+          changed_when: false
+
         - name: Uncordon
           kubernetes.core.k8s_drain:
             name: "{{ inventory_hostname }}"
-            kubeconfig: /etc/rancher/k3s/k3s.yaml
             state: uncordon
-          delegate_to: "{{ groups['master'][0] }}"
+          delegate_to: localhost
+          become: false
+          vars:
+            ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+        - name: Wait for running pods on the updated node to be Ready
+          ansible.builtin.command:
+            argv:
+              - kubectl
+              - "--kubeconfig={{ maintenance_kubeconfig }}"
+              - wait
+              - pods
+              - --all-namespaces
+              - "--field-selector=spec.nodeName={{ inventory_hostname }},status.phase=Running"
+              - --for=condition=Ready=True
+              - --timeout=600s
+          delegate_to: localhost
+          become: false
+          changed_when: false
+        - name: Wait for application controllers to recover before the next node
+          ansible.builtin.command:
+            argv:
+              - kubectl
+              - "--kubeconfig={{ maintenance_kubeconfig }}"
+              - rollout
+              - status
+              - "{{ item.split()[1] | lower }}/{{ item.split()[2] }}"
+              - "--namespace={{ item.split()[0] }}"
+              - --timeout=600s
+          loop: "{{ maintenance_controllers.stdout_lines }}"
+          delegate_to: localhost
+          become: false
+          changed_when: false
+      rescue:
+        - name: Stop the rollout for investigation
+          ansible.builtin.fail:
+            msg: >-
+              Maintenance failed on {{ inventory_hostname }}. No further nodes will be updated.
+              The node may remain cordoned; verify its health before manually uncordoning it.
