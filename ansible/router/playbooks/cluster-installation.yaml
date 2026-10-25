@@ -29,16 +29,20 @@
       ansible.builtin.include_role:
         name: xanmanning.k3s
         public: true
+        apply:
+          no_log: true
       vars:
         k3s_state: installed
 
     - name: Kubeconfig
+      when: not (k3s_upgrade | default(false) | bool)
       ansible.builtin.include_tasks: tasks/kubeconfig.yaml
       vars:
         repository_base: "{{ lookup('ansible.builtin.pipe', 'git rev-parse --show-toplevel') }}"
 
     - name: Wait for custom manifests to rollout
       when:
+        - not (k3s_upgrade | default(false) | bool)
         - k3s_primary_control_node
         - (k3s_server_manifests_templates | length > 0
             or k3s_server_manifests_urls | length > 0)
@@ -54,12 +58,37 @@
         - { name: coredns, kind: HelmChart, namespace: kube-system }
 
     - name: Coredns
-      when: k3s_primary_control_node
+      when: not (k3s_upgrade | default(false) | bool) and k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/coredns.yaml
 
     - name: Cruft
-      when: k3s_primary_control_node
+      when: not (k3s_upgrade | default(false) | bool) and k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/cruft.yaml
+
+    - name: Verify the upgraded node version and readiness
+      when:
+        - k3s_upgrade | default(false) | bool
+        - not ansible_check_mode
+      block:
+        - name: Wait for the node to advertise the target version
+          ansible.builtin.command:
+            argv:
+              - /usr/local/bin/k3s
+              - kubectl
+              - --kubeconfig=/etc/rancher/k3s/k3s.yaml
+              - wait
+              - "node/{{ inventory_hostname }}"
+              - "--for=jsonpath={.status.nodeInfo.kubeletVersion}={{ k3s_release_version }}"
+              - --timeout=600s
+          changed_when: false
+        - name: Wait for router Kubernetes readiness
+          ansible.builtin.command:
+            cmd: /usr/local/bin/k3s kubectl --kubeconfig=/etc/rancher/k3s/k3s.yaml wait nodes --all --for=condition=Ready=True --timeout=600s
+          changed_when: false
+        - name: Verify API and datastore readiness
+          ansible.builtin.command:
+            cmd: /usr/local/bin/k3s kubectl --kubeconfig=/etc/rancher/k3s/k3s.yaml get --raw=/readyz
+          changed_when: false
 
     # TODO: Replace this with embedded spegel in the future
 #    - name: Copy custom containerd configuration
