@@ -5,14 +5,16 @@
       ansible.builtin.command: k3s --version
       register: k3s_version
       changed_when: false
-      failed_when: false
+      check_mode: false
 
     - name: Extract k3s version
       ansible.builtin.set_fact:
-        deployed_k3s_version: "{{ k3s_version.stdout | regex_replace('(?im)k3s version (?P<version>[a-z0-9\\.\\+]+).*\n.*', '\\g<version>') }}"
+        deployed_k3s_version: "{{ k3s_version.stdout | regex_search('v[0-9]+\\.[0-9]+\\.[0-9]+\\+k3s[0-9]+') }}"
 
     - name: Check if upgrades are allowed
       ansible.builtin.assert:
         that:
+          - deployed_k3s_version is not none
           - "k3s_release_version is version(deployed_k3s_version, '>=')"
-        fail_msg: "Unable to upgrade k3s because the deployed version is higher than the one specified in the configuration"
+          - k3s_release_version.split('.')[1] | int <= (deployed_k3s_version.split('.')[1] | int) + 1
+        fail_msg: "Refusing a K3s downgrade or a skipped minor version."

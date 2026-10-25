@@ -1,9 +1,16 @@
 ---
+- name: Gather cluster facts before rolling execution
+  hosts: kubernetes
+  gather_facts: true
+  any_errors_fatal: true
+  tasks: []
+
 - name: Cluster Installation
   hosts: kubernetes
   become: true
-  gather_facts: true
+  gather_facts: false
   any_errors_fatal: true
+  serial: "{{ (k3s_upgrade | default(false) | bool) | ternary(1, '100%') }}"
   pre_tasks:
     - name: Pausing for 5 seconds...
       ansible.builtin.pause:
@@ -15,6 +22,45 @@
         path: /etc/rancher/k3s/config.yaml
       register: k3s_installed
 
+    - name: Validate the upgrade mode targets an existing cluster
+      when: k3s_upgrade | default(false) | bool
+      ansible.builtin.assert:
+        that:
+          - k3s_installed.stat.exists
+        fail_msg: "Upgrade mode requires an existing K3s configuration."
+
+    - name: Prevent downgrades and skipped minor versions
+      when: k3s_installed.stat.exists
+      ansible.builtin.include_tasks: tasks/version-check.yaml
+
+    - name: Require all nodes to be Ready before upgrading
+      when: k3s_upgrade | default(false) | bool
+      ansible.builtin.command:
+        cmd: /usr/local/bin/k3s kubectl --kubeconfig=/etc/rancher/k3s/k3s.yaml wait nodes --all --for=condition=Ready=True --timeout=60s
+      delegate_to: "{{ groups['master'][0] }}"
+      changed_when: false
+      check_mode: false
+
+    - name: Verify servers reached the target before upgrading workers
+      when:
+        - k3s_upgrade | default(false) | bool
+        - inventory_hostname in groups['worker']
+      ansible.builtin.command:
+        argv:
+          - /usr/local/bin/k3s
+          - kubectl
+          - --kubeconfig=/etc/rancher/k3s/k3s.yaml
+          - get
+          - nodes
+          - -l
+          - node-role.kubernetes.io/control-plane
+          - '-o=jsonpath={range .items[*]}{.status.nodeInfo.kubeletVersion}{"\n"}{end}'
+      delegate_to: "{{ groups['master'][0] }}"
+      register: k3s_server_versions
+      changed_when: false
+      check_mode: false
+      failed_when: k3s_server_versions.stdout_lines != [k3s_release_version] * (groups['master'] | length)
+
     - name: Ignore manifests templates and urls if the cluster is already installed
       when: k3s_installed.stat.exists
       ansible.builtin.set_fact:
@@ -22,19 +68,74 @@
         k3s_server_manifests_urls: []
 
     - name: Install Kubernetes
+      when: not (k3s_upgrade | default(false) | bool)
       ansible.builtin.include_role:
         name: xanmanning.k3s
         public: true
       vars:
         k3s_state: installed
 
+    - name: Upgrade Kubernetes using the existing role
+      when: k3s_upgrade | default(false) | bool
+      ansible.builtin.include_role:
+        name: xanmanning.k3s
+        public: true
+        apply:
+          no_log: true
+      vars:
+        k3s_state: installed
+        k3s_controller_list: "{{ groups['master'] }}"
+        k3s_control_delegate: "{{ groups['master'][0] }}"
+        k3s_primary_control_node: "{{ inventory_hostname == groups['master'][0] }}"
+
+    - name: Verify the upgraded node version and cluster readiness
+      when:
+        - k3s_upgrade | default(false) | bool
+        - not ansible_check_mode
+      delegate_to: "{{ groups['master'][0] }}"
+      block:
+        - name: Wait for the node to advertise the target version
+          ansible.builtin.command:
+            argv:
+              - /usr/local/bin/k3s
+              - kubectl
+              - --kubeconfig=/etc/rancher/k3s/k3s.yaml
+              - wait
+              - "node/{{ inventory_hostname }}"
+              - "--for=jsonpath={.status.nodeInfo.kubeletVersion}={{ k3s_release_version }}"
+              - --timeout=600s
+          changed_when: false
+        - name: Wait for all nodes to be Ready after upgrading
+          ansible.builtin.command:
+            cmd: /usr/local/bin/k3s kubectl --kubeconfig=/etc/rancher/k3s/k3s.yaml wait nodes --all --for=condition=Ready=True --timeout=600s
+          changed_when: false
+        - name: Verify API and datastore readiness
+          ansible.builtin.command:
+            cmd: /usr/local/bin/k3s kubectl --kubeconfig=/etc/rancher/k3s/k3s.yaml get --raw=/readyz
+          changed_when: false
+        - name: Wait for running pods on the upgraded node to be Ready
+          ansible.builtin.command:
+            argv:
+              - /usr/local/bin/k3s
+              - kubectl
+              - --kubeconfig=/etc/rancher/k3s/k3s.yaml
+              - wait
+              - pods
+              - --all-namespaces
+              - "--field-selector=spec.nodeName={{ inventory_hostname }},status.phase=Running"
+              - --for=condition=Ready=True
+              - --timeout=600s
+          changed_when: false
+
     - name: Kubeconfig
+      when: not (k3s_upgrade | default(false) | bool)
       ansible.builtin.include_tasks: tasks/kubeconfig.yaml
       vars:
         repository_base: "{{ lookup('ansible.builtin.pipe', 'git rev-parse --show-toplevel') }}"
 
     - name: Wait for custom manifests to rollout
       when:
+        - not (k3s_upgrade | default(false) | bool)
         - k3s_primary_control_node
         - (k3s_server_manifests_templates | length > 0
             or k3s_server_manifests_urls | length > 0)
@@ -53,17 +154,17 @@
         - { name: coredns, kind: HelmChart, namespace: kube-system }
 
     - name: Coredns
-      when: k3s_primary_control_node
+      when: not (k3s_upgrade | default(false) | bool) and k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/coredns.yaml
 
     - name: Calico
-      when: k3s_primary_control_node
+      when: not (k3s_upgrade | default(false) | bool) and k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/calico.yaml
 
     - name: Cruft
-      when: k3s_primary_control_node
+      when: not (k3s_upgrade | default(false) | bool) and k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/cruft.yaml
 
     - name: Nodelabels
-      when: k3s_primary_control_node
+      when: not (k3s_upgrade | default(false) | bool) and k3s_primary_control_node
       ansible.builtin.include_tasks: tasks/node_labels.yaml
