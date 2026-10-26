@@ -25,6 +25,14 @@
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
   "packageRules": [
     {
+      "description": "Track Alpine base-image digests for router container rebuilds",
+      "matchManagers": ["dockerfile"],
+      "matchDatasources": ["docker"],
+      "matchFileNames": ["kubernetes/router/apps/default/ufw/container/Dockerfile", "kubernetes/router/apps/default/wireguard/container/Dockerfile"],
+      "pinDigests": true,
+      "automerge": false
+    },
+    {
       "description": "Do not indefinitely block GHCR updates on unavailable release timestamps",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["/^ghcr\\.io\\//"],

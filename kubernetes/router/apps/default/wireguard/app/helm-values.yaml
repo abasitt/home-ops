@@ -28,8 +28,8 @@ controllers:
       wg-app:
         image: &image
           repository: ghcr.io/abasitt/wireguard
-          tag: latest
-          pullPolicy: Always
+          tag: latest@sha256:11a724aebf473f2320f1d5614178dd3e48cc79e86fb24d9cc4f78141d9a13bde
+          pullPolicy: IfNotPresent
         command:
         - /bin/bash
         - -cex
