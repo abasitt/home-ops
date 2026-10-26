@@ -7,9 +7,11 @@
       "allowedVersions": "<999"
     },
     {
+      "description": "Keep PostgreSQL 16 on its legacy numbered-build tags until an explicit image-format migration",
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["/postgresql/"],
-      "allowedVersions": "<17"
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "allowedVersions": "/^16\\.\\d+-\\d+$/",
+      "automerge": false
     }
   ]
 }

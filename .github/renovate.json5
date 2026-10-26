@@ -11,6 +11,7 @@
     ":skipStatusChecks",
     ":timezone(Asia/Singapore)",
     "github>abasitt/home-ops//.github/renovate/autoMerge.json5",
+    "github>abasitt/home-ops//.github/renovate/allowedVersions.json5",
     "github>abasitt/home-ops//.github/renovate/clusters.json5",
     "github>abasitt/home-ops//.github/renovate/commitMessage.json5",
     "github>abasitt/home-ops//.github/renovate/customManagers.json5",
@@ -23,6 +24,23 @@
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
   "packageRules": [
+    {
+      "description": "Do not indefinitely block GHCR updates on unavailable release timestamps",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/^ghcr\\.io\\//"],
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
+    },
+    {
+      "description": "The unused Kubernetes Dashboard is archived; do not query its unavailable chart",
+      "matchFileNames": ["kubernetes/neo/apps/observability/kubernetes-dashboard/**"],
+      "enabled": false
+    },
+    {
+      "description": "Review router firewall and VPN image updates manually",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/abasitt/ufw", "ghcr.io/abasitt/wireguard"],
+      "automerge": false
+    },
     {
       "description": "Keep router DHCP on the reviewed Kea 3.0 LTS branch",
       "matchDatasources": ["docker"],

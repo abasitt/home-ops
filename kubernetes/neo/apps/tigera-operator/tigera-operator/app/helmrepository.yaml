@@ -4,7 +4,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: calico
-  namespace: flux-system
+  namespace: tigera-operator
 spec:
   interval: 2h
   url: https://projectcalico.docs.tigera.io/charts

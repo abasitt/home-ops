@@ -19,7 +19,7 @@
     },
     {
       "description": "Auto-merge Helm chart minor and patch updates",
-      "matchManagers": ["helmv3", "helm-values"],
+      "matchManagers": ["flux", "helmv3", "helm-values"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
       "automergeType": "branch",
