@@ -28,7 +28,7 @@ controllers:
       wg-app:
         image: &image
           repository: ghcr.io/abasitt/wireguard
-          tag: latest@sha256:ffad3a564604f4ac80dd8c223d324db583192d49c50e19a4155e22f72b1f1ad3
+          tag: latest@sha256:dfd762fac77cd225e1e9265ef09ee19207f43924da59ef2378814e61a8bb76cc
           pullPolicy: IfNotPresent
         command:
         - /bin/bash
