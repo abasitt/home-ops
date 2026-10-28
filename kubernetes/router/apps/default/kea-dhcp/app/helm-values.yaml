@@ -13,7 +13,7 @@ controllers:
       kea:
         image:
           repository: docker.cloudsmith.io/isc/docker/kea-dhcp4
-          tag: 3.0.4@sha256:23325c7f239df76e62567c0fbdb7c187491c0192c29aaf64323f8a5b6f7ca186
+          tag: 3.0.5@sha256:5dbb6c69c0ffdc25163fc0b1726d226bfae648fb069350dfabecd8863d61c058
           pullPolicy: IfNotPresent
         command: ["/usr/sbin/kea-dhcp4"]
         args: ["-c", "/etc/kea/kea-dhcp4.conf"]
@@ -21,7 +21,7 @@ controllers:
       validate:
         image:
           repository: docker.cloudsmith.io/isc/docker/kea-dhcp4
-          tag: 3.0.4@sha256:23325c7f239df76e62567c0fbdb7c187491c0192c29aaf64323f8a5b6f7ca186
+          tag: 3.0.5@sha256:5dbb6c69c0ffdc25163fc0b1726d226bfae648fb069350dfabecd8863d61c058
           pullPolicy: IfNotPresent
         command: ["/bin/sh", "-ec"]
         args:
