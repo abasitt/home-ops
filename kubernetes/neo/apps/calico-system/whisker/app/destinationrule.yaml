@@ -1,0 +1,17 @@
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: whisker
+spec:
+  host: whisker.calico-system.svc.cluster.local
+  exportTo:
+    - istio-gateways
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 8443
+        tls:
+          mode: SIMPLE
+          # Whisker uses an operator-managed, self-signed certificate.
+          insecureSkipVerify: true

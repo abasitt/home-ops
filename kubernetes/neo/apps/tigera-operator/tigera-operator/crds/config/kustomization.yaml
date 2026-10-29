@@ -1,0 +1,8 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # Keep this version aligned with the tigera-operator Helm chart.
+  # Existing installations retain the v1 CRDs and aggregation API server.
+  - https://raw.githubusercontent.com/projectcalico/calico/v3.33.0/manifests/operator-crds.yaml

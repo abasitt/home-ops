@@ -6,6 +6,8 @@ metadata:
   name: &app tigera-operator
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: tigera-operator-crds
   targetNamespace: tigera-operator
   commonMetadata:
     labels:

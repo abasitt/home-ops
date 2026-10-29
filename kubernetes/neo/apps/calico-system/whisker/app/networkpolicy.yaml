@@ -1,0 +1,21 @@
+---
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: calico-system.whisker-private-gateway
+spec:
+  tier: calico-system
+  # Allow the private gateway before the operator's policies in this tier.
+  order: 0
+  selector: k8s-app == 'whisker'
+  types:
+    - Ingress
+  ingress:
+    - action: Allow
+      protocol: TCP
+      source:
+        namespaceSelector: kubernetes.io/metadata.name == 'istio-gateways'
+        selector: app == 'istio-privategateway'
+      destination:
+        ports:
+          - 8443
