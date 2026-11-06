@@ -205,7 +205,7 @@ controllers:
       ufw-daemon:
         image: &image
           repository: ghcr.io/abasitt/ufw
-          tag: latest@sha256:b5f2f3ffc41dc868fb7267ee02a6a753d6b350a83ccf8862cc7aedf0bd250b20
+          tag: latest@sha256:e258f6835e8bb1440fb19088bb3e2b99f88666ae4c0c5fcead2acc5446dd37bc
           pullPolicy: IfNotPresent
         command:
         - /bin/bash
